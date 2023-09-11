@@ -2,3 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
+<<<<<<< 1a25a860463434dcd8cda2f7c33c69323ed83d28
+=======
+Raw-Data/**
+>>>>>>> Edit .gitignore
+*.RData
+*.rds
