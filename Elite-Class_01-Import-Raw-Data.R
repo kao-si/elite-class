@@ -621,11 +621,11 @@ c09_base <- read_excel("Raw-Data/2009/ZBYZ2009_Demographics&Grades.xlsx")
 
 c09_20091111qz_2p <- read_excel("Raw-Data/2009/G2009/2009年11月11日期中分两部分排名.xlsx")
 
-c09_20091111qz_qb <- read_excel("Raw-Data/2009/G2009/2009年11月11日期中语数外全年级排名.xlsx")
+c09_20091111qz_qnj <- read_excel("Raw-Data/2009/G2009/2009年11月11日期中语数外全年级排名.xlsx")
 
 c09_20100201qm_2p <- read_excel("Raw-Data/2009/G2009/2010年02月1日期末分两部分排名.xlsx")
 
-c09_20100201qm_qb <- read_excel("Raw-Data/2009/G2009/2010年02月1日期末语数外年级排名.xlsx")
+c09_20100201qm_qnj <- read_excel("Raw-Data/2009/G2009/2010年02月1日期末语数外年级排名.xlsx")
 
 c09_20100304yk <- read_excel("Raw-Data/2009/G2009/2010年03月4日测试.xlsx")
 
