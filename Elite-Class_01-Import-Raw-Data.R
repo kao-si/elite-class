@@ -11,6 +11,8 @@ library(tidyverse)
 
 c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS")
 
+c03_base2 <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades_2.xlsx")
+
 c03_zkg1g2 <- read_excel("Raw-Data/2003/2003级中考高一高二成绩.XLS")
 
 c03_gk <- read_excel("Raw-Data/2003/2003级高考成绩.XLS")
@@ -38,6 +40,8 @@ c03_mn2 <- read_excel("Raw-Data/2003/2003级高三成绩/高三二模成绩.xlsx
 ## Exam Files ====
 
 c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS")
+
+c04_base2 <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades_2.xlsx")
 
 c04_zkg1g2 <- read_excel("Raw-Data/2004/2004级中考高一高二成绩.XLS")
 
@@ -120,6 +124,8 @@ c04_testname <- read_excel("Raw-Data/2004/G2004/testname.xlsx")
 ## Exam Files ====
 
 c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS")
+
+c05_base2 <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades_2.xlsx")
 
 c05_zkg1g2g3 <- read_excel("Raw-Data/2005/2005级中考高一高二高三成绩.XLS")
 
@@ -266,6 +272,10 @@ c05_testname <- read_excel("Raw-Data/2005/G2005/testname.xlsx")
 ## Exam Files ====
 
 c06_base <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades.XLS")
+
+c06_base2 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_2.xlsx")
+
+c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx")
 
 c06_gk <- read_excel("Raw-Data/2006/2006级高考成绩.XLS")
 
@@ -420,6 +430,8 @@ c06_testname <- read_excel("Raw-Data/2006/G2006/testname.xlsx")
 ## Exam Files ====
 
 c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS")
+
+c07_base2 <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades_2.xlsx")
 
 c07_zkg1gk <- read_excel("Raw-Data/2007/2007级中考高一高考成绩.XLS") 
 
@@ -755,7 +767,7 @@ c09_testname <- read_excel("Raw-Data/2009/G2009/testname.xlsx")
 
 c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx")
 
-c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls")
+c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5")
 
 c10_gk_info <- read_excel("Raw-Data/2010/2010级高考报名信息.xls") 
 
@@ -1323,6 +1335,46 @@ c05_20070701qm_hnl$能力 <- c05_20070701qm_hnl$总成绩 - c05_20070701qm_bhnl$
 
 # Combine c09_20101112_qz_lk and c09_20101112_qz_wk (Footnote 15)
 c09_20101112qz <- bind_rows(c09_20101112qz_lk, c09_20101112qz_wk)
+
+
+# Three pairs of students share identical `zcxjh` in c10_gk
+c10_gk %>%
+  filter(
+    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh) 
+  ) %>% 
+  # Extract XJH, name, and father's name
+  select(zcxjh, 姓名, jtcy1_xm)
+
+# zcxjh               姓名   jtcy1_xm
+# <chr>               <chr>  <chr>   
+# 1 2010370301000130966 孙康   孙凤林  
+# 2 2010370301000130966 常嘉琪 常建交  
+# 3 2010370301000130112 王晞   王忠    
+# 4 2010370301000130112 苏天宇 苏同伟  
+# 5 2010370301000130853 王文烨 王维刚  
+# 6 2010370301000130853 刘阳   刘绪枝
+
+# Extract these students' XJH from c10_base
+c10_base %>% 
+  filter(
+    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"), 
+    str_detect(父姓名mzk, "孙凤林|常建交|王忠|苏同伟|王维刚|刘绪枝")
+  ) %>% 
+  select(zcxh, xm, 父姓名mzk)
+
+# zcxh                xm        父姓名mzk
+# <chr>               <chr>     <chr>    
+# 1 2010370301001030112 苏天宇027 苏同伟200
+# 2 2010370301000130112 王晞65    王忠52   
+# 3 2010370301000130583 刘阳56    刘绪枝200
+# 4 2010370301000130853 王文烨527 王维刚200
+# 5 2010370301000130966 孙康38    孙凤林200
+# 6 2010370301000130971 常嘉琪 07 常建交200
+
+# Replace correct XJH value in c10_gk, notice that the `zcxjh` column is `character`
+c10_gk$zcxjh[c10_gk$姓名 == "苏天宇" & c10_gk$jtcy1_xm == "苏同伟"] <- "2010370301001030112"
+c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "2010370301000130583"
+c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971" 
 
 
 # Save to .RData ####

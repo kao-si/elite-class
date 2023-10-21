@@ -19,6 +19,7 @@
 ### Cohort 2003
 #### Exam Files
 - c03_base <- ZBYZ2003_Demographics&Grades
+- c03_base2 <- ZBYZ2003_Demographics&Grades_2
 - c03_zkg1g2 <- 2003级中考高一高二成绩
 - **$** c03_gk <- 2003级高考成绩
 - **$** c03_zk <- g2003级入学成绩
@@ -33,6 +34,7 @@
 
 #### Exam Files
 - c04_base <- ZBYZ2004_Demographics&Grades
+- c04_base2 <- ZBYZ2004_Demographics&Grades_2
 - c04_zkg1g2 <- 2004级中考高一高二成绩
 - **$** c04_20050128qm_a <- 2005年1月28期末A卷[^1]
 - **$** c04_20050128qm_b <- 2005年1月28期末B卷
@@ -75,6 +77,7 @@
 
 #### Exam Files
 - c05_base <- ZBYZ2005_Demographics&Grades
+- c05_base2 <- ZBYZ2005_Demographics&Grades_2
 - c05_zkg1g2g3 <- 2005级中考高一高二高三成绩
 - c05_gk <- 2005级高考成绩
 - **$** c05_zk <- 2005年入学成绩
@@ -150,7 +153,9 @@
 ### Cohort 2006
 
 #### Exam Files
- - c06_base <- ZBYZ2006_Demographics&Grades
+- c06_base <- ZBYZ2006_Demographics&Grades
+- c06_base2 <- ZBYZ2006_Demographics&Grades_2
+- c06_base3 <- ZBYZ2006_Demographics&Grades_3
 - c06_gk <- 2006级高考成绩
 - c06_zk <- 入学成绩
 - **$** c06_20061005yk <- 2006年10月5日测试
@@ -231,6 +236,7 @@
 
 #### Exam Files
 - c07_base <- ZBYZ2007_Demographics&Grades
+- c07_base2 <- ZBYZ2007_Demographics&Grades_2
 - c07_zkg1gk <- 2007级中考高一高考成绩
 - **$** c07_gk <- 2007级高考成绩
 - c07_20071013yk_gkkm <- 2007年10月13日月考高考科目
