@@ -9,3 +9,5 @@ Raw-Data/**
 >>>>>>> Edit .gitignore
 *.RData
 *.rds
+*.xlsx
+*.sav

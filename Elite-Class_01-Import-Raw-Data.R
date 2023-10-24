@@ -9,9 +9,9 @@ library(tidyverse)
 
 ## Exam Files ====
 
-c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS")
+c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 
-c03_base2 <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades_2.xlsx")
+c03_base2 <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades_2.xlsx", col_types = "text", trim_ws = TRUE)
 
 c03_zkg1g2 <- read_excel("Raw-Data/2003/2003级中考高一高二成绩.XLS")
 
@@ -39,9 +39,9 @@ c03_mn2 <- read_excel("Raw-Data/2003/2003级高三成绩/高三二模成绩.xlsx
 
 ## Exam Files ====
 
-c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS")
+c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 
-c04_base2 <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades_2.xlsx")
+c04_base2 <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades_2.xlsx", col_types = "text", trim_ws = TRUE)
 
 c04_zkg1g2 <- read_excel("Raw-Data/2004/2004级中考高一高二成绩.XLS")
 
@@ -87,7 +87,7 @@ c04_mn1 <- read_excel("Raw-Data/2004/G2004/高三一模.xlsx")
 
 c04_mn2 <- read_excel("Raw-Data/2004/G2004/高三二模成绩.xlsx")
 
-c04_gk <- read_excel("Raw-Data/2004/G2004/高考成绩.xlsx")
+c04_gk <- read_excel("Raw-Data/2004/G2004/高考成绩.xlsx", col_types = "text", trim_ws = TRUE)
 
 ## 6d Files ====
 
@@ -123,9 +123,9 @@ c04_testname <- read_excel("Raw-Data/2004/G2004/testname.xlsx")
 
 ## Exam Files ====
 
-c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS")
+c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 
-c05_base2 <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades_2.xlsx")
+c05_base2 <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades_2.xlsx", col_types = "text", trim_ws = TRUE)
 
 c05_zkg1g2g3 <- read_excel("Raw-Data/2005/2005级中考高一高二高三成绩.XLS")
 
@@ -271,11 +271,11 @@ c05_testname <- read_excel("Raw-Data/2005/G2005/testname.xlsx")
 
 ## Exam Files ====
 
-c06_base <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades.XLS")
+c06_base <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 
-c06_base2 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_2.xlsx")
+c06_base2 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_2.xlsx", col_types = "text", trim_ws = TRUE)
 
-c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx")
+c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx", col_types = "text", trim_ws = TRUE)
 
 c06_gk <- read_excel("Raw-Data/2006/2006级高考成绩.XLS")
 
@@ -429,9 +429,9 @@ c06_testname <- read_excel("Raw-Data/2006/G2006/testname.xlsx")
 
 ## Exam Files ====
 
-c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS")
+c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 
-c07_base2 <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades_2.xlsx")
+c07_base2 <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades_2.xlsx", col_types = "text", trim_ws = TRUE)
 
 c07_zkg1gk <- read_excel("Raw-Data/2007/2007级中考高一高考成绩.XLS") 
 
@@ -529,7 +529,7 @@ c07_testname <- read_excel("Raw-Data/2007/G2007/testname.xlsx")
 
 ## Exam Files ====
 
-c08_base <- read_excel("Raw-Data/2008/ZBYZ2008_Demographics&Grades.xlsx")
+c08_base <- read_excel("Raw-Data/2008/ZBYZ2008_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
 c08_20081106qz <- read_excel("Raw-Data/2008/G2008/2008年11月6日期中.xlsx")
 
@@ -629,7 +629,7 @@ c08_testname <- read_excel("Raw-Data/2008/G2008/testname.xlsx")
 
 ## Exam Files ====
 
-c09_base <- read_excel("Raw-Data/2009/ZBYZ2009_Demographics&Grades.xlsx")
+c09_base <- read_excel("Raw-Data/2009/ZBYZ2009_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
 c09_20091111qz_2p <- read_excel("Raw-Data/2009/G2009/2009年11月11日期中分两部分排名.xlsx")
 
@@ -765,9 +765,9 @@ c09_testname <- read_excel("Raw-Data/2009/G2009/testname.xlsx")
 
 ## Exam Files ====
 
-c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx")
+c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
-c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5")
+c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5", col_types = "text", trim_ws = TRUE)
 
 c10_gk_info <- read_excel("Raw-Data/2010/2010级高考报名信息.xls") 
 
@@ -865,7 +865,7 @@ c10_testname <- read_excel("Raw-Data/2010/G2010/testname.xlsx")
 
 ## Exam Files ====
 
-c11_base <- read_excel("Raw-Data/2011/ZBYZ2011_Demographics&Grades.xlsx")
+c11_base <- read_excel("Raw-Data/2011/ZBYZ2011_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
 c11_gk <- read_excel("Raw-Data/2011/2011级高考成绩.xls")
 
@@ -965,7 +965,7 @@ c11_testname_a <- read_excel("Raw-Data/2011/G2011/testname 的副本.xlsx")
 
 ## Exam Files ====
 
-c12_base <- read_excel("Raw-Data/2012/ZBYZ2012_Demographics&Grades.xlsx")
+c12_base <- read_excel("Raw-Data/2012/ZBYZ2012_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
 c12_gk <- read_excel("Raw-Data/2012/2012级高考成绩.XLS")
 
@@ -1099,7 +1099,7 @@ c12_testname_2_a <- read_excel("Raw-Data/2012/G2012/testname又副本.xlsx")
 
 ## Exam Files ====
 
-c13_base <- read_excel("Raw-Data/2013/ZBYZ2013_Demographics&Grades.xlsx")
+c13_base <- read_excel("Raw-Data/2013/ZBYZ2013_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
 c13_gk <- read_excel("Raw-Data/2013/2013级高考成绩.xlsx")
 
@@ -1209,7 +1209,7 @@ c13_testname <- read_excel("Raw-Data/2013/G2013/testname.xlsx")
 
 ## Exam Files ====
 
-c14_base <- read_excel("Raw-Data/2014/ZBYZ2014_Demographics&Grades.xlsx")
+c14_base <- read_excel("Raw-Data/2014/ZBYZ2014_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
 c14_gk <- read_excel("Raw-Data/2014/2014级高考成绩.xls") 
 

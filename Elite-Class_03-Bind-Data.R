@@ -3,22 +3,61 @@
 library(readxl)
 library(tidyverse)
 
-c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS")
-c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS")
-c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS")
-c06_base <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades.XLS")
-c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS")
-c08_base <- read_excel("Raw-Data/2008/ZBYZ2008_Demographics&Grades.xlsx")
-c09_base <- read_excel("Raw-Data/2009/ZBYZ2009_Demographics&Grades.xlsx")
-c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx")
-c11_base <- read_excel("Raw-Data/2011/ZBYZ2011_Demographics&Grades.xlsx")
-c12_base <- read_excel("Raw-Data/2012/ZBYZ2012_Demographics&Grades.xlsx")
-c13_base <- read_excel("Raw-Data/2013/ZBYZ2013_Demographics&Grades.xlsx")
-c14_base <- read_excel("Raw-Data/2014/ZBYZ2014_Demographics&Grades.xlsx")
-c04_gk <- read_excel("Raw-Data/2004/G2004/高考成绩.xlsx")
-c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx")
+c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
+c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
+c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
+c06_base <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
+c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
+c08_base <- read_excel("Raw-Data/2008/ZBYZ2008_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c09_base <- read_excel("Raw-Data/2009/ZBYZ2009_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c11_base <- read_excel("Raw-Data/2011/ZBYZ2011_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c12_base <- read_excel("Raw-Data/2012/ZBYZ2012_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c13_base <- read_excel("Raw-Data/2013/ZBYZ2013_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c14_base <- read_excel("Raw-Data/2014/ZBYZ2014_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+c04_gk <- read_excel("Raw-Data/2004/G2004/高考成绩.xlsx", col_types = "text", trim_ws = TRUE)
+c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx", col_types = "text", trim_ws = TRUE)
 # See 01 File for correction of XJH values in c10_gk
-c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5")
+c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5", col_types = "text", trim_ws = TRUE)
+
+# Three pairs of students share identical `zcxjh` in c10_gk
+c10_gk %>%
+  filter(
+    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh) 
+  ) %>% 
+  # Extract XJH, name, and father's name
+  select(zcxjh, 姓名, jtcy1_xm)
+
+# zcxjh               姓名   jtcy1_xm
+# <chr>               <chr>  <chr>   
+# 1 2010370301000130966 孙康   孙凤林  
+# 2 2010370301000130966 常嘉琪 常建交  
+# 3 2010370301000130112 王晞   王忠    
+# 4 2010370301000130112 苏天宇 苏同伟  
+# 5 2010370301000130853 王文烨 王维刚  
+# 6 2010370301000130853 刘阳   刘绪枝
+
+# Extract these students' XJH from c10_base
+c10_base %>% 
+  filter(
+    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"), 
+    str_detect(父姓名mzk, "孙凤林|常建交|王忠|苏同伟|王维刚|刘绪枝")
+  ) %>% 
+  select(zcxh, xm, 父姓名mzk)
+
+# zcxh                xm        父姓名mzk
+# <chr>               <chr>     <chr>    
+# 1 2010370301001030112 苏天宇027 苏同伟200
+# 2 2010370301000130112 王晞65    王忠52   
+# 3 2010370301000130583 刘阳56    刘绪枝200
+# 4 2010370301000130853 王文烨527 王维刚200
+# 5 2010370301000130966 孙康38    孙凤林200
+# 6 2010370301000130971 常嘉琪 07 常建交200
+
+# Replace correct XJH value in c10_gk, notice that the `zcxjh` column is `character`
+c10_gk$zcxjh[c10_gk$姓名 == "苏天宇" & c10_gk$jtcy1_xm == "苏同伟"] <- "2010370301001030112"
+c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "2010370301000130583"
+c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971"
 
 
 # Create and Tidy Demographic Files ####
