@@ -1026,6 +1026,87 @@
 
 
 
+## Variable Information
+
+### Demographic Variables
+
+| Variables \ Cohort                             | Label                     | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
+| ---------------------------------------------- | ------------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| xjh                                            | Student Status ID         |      |      |      |      |      |      |      |      |      |      |      |      |
+| name                                           | Name                      |      |      |      |      |      |      |      |      |      |      |      |      |
+| male<br />0: female, 1: male                   | Gender                    |      |      |      |      |      |      |      |      |      |      |      |      |
+| nid                                            | National ID Number        |      |      |      |      |      |      |      |      |      |      |      |      |
+| dob                                            | Date of Birth             |      |      |      |      |      |      |      |      |      |      |      |      |
+| han<br />0: others, 1: Han ethnicity           | Han Ethnicity             |      |      |      |      |      |      |      |      |      |      |      |      |
+| orig                                           | Place of Origin           |      |      |      |      |      |      |      |      |      |      |      |      |
+| hukou<br />0: rural, 1: urban                  | Hukou Type                |      |      |      |      |      |      |      |      |      |      |      |      |
+| hukou_loc                                      | Hukou Address             |      |      |      |      |      |      |      |      |      |      |      |      |
+| sib<br />0: no siblings, 1: having siblings    | Siblings                  |      |      |      |      |      |      |      |      |      |      |      |      |
+| polsta<br />0: not CYL member, 1: CYL member   | Political Status          |      |      |      |      |      |      |      |      |      |      |      |      |
+| home_add                                       | Home Address              |      |      |      |      |      |      |      |      |      |      |      |      |
+| tel                                            | Phone Number              |      |      |      |      |      |      |      |      |      |      |      |      |
+| bd<br />0: not boarding, 1: boarding at school | Boarding                  |      |      |      |      |      |      |      |      |      |      |      |      |
+| jhsch                                          | Junior High School        |      |      |      |      |      |      |      |      |      |      |      |      |
+| univ                                           | University Accepted       |      |      |      |      |      |      |      |      |      |      |      |      |
+| univmajor                                      | University Major          |      |      |      |      |      |      |      |      |      |      |      |      |
+| spec                                           | Speciality                |      |      |      |      |      |      |      |      |      |      |      |      |
+| spec_rank                                      | Speciality Rank           |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_name                                         | Father Name               |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_job_text                                     | Father Job                |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_pos_text                                     | Father Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_tel                                          | Father Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_edu                                          | Father Education          |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_polsta<br />0: not CCP member, 1: CCP member | Father Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_job_add                                      | Father Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_nid                                          | Father National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_name                                         | Mother Name               |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_job_text                                     | Mother Job                |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_pos_text                                     | Mother Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_tel                                          | Mother Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_edu                                          | Mother Education          |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_polsta<br />0: not CCP member, 1: CCP member | Mother Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_job_add                                      | Mother Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_nid                                          | Mother National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
+
+
+
+### Exam-Varying Variables
+
+#### Exam Prefixes 
+
+Collect information of **14** exams for each student in a cohort
+
+- HSEE: **hsee**
+- Grade 1 to first semester of Grade 3: **g1m1, g1f1, g1m2, g1f2, g2m1, g2f1, g2m2, g2f2, g3m1, g3f1**
+- Mock Exam 1 & 2: **g3k1, g3k2**
+- CEE: **cee**
+
+ #### Subject Suffixes
+
+1. 文理科类: \_trk
+2. 班号: \_cls
+3. 学号: \_cid
+4. 总分: \_tot
+5. 语文: \_chn
+6. 数学: \_mat
+7. 英语: \_eng
+8. 物理: \_phy
+9. 化学: \_che
+10. 生物: \_bio
+11. 地理: \_geo
+12. 历史: \_his
+13. 政治: \_pol
+14. 理综: \_sci
+15. 文综: \_lib
+16. 能力: \_gen
+
+#### Cohort 2003
+
+| Exam | Data File | 1    | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   |
+| ---- | --------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| hsee |           |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
+| g1m1 |           |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
+
 ## Miscellaneous Notes
 
 - 6d files：六档线; 总分及每学科成绩分六档，文科理科每学科的六档线不同; 记录每个班级每学科不同档次学生人数以及对应的任课教师
