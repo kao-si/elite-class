@@ -1030,44 +1030,45 @@
 
 ### Demographic Variables
 
-| Variables \ Cohort                             | Label                     | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
-| ---------------------------------------------- | ------------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| xjh                                            | Student Status ID         |      |      |      |      |      |      |      |      |      |      |      |      |
-| name                                           | Name                      |      |      |      |      |      |      |      |      |      |      |      |      |
-| male<br />0: female, 1: male                   | Gender                    |      |      |      |      |      |      |      |      |      |      |      |      |
-| nid                                            | National ID Number        |      |      |      |      |      |      |      |      |      |      |      |      |
-| dob                                            | Date of Birth             |      |      |      |      |      |      |      |      |      |      |      |      |
-| han<br />0: others, 1: Han ethnicity           | Han Ethnicity             |      |      |      |      |      |      |      |      |      |      |      |      |
-| orig                                           | Place of Origin           |      |      |      |      |      |      |      |      |      |      |      |      |
-| hukou<br />0: rural, 1: urban                  | Hukou Type                |      |      |      |      |      |      |      |      |      |      |      |      |
-| hukou_loc                                      | Hukou Address             |      |      |      |      |      |      |      |      |      |      |      |      |
-| sib<br />0: no siblings, 1: having siblings    | Siblings                  |      |      |      |      |      |      |      |      |      |      |      |      |
-| polsta<br />0: not CYL member, 1: CYL member   | Political Status          |      |      |      |      |      |      |      |      |      |      |      |      |
-| home_add                                       | Home Address              |      |      |      |      |      |      |      |      |      |      |      |      |
-| tel                                            | Phone Number              |      |      |      |      |      |      |      |      |      |      |      |      |
-| bd<br />0: not boarding, 1: boarding at school | Boarding                  |      |      |      |      |      |      |      |      |      |      |      |      |
-| jhsch                                          | Junior High School        |      |      |      |      |      |      |      |      |      |      |      |      |
-| univ                                           | University Accepted       |      |      |      |      |      |      |      |      |      |      |      |      |
-| univmajor                                      | University Major          |      |      |      |      |      |      |      |      |      |      |      |      |
-| spec                                           | Speciality                |      |      |      |      |      |      |      |      |      |      |      |      |
-| spec_rank                                      | Speciality Rank           |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_name                                         | Father Name               |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_job_text                                     | Father Job                |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_pos_text                                     | Father Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_tel                                          | Father Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_edu                                          | Father Education          |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_polsta<br />0: not CCP member, 1: CCP member | Father Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_job_add                                      | Father Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_nid                                          | Father National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_name                                         | Mother Name               |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_job_text                                     | Mother Job                |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_pos_text                                     | Mother Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_tel                                          | Mother Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_edu                                          | Mother Education          |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_polsta<br />0: not CCP member, 1: CCP member | Mother Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_job_add                                      | Mother Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_nid                                          | Mother National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
+| Variables \ Cohort                                           | Label                     | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
+| ------------------------------------------------------------ | ------------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| ssid                                                         | Student Status ID (XJH)   |      |      |      |      |      |      |      |      |      |      |      |      |
+| name                                                         | Name                      |      |      |      |      |      |      |      |      |      |      |      |      |
+| male<br />0: female, 1: male                                 | Gender                    |      |      |      |      |      |      |      |      |      |      |      |      |
+| nid                                                          | National ID Number        |      |      |      |      |      |      |      |      |      |      |      |      |
+| dob                                                          | Date of Birth             |      |      |      |      |      |      |      |      |      |      |      |      |
+| han<br />0: other ethnicity, 1: Han ethnicity                         | Han Ethnicity             |      |      |      |      |      |      |      |      |      |      |      |      |
+| orig                                                         | Place of Origin           |      |      |      |      |      |      |      |      |      |      |      |      |
+| hukou<br />0: rural, 1: urban                                | Hukou Type                |      |      |      |      |      |      |      |      |      |      |      |      |
+| hukou_loc                                                    | Hukou Address             |      |      |      |      |      |      |      |      |      |      |      |      |
+| onlychd<br />0: no, 1: yes                                   | Only Child in Family      |      |      |      |      |      |      |      |      |      |      |      |      |
+| polsta<br />0: not CYL member, 1: CYL member                 | Political Status          |      |      |      |      |      |      |      |      |      |      |      |      |
+| home_add                                                     | Home Address              |      |      |      |      |      |      |      |      |      |      |      |      |
+| tel                                                          | Phone Number              |      |      |      |      |      |      |      |      |      |      |      |      |
+| board<br />0: no, 1: yes                                     | Board at School           |      |      |      |      |      |      |      |      |      |      |      |      |
+| jhsch                                                        | Junior High School        |      |      |      |      |      |      |      |      |      |      |      |      |
+| univ                                                         | University Accepted       |      |      |      |      |      |      |      |      |      |      |      |      |
+| univmajor                                                    | University Major          |      |      |      |      |      |      |      |      |      |      |      |      |
+| spec                                                         | Speciality                |      |      |      |      |      |      |      |      |      |      |      |      |
+| spec_rank                                                    | Speciality Rank           |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_name                                                       | Father Name               |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_job_text                                                   | Father Job                |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_pos_text                                                   | Father Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_tel                                                        | Father Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_edu<br />1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree | Father Education          |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_polsta<br />0: no party affiliation, 1: CCP member, 2: other-party member | Father Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_job_add                                                    | Father Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
+| f_nid                                                        | Father National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_name                                                       | Mother Name               |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_job_text                                                   | Mother Job                |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_pos_text                                                   | Mother Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_tel                                                        | Mother Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_edu<br />1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree | Mother Education          |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_polsta<br />0: no party affiliation, 1: CCP member, 2: other-party member | Mother Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_job_add                                                    | Mother Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
+| m_nid                                                        | Mother National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
 
+- Students with **board** == 0 could also mean NA (no data input) for Cohorts 2003 & 2005
 
 
 ### Exam-Varying Variables

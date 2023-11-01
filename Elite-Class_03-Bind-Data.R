@@ -67,13 +67,14 @@ c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "
 
 c03_demo <- c03_base %>% 
   select(
-    xjh, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 
-    联系电话, 籍贯, 父姓名, 父单位, 母姓名, 母单位, 家庭住址, 户口性质, birth
+    xjh, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 联系电话, 籍贯, 
+    父姓名, 父单位, 母姓名, 母单位, 家庭住址, 户口性质, birth, 科类
   ) %>% 
   rename(
+    ssid = xjh,
     name = 姓名,
-    gender = 性别,
-    bd = zx,
+    male = 性别,
+    board = zx,
     han = 民族,
     polsta = 政治面貌,
     spec = zy,
@@ -87,7 +88,57 @@ c03_demo <- c03_base %>%
     m_job_text = 母单位,
     home_add = 家庭住址,
     hukou = 户口性质,
-    dob2 = birth
+    dob2 = birth,
+    btrack = 科类
+  )
+
+### Tidy variables ----
+
+c03_demo <- c03_demo %>% 
+  mutate(
+    ssid = case_when(
+      ssid == "0" ~ NA,
+      TRUE ~ ssid
+    ),
+    male = case_when(
+      str_detect(male, "男") ~ "1",
+      str_detect(male, "女") ~ "0",
+      is.na(male) ~ NA
+    ),
+    board = case_when(
+      str_detect(board, "A") ~ "1",
+      is.na(board) ~ "0"
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      str_detect(han, "它") ~ "0",
+      is.na(han) ~ NA
+    ),
+    polsta = case_when(
+      str_detect(polsta, "团") ~ "1",
+      str_detect(polsta, "它") ~ "0",
+      is.na(polsta) ~ NA
+    ),
+    spec_rank = case_when(
+      spec_rank == "0" ~ NA,
+      TRUE ~ spec_rank
+    ),
+    hukou = case_when(
+      str_detect(hukou, "A|A`|a|Α|非农|非农业") ~ "1",
+      str_detect(hukou, "B|b|农|农业") ~ "0",
+      TRUE ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    dob = case_when(
+      # Convert `dob2` with exact birth date to `dob`
+      nchar(dob2) == 6 & str_detect(dob2, "^[0-9]+$") ~ paste0("19", dob2),
+      TRUE ~ NA
+    ),
+    cohort = "2003"
   )
 
 ## Cohort 2004 ====
@@ -98,8 +149,9 @@ c04_demo <- c04_base %>%
     联系电话, 出生日期, 家庭住址
   ) %>% 
   rename(
+    ssid = xjh,
     name = 姓名,
-    gender = 性别,
+    male = 性别,
     spec = tc,
     spec_rank = zymc,
     jhsch = 毕业学校1,
@@ -111,16 +163,17 @@ c04_demo <- c04_base %>%
     dob2 = 出生日期,
     home_add = 家庭住址
   ) %>%
-  # Extract `nid`, `univ`,`univmajor` from c04_gk
+  # Extract `btrack`, `nid`, `univ`, and `univmajor` from c04_gk
   full_join(
-    select(c04_gk, HKKH, SFZH, YXMC, ZYMC),
-    by = c("xjh" = "HKKH"),
+    select(c04_gk, HKKH, KL, SFZH, YXMC, ZYMC),
+    by = c("ssid" = "HKKH"),
     # Make sure NAs do not match
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
     relationship = "one-to-one"
   ) %>% 
   rename(
+    btrack = KL,
     nid = SFZH,
     univ = YXMC,
     univmajor = ZYMC
@@ -130,20 +183,42 @@ c04_demo <- c04_base %>%
     dob = substr(nid, 7, 14)
   )
 
+### Tidy variables ----
+
+c04_demo <- c04_demo %>% 
+  mutate(
+    male = case_when(
+      str_detect(male, "男") ~ "1",
+      str_detect(male, "女") ~ "0",
+      is.na(male) ~ NA
+    ),
+    spec_rank = case_when(
+      spec_rank == "0" ~ NA,
+      TRUE ~ spec_rank
+    ),
+    btrack = case_when(
+      str_detect(btrack, "理") ~ "1",
+      str_detect(btrack, "文") ~ "2",
+      str_detect(btrack, "体育") ~ "1",
+      TRUE ~ NA
+    ),
+    cohort = "2004"
+  )
+
 ## Cohort 2005 ====
 
 c05_demo <- c05_base %>% 
   select(
     zcxh, xm, xb, sfzh, tc, zx, race, appe, jtzz, 父姓名, 父单位, 母姓名,
-    母单位, byxx, csrq, lxdh
+    母单位, byxx, csrq, lxdh, kl
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
-    gender = xb,
+    male = xb,
     nid = sfzh,
     spec = tc,
-    bd = zx,
+    board = zx,
     han = race,
     polsta = appe,
     home_add = jtzz,
@@ -153,11 +228,48 @@ c05_demo <- c05_base %>%
     m_job_text = 母单位,
     jhsch = byxx,
     dob2 = csrq,
-    tel = lxdh
+    tel = lxdh,
+    btrack = kl
   ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
+  )
+
+### Tidy variables ----
+
+c05_demo <- c05_demo %>% 
+  mutate(
+    ssid = case_when(
+      # Keep `ssid` that contain only numeric strings
+      str_detect(ssid, "^[0-9]+$") ~ ssid,
+      TRUE ~ NA
+    ),
+    male = case_when(
+      str_detect(male, "男") ~ "1",
+      str_detect(male, "女") ~ "0",
+      is.na(male) ~ NA
+    ),
+    board = case_when(
+      str_detect(board, "住") ~ "1",
+      is.na(board) ~ "0"
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      str_detect(han, "它") ~ "0",
+      is.na(han) ~ NA
+    ),
+    polsta = case_when(
+      str_detect(polsta, "团") ~ "1",
+      str_detect(polsta, "它") ~ "0",
+      is.na(polsta) ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "理") ~ "1",
+      str_detect(btrack, "文") ~ "2",
+      TRUE ~ NA
+    ),
+    cohort = "2005"
   )
 
 ## Cohort 2006 ====
@@ -165,10 +277,10 @@ c05_demo <- c05_base %>%
 c06_demo <- c06_base %>% 
   select(
     zcxh, xm, jtzz, lxdh, 父姓名, 父工作, 父职务, 父电话, 母姓名, 母工作, 
-    母职务, 母电话, sfzh, byxx, zx, xb, 民族, 政治面貌
+    母职务, 母电话, sfzh, byxx, zx, xb, 民族, 政治面貌, wl
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
     home_add = jtzz,
     tel = lxdh,
@@ -182,15 +294,24 @@ c06_demo <- c06_base %>%
     m_tel = 母电话,
     nid = sfzh,
     jhsch = byxx,
-    bd = zx,
-    gender = xb,
+    board = zx,
+    male = xb,
     han = 民族,
-    polsta = 政治面貌
+    polsta = 政治面貌,
+    btrack = wl
+  ) %>% 
+  # 12 students were found to share a same `nid` with others
+  # Convert the `nid` value of these rows to NA
+  mutate(
+    nid = case_when(
+      duplicated(nid) | duplicated(nid, fromLast = TRUE) ~ NA,
+      TRUE ~ nid
+    )
   ) %>% 
   # Extract `spec` from c06_base3
   full_join(
     select(c06_base3, zcxh, tc),
-    by = c("xjh" = "zcxh"),
+    by = c("ssid" = "zcxh"),
     # Make sure NAs do not match
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
@@ -204,6 +325,38 @@ c06_demo <- c06_base %>%
     dob = substr(nid, 7, 14)
   )
 
+### Tidy variables ----
+
+c06_demo <- c06_demo %>% 
+  mutate(
+    male = case_when(
+      str_detect(male, "男") ~ "1",
+      str_detect(male, "女") ~ "0",
+      is.na(male) ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      str_detect(han, "回") ~ "0",
+      is.na(han) ~ NA
+    ),
+    polsta = case_when(
+      str_detect(polsta, "团") ~ "1",
+      str_detect(polsta, "它") ~ "0",
+      is.na(polsta) ~ NA
+    ),
+    spec = case_when(
+      str_detect(spec, "田径") ~ "田径",
+      is.na(spec) ~ NA,
+      TRUE ~ substr(spec, 1, 2)
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    cohort = "2006"
+  )
+
 ## Cohort 2007 ====
 
 c07_demo <- c07_base %>% 
@@ -213,16 +366,16 @@ c07_demo <- c07_base %>%
     母政治面貌, 母文化程度, 母电话
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
-    gender = xb,
+    male = xb,
     han = mz,
     nid = sfzh,
     polsta = zzmm,
     home_add = jtzz,
     tel = lxdh,
     jhsch = byxx,
-    bd = zx,
+    board = zx,
     spec = mark,
     orig = 籍贯,
     f_name = 父姓名,
@@ -236,9 +389,73 @@ c07_demo <- c07_base %>%
     m_edu = 母文化程度,
     m_tel = 母电话
   ) %>% 
+  # 3 students were found to share a same `nid`
+  # Convert the `nid` value of these rows to NA
+  mutate(
+    nid = case_when(
+      duplicated(nid) | duplicated(nid, fromLast = TRUE) ~ NA,
+      TRUE ~ nid
+    )
+  ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
+  )
+
+### Tidy variables ----
+
+c07_demo <- c07_demo %>% 
+  mutate(
+    male = case_when(
+      str_detect(male, "男") ~ "1",
+      str_detect(male, "女") ~ "0",
+      is.na(male) ~ NA
+    ),
+    board = case_when(
+      str_detect(board, "住") ~ "1",
+      str_detect(board, "否") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      is.na(han) ~ NA,
+      TRUE ~ "0"
+    ),
+    spec = case_when(
+      str_detect(spec, "健美") ~ "健美",
+      is.na(spec) ~ NA,
+      TRUE ~ substr(spec, 1, 2)
+    ),
+    f_polsta = case_when(
+      str_detect(f_polsta, "无|群众") ~ "0",
+      str_detect(f_polsta, "^党员$|中共党员|党 员") ~ "1",
+      str_detect(f_polsta, "九三学社|民革党员") ~ "2",
+      TRUE ~ NA 
+    ),
+    m_polsta = case_when(
+      str_detect(m_polsta, "无|群众") ~ "0",
+      str_detect(m_polsta, "党员") ~ "1",
+      TRUE ~ NA
+    ),
+    f_edu = case_when(
+      str_detect(f_edu, "小学") ~ "1",
+      str_detect(f_edu, "初中|中学") ~ "2",
+      str_detect(f_edu, "高中|中专|技校|中等专业") ~ "3",
+      str_detect(f_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(f_edu, "本科|大学|大本") ~ "5",
+      str_detect(f_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    m_edu = case_when(
+      str_detect(m_edu, "小学") ~ "1",
+      str_detect(m_edu, "初中|中学") ~ "2",
+      str_detect(m_edu, "高中|中专|技校|中等专业") ~ "3",
+      str_detect(m_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(m_edu, "本科|大学|大本") ~ "5",
+      str_detect(m_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    cohort = "2007"
   )
 
 ## Cohort 2008 ====
@@ -247,12 +464,12 @@ c08_demo <- c08_base %>%
   select(
     zcxh, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, tc, 籍贯31, 父姓名1zc,
     父工作单位choõ, 父文化程度choõ, 父政治面貌choõ, 父电话面貌c,
-    母姓名面貌c, 母工作单位choõ, 母政治面貌choõ, 母文化程度choõ, 母电话程度c
+    母姓名面貌c, 母工作单位choõ, 母政治面貌choõ, 母文化程度choõ, 母电话程度c, kl
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
-    gender = xb,
+    male = xb,
     han = mz,
     nid = sfzh,
     polsta = zzmm,
@@ -270,11 +487,88 @@ c08_demo <- c08_base %>%
     m_job_text = 母工作单位choõ,
     m_polsta = 母政治面貌choõ,
     m_edu = 母文化程度choõ,
-    m_tel = 母电话程度c
+    m_tel = 母电话程度c,
+    btrack = kl
   ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
+  )
+
+### Tidy variables ----
+
+c08_demo <- c08_demo %>% 
+  mutate(
+    # Remove numeric string and then extract the first 3 characters in `name`
+    name = substr(gsub("[0-9]", "", name), 1, 3),
+    male = case_when(
+      str_detect(male, "^男") ~ "1",
+      str_detect(male, "^女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      is.na(han) ~ NA,
+    ),
+    spec = case_when(
+      str_detect(spec, "健美") ~ "健美",
+      is.na(spec) ~ NA,
+      TRUE ~ substr(spec, 1, 2)
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    # Keep string in `jhsch` that appear before the first numeric character
+    jhsch = case_when(
+      str_detect(jhsch, "^无") ~ NA,
+      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      TRUE ~ jhsch
+    ),
+    # Remove numeric string and then extract the first 3 characters in `f_name`
+    f_name = case_when(
+      str_detect(f_name, "^无") ~ NA,
+      is.na(f_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", f_name), 1, 3)
+    ),
+    # Remove numeric string and then extract the first 3 characters in `m_name`
+    m_name = case_when(
+      str_detect(m_name, "^无") ~ NA,
+      is.na(m_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
+    ),  
+    f_polsta = case_when(
+      str_detect(f_polsta, "群众") ~ "0",
+      str_detect(f_polsta, "党员") ~ "1",
+      str_detect(f_polsta, "九三学社") ~ "2",
+      TRUE ~ NA 
+    ),
+    m_polsta = case_when(
+      str_detect(m_polsta, "群众|团员") ~ "0",
+      str_detect(m_polsta, "党员") ~ "1",
+      str_detect(m_polsta, "民进") ~ "2",
+      TRUE ~ NA
+    ),
+    f_edu = case_when(
+      str_detect(f_edu, "小学") ~ "1",
+      str_detect(f_edu, "初中|中学") ~ "2",
+      str_detect(f_edu, "高中|中专|技校|中等专业") ~ "3",
+      str_detect(f_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(f_edu, "本科|大学|大本") ~ "5",
+      str_detect(f_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    m_edu = case_when(
+      str_detect(m_edu, "小学") ~ "1",
+      str_detect(m_edu, "初中|中学") ~ "2",
+      str_detect(m_edu, "高中|中专|技校|中等专业") ~ "3",
+      str_detect(m_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(m_edu, "本科|大学|大本") ~ "5",
+      str_detect(m_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    cohort = "2008"
   )
 
 ## Cohort 2009 ====
@@ -283,17 +577,17 @@ c09_demo <- c09_base %>%
   select(
     zcxh, xm, xb, byxx, byxxdh, sfzh, csrq, dszn, 籍贯zn, mz, zzmm, jtzz, hkszd,
     lxdh, 父姓名mzk, "父工作单位x09\u09ba", 父地址单位x, 父电话单位x,            
-    母姓名yzb, "母工作单位xm9\u09ba", 母地址单位x, 母电话单位x
+    母姓名yzb, "母工作单位xm9\u09ba", 母地址单位x, 母电话单位x, kl
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
-    gender = xb,
+    male = xb,
     jhsch = byxx,
     jhsch_id = byxxdh,
     nid = sfzh,
     dob2 = csrq,
-    sib = dszn, # 独生子女
+    onlychd = dszn,
     orig = 籍贯zn,
     han = mz,
     polsta = zzmm,
@@ -307,29 +601,77 @@ c09_demo <- c09_base %>%
     m_name = 母姓名yzb,
     m_job_text = "母工作单位xm9\u09ba",
     m_job_add = 母地址单位x,
-    m_tel = 母电话单位x
+    m_tel = 母电话单位x,
+    btrack = kl
   ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
   )
 
+### Tidy variables ----
+
+c09_demo <- c09_demo %>% 
+  mutate(
+    # Remove numeric string, English alphabets, ".", and "-" in `name`
+    name = gsub("[0-9]|[A-Za-z]|\\.|-", "", name),
+    male = case_when(
+      str_detect(male, "^男") ~ "1",
+      str_detect(male, "^女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      TRUE ~ NA
+    ),
+    polsta = case_when(
+      str_detect(polsta, "03") ~ "1",
+      str_detect(polsta, "13") ~ "0",
+      TRUE ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    # Keep string in `jhsch` that appear before the first numeric character
+    jhsch = case_when(
+      str_detect(jhsch, "^无") ~ NA,
+      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      TRUE ~ jhsch
+    ),
+    # Remove numeric string in `f_name`
+    f_name = case_when(
+      str_detect(f_name, "^无") ~ NA,
+      is.na(f_name) ~ NA,
+      TRUE ~ gsub("[0-9]", "", f_name)
+    ),
+    # Remove numeric string in `m_name`
+    m_name = case_when(
+      str_detect(m_name, "^无") ~ NA,
+      is.na(m_name) ~ NA,
+      TRUE ~ gsub("[0-9]", "", m_name)
+    ),  
+    cohort = "2009"
+  )
+
 ## Cohort 2010 ====
 
 c10_demo <- c10_base %>% 
   select(
-    zcxh, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd 
+    zcxh, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd, kl 
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     nid = sfzh,
-    gender = xb,
+    male = xb,
     dob2 = csrq,
-    sib = dszn,
+    onlychd = dszn,
     orig = jg,
     han = mz,
     polsta = zzmm,
-    hukou_loc = hkszd
+    hukou_loc = hkszd,
+    btrack = kl
   ) %>% 
   # Extract other variables from c10_gk
   full_join(
@@ -337,7 +679,7 @@ c10_demo <- c10_base %>%
       c10_gk, zcxjh, 姓名, 录取院校, lxdh, jtdz, grjl1_jl, jtcy1_xm, jtcy1_gzdw, 
       jtcy1_zw, jtcy1_lxdh, jtcy2_xm, jtcy2_gzdw, jtcy2_zw, jtcy2_lxdh
     ),
-    by = c("xjh" = "zcxjh"),
+    by = c("ssid" = "zcxjh"),
     # Make sure NAs do not match
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
@@ -362,6 +704,33 @@ c10_demo <- c10_base %>%
   mutate(
     dob = substr(nid, 7, 14)
   )
+
+### Tidy variables ----
+
+c10_demo <- c10_demo %>% 
+  mutate(
+    male = case_when(
+      str_detect(male, "^男") ~ "1",
+      str_detect(male, "^女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "01") ~ "1",
+      is.na(han) ~ NA,
+      TRUE ~ "0"
+    ),
+    polsta = case_when(
+      str_detect(polsta, "03") ~ "1",
+      str_detect(polsta, "13") ~ "0",
+      TRUE ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    cohort = "2010"
+  )
   
 ## Cohort 2011 ====
 
@@ -373,9 +742,9 @@ c11_demo <- c11_base %>%
     "母工作单位言\u07b4翬ৄ", 母电话单位言, 母面貌单位言, 母文化单位言
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
-    gender = xb,
+    male = xb,
     nid = sfzh,
     han = mz,
     polsta = zzmm,
@@ -400,19 +769,97 @@ c11_demo <- c11_base %>%
     dob = substr(nid, 7, 14)
   )
 
+### Tidy variables ----
+
+c11_demo <- c11_demo %>% 
+  mutate(
+    # Remove numeric string in `name`
+    name = gsub("[0-9]", "", name),
+    male = case_when(
+      str_detect(male, "^男") ~ "1",
+      str_detect(male, "^女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      is.na(han) ~ NA,
+      TRUE ~ "0"
+    ),
+    polsta = case_when(
+      str_detect(polsta, "团员|党员") ~ "1",
+      is.na(polsta) ~ NA,
+      TRUE ~ "0"
+    ),
+    spec = case_when(
+      str_detect(spec, "健美") ~ "健美",
+      str_detect(spec, "羽毛球") ~ "羽毛球",
+      is.na(spec) ~ NA,
+      TRUE ~ substr(spec, 1, 2)
+    ),
+    # Keep string in `jhsch` that appear before the first numeric character
+    jhsch = case_when(
+      str_detect(jhsch, "^无") ~ NA,
+      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      TRUE ~ jhsch
+    ),
+    # Remove numeric string and then extract the first 3 characters in `f_name`
+    f_name = case_when(
+      str_detect(f_name, "^无") ~ NA,
+      is.na(f_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", f_name), 1, 3)
+    ),
+    # Remove numeric string and then extract the first 3 characters in `m_name`
+    m_name = case_when(
+      str_detect(m_name, "^无") ~ NA,
+      is.na(m_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
+    ),  
+    f_polsta = case_when(
+      str_detect(f_polsta, "群众|^无|团员") ~ "0",
+      str_detect(f_polsta, "^党员|中共党员|中国党员|共产党") ~ "1",
+      str_detect(f_polsta, "九三|民建|民进|民革") ~ "2",
+      TRUE ~ NA 
+    ),
+    m_polsta = case_when(
+      str_detect(m_polsta, "群众|^无|团员") ~ "0",
+      str_detect(m_polsta, "党员|共产党") ~ "1",
+      str_detect(m_polsta, "农工民主党") ~ "2",
+      TRUE ~ NA
+    ),
+    f_edu = case_when(
+      str_detect(f_edu, "小学") ~ "1",
+      str_detect(f_edu, "初中|中学") ~ "2",
+      str_detect(f_edu, "高中|中专|技校|中技|中转|中等专业") ~ "3",
+      str_detect(f_edu, "专科|大专|高专|中师|师范|师专") ~ "4",
+      str_detect(f_edu, "本科|大学|大本") ~ "5",
+      str_detect(f_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    m_edu = case_when(
+      str_detect(m_edu, "小学") ~ "1",
+      str_detect(m_edu, "初中|中学") ~ "2",
+      str_detect(m_edu, "高中|中专|技校|中等专业") ~ "3",
+      str_detect(m_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(m_edu, "本科|大学|大本") ~ "5",
+      str_detect(m_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    cohort = "2011"
+  )
+
 ## Cohort 2012 ====
 
 c12_demo <- c12_base %>% 
   select(
     zcxh, xm1, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
     jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd, jtcy1dh, 
-    jtcy1gz, zzmm, hkxz, dszn, jdfs, xxmc, tc
+    jtcy1gz, zzmm, hkxz, dszn, jdfs, xxmc, tc, kl
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm1,
     nid = sfzh,
-    gender = xb,
+    male = xb,
     han = mz,
     dob2 = csrq,
     tel = lxdh,
@@ -431,14 +878,116 @@ c12_demo <- c12_base %>%
     f_job_text = jtcy1gz,
     polsta = zzmm,
     hukou = hkxz,
-    sib = dszn,
-    bd = jdfs,
+    onlychd = dszn,
+    board = jdfs,
     jhsch = xxmc,
-    spec = tc
+    spec = tc,
+    btrack = kl
   ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
+  )
+
+### Tidy variables ----
+
+c12_demo <- c12_demo %>% 
+  mutate(
+    ssid = case_when(
+      str_detect(ssid, "借读") ~ NA,
+      TRUE ~ ssid
+    ),
+    # Remove numeric string in `name`
+    name = gsub("[0-9]", "", name),
+    male = case_when(
+      str_detect(male, "男") ~ "1",
+      str_detect(male, "女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "汉") ~ "1",
+      is.na(han) ~ NA,
+      TRUE ~ "0"
+    ),
+    polsta = case_when(
+      str_detect(polsta, "^03") ~ "1",
+      str_detect(polsta, "^13") ~ "0",
+      TRUE ~ NA
+    ),
+    spec = case_when(
+      str_detect(spec, "羽毛球") ~ "羽毛球",
+      is.na(spec) ~ NA,
+      TRUE ~ substr(spec, 1, 2)
+    ),
+    hukou = case_when(
+      str_detect(hukou, "^1") ~ "0",
+      str_detect(hukou, "^2") ~ "1",
+      TRUE ~ NA
+    ),
+    onlychd = case_when(
+      str_detect(onlychd, "^0") ~ "1",
+      str_detect(onlychd, "^1") ~ "0",
+      TRUE ~ NA
+    ),
+    board = case_when(
+      str_detect(board, "^1") ~ "0",
+      str_detect(board, "^2") ~ "1",
+      TRUE ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    # Keep string in `jhsch` that appear before the first numeric character
+    jhsch = case_when(
+      str_detect(jhsch, "^无") ~ NA,
+      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      TRUE ~ jhsch
+    ),
+    # Remove numeric string and then extract the first 3 characters in `f_name`
+    f_name = case_when(
+      str_detect(f_name, "^无") ~ NA,
+      is.na(f_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", f_name), 1, 3)
+    ),
+    # Remove numeric string and then extract the first 3 characters in `m_name`
+    m_name = case_when(
+      str_detect(m_name, "^无") ~ NA,
+      is.na(m_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
+    ),
+    f_polsta = case_when(
+      str_detect(f_polsta, "群众") ~ "0",
+      str_detect(f_polsta, "共产党") ~ "1",
+      is.na(f_polsta) ~ NA,
+      TRUE ~ "2"
+    ),
+    m_polsta = case_when(
+      str_detect(m_polsta, "群众|^无") ~ "0",
+      str_detect(m_polsta, "共产党") ~ "1",
+      is.na(m_polsta) ~ NA,
+      TRUE ~ "2"
+    ),
+    f_edu = case_when(
+      str_detect(f_edu, "小学") ~ "1",
+      str_detect(f_edu, "初中|中学") ~ "2",
+      str_detect(f_edu, "高中|中专|技校|中技|中转|中等专业") ~ "3",
+      str_detect(f_edu, "专科|大专|高专|中师|师范|师专") ~ "4",
+      str_detect(f_edu, "本科|大学|大本") ~ "5",
+      str_detect(f_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    m_edu = case_when(
+      str_detect(m_edu, "小学") ~ "1",
+      str_detect(m_edu, "初中|中学") ~ "2",
+      str_detect(m_edu, "高中|中专|技校|中技|中等专业") ~ "3",
+      str_detect(m_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(m_edu, "本科|大学|大本") ~ "5",
+      str_detect(m_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    cohort = "2012"
   )
 
 ## Cohort 2013 ====
@@ -447,13 +996,13 @@ c13_demo <- c13_base %>%
   select(
     zcxh, xm, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
     jtcy2whcd, jtcy2dh, jtcy2gz, jtcy2sf, jtcy1xm, jtcy1zzmm, jtcy1whcd,
-    jtcy1dh, jtcy1gz, jtcy1sf, zzmm, hkxz, dszn, jdfs, byxx 
+    jtcy1dh, jtcy1gz, jtcy1sf, zzmm, hkxz, dszn, jdfs, byxx, kl 
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
     nid = sfzh,
-    gender = xb,
+    male = xb,
     han = mz,
     dob2 = csrq,
     tel = lxdh,
@@ -474,13 +1023,106 @@ c13_demo <- c13_base %>%
     f_nid = jtcy1sf,
     polsta = zzmm,
     hukou = hkxz,
-    sib = dszn,
-    bd = jdfs,
-    jhsch = byxx
+    onlychd = dszn,
+    board = jdfs,
+    jhsch = byxx,
+    btrack = kl
   ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
+  )
+
+### Tidy variables ----
+
+c13_demo <- c13_demo %>% 
+  mutate(
+    # Remove numeric string in `name`
+    name = gsub("[0-9]", "", name),
+    male = case_when(
+      str_detect(male, "^男") ~ "1",
+      str_detect(male, "^女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "^汉") ~ "1",
+      is.na(han) ~ NA,
+      TRUE ~ "0"
+    ),
+    polsta = case_when(
+      str_detect(polsta, "^03") ~ "1",
+      str_detect(polsta, "^13") ~ "0",
+      TRUE ~ NA
+    ),
+    hukou = case_when(
+      str_detect(hukou, "^1") ~ "0",
+      str_detect(hukou, "^2") ~ "1",
+      TRUE ~ NA
+    ),
+    onlychd = case_when(
+      str_detect(onlychd, "^0") ~ "1",
+      str_detect(onlychd, "^1") ~ "0",
+      TRUE ~ NA
+    ),
+    board = case_when(
+      str_detect(board, "^1") ~ "0",
+      str_detect(board, "^2") ~ "1",
+      TRUE ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    # Keep string in `jhsch` that appear before the first numeric character or English alphabet
+    jhsch = case_when(
+      str_detect(jhsch, "^无") ~ NA,
+      regexpr("[0-9]+|[A-Za-z]", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+|[A-Za-z]", jhsch) - 1),
+      TRUE ~ jhsch
+    ),
+    # Remove numeric string and then extract the first 3 characters in `f_name`
+    f_name = case_when(
+      str_detect(f_name, "^暂无") ~ NA,
+      is.na(f_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", f_name), 1, 3)
+    ),
+    # Remove numeric string and then extract the first 3 characters in `m_name`
+    m_name = case_when(
+      str_detect(m_name, "^暂无") ~ NA,
+      is.na(m_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
+    ),
+    f_polsta = case_when(
+      str_detect(f_polsta, "群众") ~ "0",
+      str_detect(f_polsta, "共产党|中共") ~ "1",
+      is.na(f_polsta) ~ NA,
+      TRUE ~ "2"
+    ),
+    m_polsta = case_when(
+      str_detect(m_polsta, "群众") ~ "0",
+      str_detect(m_polsta, "共产党") ~ "1",
+      is.na(m_polsta) ~ NA,
+      TRUE ~ "2"
+    ),
+    f_edu = case_when(
+      str_detect(f_edu, "小学") ~ "1",
+      str_detect(f_edu, "初中|中学") ~ "2",
+      str_detect(f_edu, "高中|中专|技校|中技|中转|中等专业") ~ "3",
+      str_detect(f_edu, "专科|大专|高专|中师|师范|师专") ~ "4",
+      str_detect(f_edu, "本科|大学|大本") ~ "5",
+      str_detect(f_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    m_edu = case_when(
+      str_detect(m_edu, "小学") ~ "1",
+      str_detect(m_edu, "初中|中学") ~ "2",
+      str_detect(m_edu, "高中|中专|技校|中技|中等专业") ~ "3",
+      str_detect(m_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(m_edu, "本科|大学|大本") ~ "5",
+      str_detect(m_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    cohort = "2013"
   )
 
 ## Cohort 2014 ====
@@ -489,12 +1131,12 @@ c14_demo <- c14_base %>%
   select(
     zcxh, xm, xb, 特长c2, mz, sfzh, csrq, lxdh, jg, hjszd, zz, jtcy2xm,
     jtcy2zzmm, jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd,
-    jtcy1dh, jtcy1gz, zzmm, hkxz, dszn, jdfs, byxx
+    jtcy1dh, jtcy1gz, zzmm, hkxz, dszn, jdfs, byxx, kl
   ) %>% 
   rename(
-    xjh = zcxh,
+    ssid = zcxh,
     name = xm,
-    gender = xb,
+    male = xb,
     spec = 特长c2,
     han = mz,
     nid = sfzh,
@@ -515,34 +1157,111 @@ c14_demo <- c14_base %>%
     f_job_text = jtcy1gz,
     polsta = zzmm,
     hukou = hkxz,
-    sib = dszn,
-    bd = jdfs,
-    jhsch = byxx
+    onlychd = dszn,
+    board = jdfs,
+    jhsch = byxx,
+    btrack = kl
   ) %>% 
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
   )
 
+### Tidy variables ----
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+c14_demo <- c14_demo %>% 
+  mutate(
+    # Remove numeric string and then extract the first 3 characters in `name`
+    name = substr(gsub("[0-9]", "", name), 1, 3),
+    male = case_when(
+      str_detect(male, "^男") ~ "1",
+      str_detect(male, "^女") ~ "0",
+      TRUE ~ NA
+    ),
+    han = case_when(
+      str_detect(han, "^汉") ~ "1",
+      is.na(han) ~ NA,
+      TRUE ~ "0"
+    ),
+    spec = case_when(
+      str_detect(spec, "A") ~ "Unknown",
+      str_detect(spec, "羽毛球") ~ "羽毛球",
+      is.na(spec) ~ NA,
+      TRUE ~ substr(spec, 1, 2)
+    ),
+    polsta = case_when(
+      str_detect(polsta, "^03") ~ "1",
+      str_detect(polsta, "^13") ~ "0",
+      TRUE ~ NA
+    ),
+    hukou = case_when(
+      str_detect(hukou, "^1") ~ "0",
+      str_detect(hukou, "^2") ~ "1",
+      TRUE ~ NA
+    ),
+    onlychd = case_when(
+      str_detect(onlychd, "^0") ~ "1",
+      str_detect(onlychd, "^1") ~ "0",
+      TRUE ~ NA
+    ),
+    board = case_when(
+      str_detect(board, "^1") ~ "0",
+      str_detect(board, "^2") ~ "1",
+      TRUE ~ NA
+    ),
+    btrack = case_when(
+      str_detect(btrack, "L") ~ "1",
+      str_detect(btrack, "W") ~ "2",
+      TRUE ~ NA
+    ),
+    # Keep string in `jhsch` that appear before the first numeric character or English alphabet
+    jhsch = case_when(
+      str_detect(jhsch, "^无") ~ NA,
+      regexpr("[0-9]+|[A-Za-z]", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+|[A-Za-z]", jhsch) - 1),
+      TRUE ~ jhsch
+    ),
+    # Remove numeric string and then extract the first 3 characters in `f_name`
+    f_name = case_when(
+      str_detect(f_name, "^无") ~ NA,
+      is.na(f_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", f_name), 1, 3)
+    ),
+    # Remove numeric string and then extract the first 3 characters in `m_name`
+    m_name = case_when(
+      str_detect(m_name, "^无") ~ NA,
+      is.na(m_name) ~ NA,
+      TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
+    ),
+    f_polsta = case_when(
+      str_detect(f_polsta, "群众|无党派") ~ "0",
+      str_detect(f_polsta, "共产党") ~ "1",
+      is.na(f_polsta) ~ NA,
+      TRUE ~ "2"
+    ),
+    m_polsta = case_when(
+      str_detect(m_polsta, "群众|无党派") ~ "0",
+      str_detect(m_polsta, "共产党") ~ "1",
+      is.na(m_polsta) ~ NA,
+      TRUE ~ "2"
+    ),
+    f_edu = case_when(
+      str_detect(f_edu, "小学") ~ "1",
+      str_detect(f_edu, "初中|中学") ~ "2",
+      str_detect(f_edu, "高中|中专|技校|中技|中转|中等专业") ~ "3",
+      str_detect(f_edu, "专科|大专|高专|中师|师范|师专") ~ "4",
+      str_detect(f_edu, "本科|大学|大本") ~ "5",
+      str_detect(f_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    m_edu = case_when(
+      str_detect(m_edu, "小学") ~ "1",
+      str_detect(m_edu, "初中|中学") ~ "2",
+      str_detect(m_edu, "高中|中专|技校|中技|中等专业") ~ "3",
+      str_detect(m_edu, "专科|大专|高专|中师|师范") ~ "4",
+      str_detect(m_edu, "本科|大学|大本") ~ "5",
+      str_detect(m_edu, "研究生|硕士|博士") ~ "6",
+      TRUE ~ NA
+    ),
+    cohort = "2014"
+  )
 
