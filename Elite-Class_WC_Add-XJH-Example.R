@@ -11,6 +11,14 @@ cui <- function(df, bh = "BH", xm = "姓名", nv = "cls_name"){
   return(df)
 }
 
+# Create a function to facilitate creating unique identifier in base files with untidy names
+cui2 <- function(df, bh, xm, nv = "cls_name"){
+  # Remove numeric string and then extract the first 3 characters in name
+  df[[xm]] <- substr(gsub("[0-9]", "", df[[xm]]), 1, 3)
+  df[[nv]] <- paste(df[[bh]], df[[xm]], sep = "_")
+  return(df)
+}
+
 # Create a function to perform the check on potential errors in XJH across the source files 
 mis <- function(df){
   
@@ -73,6 +81,7 @@ c10_20110122qm <- cui(c10_20110122qm)
 c10_20110428qz <- cui(c10_20110428qz)
 c10_20110708qm <- cui(c10_20110708qm) # Target file (without XJH)
 c10_20111104qz <- cui(c10_20111104qz, bh = "BH1")
+c10_base <- cui2(c10_base, bh = "bh", xm = "xm")
 
 ## Step 2: Check XJH ====
 ## >>> DO NOT SAVE THIS SECTION IN R SCRIPT 
@@ -83,7 +92,8 @@ c10_20111104qz <- cui(c10_20111104qz, bh = "BH1")
 check1 <- select(c10_20101110yk, cls_name, XJH) %>% 
   left_join(select(c10_20110122qm, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>%
   left_join(select(c10_20110428qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
-  left_join(select(c10_20111104qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any")
+  left_join(select(c10_20111104qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
+  left_join(select(c10_base, cls_name, zcxh), by = "cls_name", na_matches = "never", multiple = "any")
 
 # Perform the check using function 'mis'
 mis(check1)
@@ -105,11 +115,13 @@ mis(check1)
 c10_20110708qm <- c10_20110708qm %>% 
   left_join(select(c10_20101110yk, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>%
   left_join(select(c10_20110428qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
-  left_join(select(c10_20111104qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any")
+  left_join(select(c10_20111104qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
+  left_join(select(c10_base, cls_name, zcxh), by = "cls_name", na_matches = "never", multiple = "any")
 
 # >>> Get the positions of relevant XJH columns for checks and later operations
 # To return column names, use 'value = TRUE'
 grep("XJH", colnames(c10_20110708qm))
+grep("zcxh", colnames(c10_20110708qm))
 
 # >>> Check number of NAs in XJH extracted from the first source file before replacement
 sum(is.na(c10_20110708qm[84]))
@@ -124,7 +136,7 @@ sum(is.na(c10_20110708qm[84]))
 colnames(c10_20110708qm)[84] <- "XJH"
 
 # Remove the other XJH columns
-c10_20110708qm[c(2, 85, 86)] <- NULL
+c10_20110708qm[c(2, 85, 86, 87)] <- NULL
 
 ## Step 4: Duplicate Values in Unique Identifier ====
 

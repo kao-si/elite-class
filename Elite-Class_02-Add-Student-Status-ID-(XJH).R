@@ -12,6 +12,14 @@ cui <- function(df, bh = "BH", xm = "姓名", nv = "cls_name"){
   return(df)
 }
 
+# Function that facilitates the creation of unique identifier for base files with untidy names
+cui2 <- function(df, bh, xm, nv = "cls_name"){
+  # Remove numeric string and then extract the first 3 characters in name
+  df[[xm]] <- substr(gsub("[0-9]", "", df[[xm]]), 1, 3)
+  df[[nv]] <- paste(df[[bh]], df[[xm]], sep = "_")
+  return(df)
+}
+
 # Function that performs checks on potential errors in XJH across the source files 
 mis <- function(df){
   
