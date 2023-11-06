@@ -1026,49 +1026,95 @@
 
 
 
-## Variable Information
+## Variables
 
 ### Demographic Variables
 
-| Variables \ Cohort                                           | Label                     | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
-| ------------------------------------------------------------ | ------------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| ssid                                                         | Student Status ID (XJH)   |      |      |      |      |      |      |      |      |      |      |      |      |
-| name                                                         | Name                      |      |      |      |      |      |      |      |      |      |      |      |      |
-| male<br />0: female, 1: male                                 | Gender                    |      |      |      |      |      |      |      |      |      |      |      |      |
-| nid                                                          | National ID Number        |      |      |      |      |      |      |      |      |      |      |      |      |
-| dob                                                          | Date of Birth             |      |      |      |      |      |      |      |      |      |      |      |      |
-| han<br />0: other ethnicity, 1: Han ethnicity                         | Han Ethnicity             |      |      |      |      |      |      |      |      |      |      |      |      |
-| orig                                                         | Place of Origin           |      |      |      |      |      |      |      |      |      |      |      |      |
-| hukou<br />0: rural, 1: urban                                | Hukou Type                |      |      |      |      |      |      |      |      |      |      |      |      |
-| hukou_loc                                                    | Hukou Address             |      |      |      |      |      |      |      |      |      |      |      |      |
-| onlychd<br />0: no, 1: yes                                   | Only Child in Family      |      |      |      |      |      |      |      |      |      |      |      |      |
-| polsta<br />0: not CYL member, 1: CYL member                 | Political Status          |      |      |      |      |      |      |      |      |      |      |      |      |
-| home_add                                                     | Home Address              |      |      |      |      |      |      |      |      |      |      |      |      |
-| tel                                                          | Phone Number              |      |      |      |      |      |      |      |      |      |      |      |      |
-| board<br />0: no, 1: yes                                     | Board at School           |      |      |      |      |      |      |      |      |      |      |      |      |
-| jhsch                                                        | Junior High School        |      |      |      |      |      |      |      |      |      |      |      |      |
-| univ                                                         | University Accepted       |      |      |      |      |      |      |      |      |      |      |      |      |
-| univmajor                                                    | University Major          |      |      |      |      |      |      |      |      |      |      |      |      |
-| spec                                                         | Speciality                |      |      |      |      |      |      |      |      |      |      |      |      |
-| spec_rank                                                    | Speciality Rank           |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_name                                                       | Father Name               |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_job_text                                                   | Father Job                |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_pos_text                                                   | Father Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_tel                                                        | Father Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_edu<br />1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree | Father Education          |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_polsta<br />0: no party affiliation, 1: CCP member, 2: other-party member | Father Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_job_add                                                    | Father Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
-| f_nid                                                        | Father National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_name                                                       | Mother Name               |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_job_text                                                   | Mother Job                |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_pos_text                                                   | Mother Job Position       |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_tel                                                        | Mother Phone Number       |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_edu<br />1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree | Mother Education          |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_polsta<br />0: no party affiliation, 1: CCP member, 2: other-party member | Mother Political Status   |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_job_add                                                    | Mother Job Address        |      |      |      |      |      |      |      |      |      |      |      |      |
-| m_nid                                                        | Mother National ID Number |      |      |      |      |      |      |      |      |      |      |      |      |
+| Variable      | Label                         | Levels                                                       |
+| ------------- | ----------------------------- | ------------------------------------------------------------ |
+| **ssid**      | Student Status ID (XJH)       |                                                              |
+| **btrack**    | Track of Study (in base file) | 1: science track, 2: liberal arts track                      |
+| **name**      | Name                          |                                                              |
+| **male**      | Gender                        | 0: female, 1: male                                           |
+| **nid**       | National ID Number            |                                                              |
+| **dob**       | Date of Birth                 |                                                              |
+| **han**       | Han Ethnicity                 | 0: other ethnicity, 1: Han ethnicity                         |
+| orig          | Place of Origin               |                                                              |
+| **hukou**     | Hukou Type                    | 0: rural, 1: urban                                           |
+| hukou_loc     | Hukou Address                 |                                                              |
+| **onlychd**   | Only Child in Family          | 0: no, 1: yes                                                |
+| **polsta**    | Political Status              | 0: not CYL member, 1: CYL member                             |
+| home_add      | Home Address                  |                                                              |
+| tel           | Phone Number                  |                                                              |
+| **board**     | Board at School               | 0: no, 1: yes                                                |
+| **jhsch**     | Junior High School            |                                                              |
+| **univ**      | University Accepted           |                                                              |
+| **univmajor** | University Major              |                                                              |
+| **spec**      | Speciality                    |                                                              |
+| spec_rank     | Speciality Rank               |                                                              |
+| **f_name**    | Father Name                   |                                                              |
+| **f_job**     | Father Job                    | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| f_pos         | Father Job Position           |                                                              |
+| f_tel         | Father Phone Number           |                                                              |
+| **f_edu**     | Father Education              | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **f_polsta**  | Father Political Status       | 0: no party affiliation, 1: CCP member, 2: member of other parties |
+| f_job_add     | Father Job Address            |                                                              |
+| **f_nid**     | Father National ID Number     |                                                              |
+| **m_name**    | Mother Name                   |                                                              |
+| **m_job**     | Mother Job                    | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| m_pos         | Mother Job Position           |                                                              |
+| m_tel         | Mother Phone Number           |                                                              |
+| **m_edu**     | Mother Education              | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **m_polsta**  | Mother Political Status       | 0: no party affiliation, 1: CCP member, 2: member of other parties |
+| m_job_add     | Mother Job Address            |                                                              |
+| **m_nid**     | Mother National ID Number     |                                                              |
 
-- Students with **board** == 0 could also mean NA (no data input) for Cohorts 2003 & 2005
+#### Notes
+
+- Strings in **name** are not exact correct names for some rows in Cohorts 2008, 2011, & 2014
+- Strings in **f_name** and **m_name** are not exact correct names for some rows in Cohorts 2008, 2011, 2012, 2013, & 2014
+- **board** == 0 could also mean NA (no data input) for Cohorts 2003 & 2005
+
+#### Summary by Cohort
+
+| Variable<br />/Cohort | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
+| --------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| **ssid**              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **btrack**            | 1    | 1    | 1    | 1    | 0    | 1    | 1    | 1    | 0    | 1    | 1    | 1    |
+| **name**              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **male**              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **nid**               | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **dob**               | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **han**               | 1    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| orig                  | 1    | 0    | 0    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **hukou**             | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 1    |
+| hukou_loc             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 1    | 1    | 1    |
+| **onlychd**           | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 1    | 1    | 1    |
+| **polsta**            | 1    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| home_add              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| tel                   | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **board**             | 1    | 0    | 1    | 1    | 1    | 0    | 0    | 0    | 0    | 1    | 1    | 1    |
+| **jhsch**             | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **univ**              | 0    | 1    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
+| **univmajor**         | 0    | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    |
+| **spec**              | 1    | 1    | 1    | 1    | 1    | 1    | 0    | 0    | 1    | 1    | 0    | 1    |
+| spec_rank             | 1    | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    |
+| **f_name**            | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **f_job**             | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| f_pos                 | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
+| f_tel                 | 0    | 0    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **f_edu**             | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| **f_polsta**          | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| f_job_add             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    | 0    |
+| **f_nid**             | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
+| **m_name**            | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **m_job**             | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| m_pos                 | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
+| m_tel                 | 0    | 0    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| **m_edu**             | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| **m_polsta**          | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| m_job_add             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    | 0    |
+| **m_nid**             | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
 
 
 ### Exam-Varying Variables
