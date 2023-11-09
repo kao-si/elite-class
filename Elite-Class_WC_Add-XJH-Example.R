@@ -1,5 +1,22 @@
 
 
+library(readxl)
+library(tidyverse)
+
+c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
+
+c10_20101110yk <- read_excel("Raw-Data/2010/G2010/2010年11月10日测试.xlsx")
+
+c10_20110122qm <- read_excel("Raw-Data/2010/G2010/2011年1月22日期末.xlsx")
+
+c10_20110428qz <- read_excel("Raw-Data/2010/G2010/2011年4月28日期中.xlsx")
+
+c10_20110708qm <- read_excel("Raw-Data/2010/G2010/2011年7月8日期末.xlsx")
+
+c10_20111104qz <- read_excel("Raw-Data/2010/G2010/2011年11月4日期中.xlsx")
+
+
+
 # Add XJH Example - Cohort 2010
 
 
@@ -26,17 +43,12 @@ mis <- function(df){
   mismatch <- numeric(length = ncol(df) - 2)
   
   for(i in 3:ncol(df)){
-    
-    for(j in 1:length(mismatch)){
-      
-      # get the number of mismatches between XJH of the first source file and XJH of the other source files
-      mismatch[[j]] <- which(df[[2]] != df[[i]]) %>% length()
-      
-      return(mismatch)
-    }
+    # get the number of mismatches between XJH of the first source file and XJH of the other source files
+    mismatch[[i - 2]] <- which(df[[2]] != df[[i]]) %>% length()
   }
+  return(mismatch)
 }
-
+    
 # Create a function to replace NAs in XJH extracted from the first source file
 # with values in XJH extracted from all the other source files
 fillna <- function(df, nv = "cls_name"){

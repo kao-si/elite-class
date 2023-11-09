@@ -27,15 +27,10 @@ mis <- function(df){
   mismatch <- numeric(length = ncol(df) - 2)
   
   for(i in 3:ncol(df)){
-    
-    for(j in 1:length(mismatch)){
-      
-      # get the number of mismatches between XJH of the first source file and XJH of the other source files
-      mismatch[[j]] <- which(df[[2]] != df[[i]]) %>% length()
-      
-      return(mismatch)
-    }
+    # get the number of mismatches between XJH of the first source file and XJH of the other source files
+    mismatch[[i - 2]] <- which(df[[2]] != df[[i]]) %>% length()
   }
+  return(mismatch)
 }
 
 # Function that replaces NAs in XJH extracted from the first source file

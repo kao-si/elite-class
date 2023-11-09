@@ -1377,6 +1377,20 @@ c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "201
 c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971" 
 
 
+# 47 students has two duplicate rows of data in c12_gk
+# Remove the duplicated rows
+c12_gk <- c12_gk %>% filter(!duplicated(ksh))
+
+
+# 20 students has two duplicate rows of data in c13_gk
+# Remove the duplicated rows
+c13_gk <- c13_gk %>% filter(!duplicated(ksh))
+
+# One student has two rows of (different) data in c14_gk
+# Remove these two rows
+c14_gk <- c14_gk %>% filter(is.na(夏考考试号) | 夏考考试号 != "17370304110227")
+
+
 # Save to .RData ####
 
 
