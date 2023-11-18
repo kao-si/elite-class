@@ -1101,7 +1101,7 @@ c12_testname_2_a <- read_excel("Raw-Data/2012/G2012/testname又副本.xlsx")
 
 c13_base <- read_excel("Raw-Data/2013/ZBYZ2013_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
-c13_gk <- read_excel("Raw-Data/2013/2013级高考成绩.xlsx")
+c13_gk <- read_excel("Raw-Data/2013/2013级高考成绩.XLS")
 
 c13_20131012yk <- read_excel("Raw-Data/2013/G2013/2013年10月12日测试.xlsx")
 

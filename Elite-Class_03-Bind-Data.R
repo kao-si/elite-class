@@ -2,6 +2,7 @@
 
 library(readxl)
 library(tidyverse)
+library(lubridate)
 
 c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
@@ -60,7 +61,7 @@ c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "201
 c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971"
 
 
-# Create and Tidy Demographic Files ####
+# Create and Tidy Demographic Files for Each Cohort ####
 
 
 ## Cohort 2003 ====
@@ -1264,4 +1265,64 @@ c14_demo <- c14_demo %>%
     ),
     cohort = "2014"
   )
+
+
+# Combine Demographic Files and Further Tidying & Processing ####
+
+demo_list <- mget(ls(pattern = "c\\d{2}_demo"))
+
+demo <- bind_rows(demo_list) %>% 
+  select(
+    cohort, ssid, btrack, name, male, nid, dob, han, orig, hukou, hukou_loc,
+    onlychd, polsta, home_add, tel, board, jhsch, univ, univmajor, spec, spec_rank,
+    f_name, f_job_text, f_pos_text, f_tel, f_edu, f_polsta, f_job_add, f_nid,
+    m_name, m_job_text, m_pos_text, m_tel, m_edu, m_polsta, m_job_add, m_nid
+  )
+
+
+demo$btrack <- factor(demo$btrack,
+                 levels = c(1, 2),
+                 labels = c("Science Track", "Liberal Arts Track"))
+
+demo$male <- factor(demo$male,
+                    levels = c(0, 1),
+                    labels = c("Female", "Male"))
+
+# Fix rows with incorrect `nid` and thus incorrect `dob`
+# Also fix rows with incorrect `f_nid` or `m_nid`
+# Convert `dob` to Date
+demo <- demo %>% 
+  mutate(
+    dob = case_when(
+      nchar(nid) != 18 ~ NA,
+      TRUE ~ dob
+    ),
+    nid = case_when(
+      nchar(nid) != 18 ~ NA,
+      TRUE ~ nid
+    ),
+    f_nid = case_when(
+      nchar(f_nid) != 18 ~ NA,
+      TRUE ~ f_nid
+    ),
+    m_nid = case_when(
+      nchar(m_nid) != 18 ~ NA,
+      TRUE ~ m_nid
+    )
+  ) %>% 
+  mutate(
+    dob = ymd(dob)
+  )
+
+demo$han <- factor(demo$han,
+                    levels = c(0, 1),
+                    labels = c("Other Ethnicity", "Han Ethnicity"))
+
+
+
+
+
+
+
+
 
