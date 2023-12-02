@@ -1030,44 +1030,47 @@
 
 ### Demographic Variables
 
-| Variable      | Label                         | Levels                                                       |
-| ------------- | ----------------------------- | ------------------------------------------------------------ |
-| **ssid**      | Student Status ID (XJH)       |                                                              |
-| **btrack**    | Track of Study (in base file) | 1: science track, 2: liberal arts track                      |
-| **name**      | Name                          |                                                              |
-| **male**      | Gender                        | 0: female, 1: male                                           |
-| **nid**       | National ID Number            |                                                              |
-| **dob**       | Date of Birth                 |                                                              |
-| **han**       | Han Ethnicity                 | 0: other ethnicity, 1: Han ethnicity                         |
-| orig          | Place of Origin               |                                                              |
-| **hukou**     | Hukou Type                    | 0: rural, 1: urban                                           |
-| hukou_loc     | Hukou Address                 |                                                              |
-| **onlychd**   | Only Child in Family          | 0: no, 1: yes                                                |
-| **polsta**    | Political Status              | 0: not CYL member, 1: CYL member                             |
-| home_add      | Home Address                  |                                                              |
-| tel           | Phone Number                  |                                                              |
-| **board**     | Board at School               | 0: no, 1: yes                                                |
-| **jhsch**     | Junior High School            |                                                              |
-| **univ**      | University Accepted           |                                                              |
-| **univmajor** | University Major              |                                                              |
-| **spec**      | Speciality                    |                                                              |
-| spec_rank     | Speciality Rank               |                                                              |
-| **f_name**    | Father Name                   |                                                              |
-| **f_job**     | Father Job                    | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| f_pos         | Father Job Position           |                                                              |
-| f_tel         | Father Phone Number           |                                                              |
-| **f_edu**     | Father Education              | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **f_polsta**  | Father Political Status       | 0: no party affiliation, 1: CCP member, 2: member of other parties |
-| f_job_add     | Father Job Address            |                                                              |
-| **f_nid**     | Father National ID Number     |                                                              |
-| **m_name**    | Mother Name                   |                                                              |
-| **m_job**     | Mother Job                    | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| m_pos         | Mother Job Position           |                                                              |
-| m_tel         | Mother Phone Number           |                                                              |
-| **m_edu**     | Mother Education              | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **m_polsta**  | Mother Political Status       | 0: no party affiliation, 1: CCP member, 2: member of other parties |
-| m_job_add     | Mother Job Address            |                                                              |
-| **m_nid**     | Mother National ID Number     |                                                              |
+| Variable       | Label                               | Levels                                                       |
+| -------------- | ----------------------------------- | ------------------------------------------------------------ |
+| **ssid**       | Student Status ID (XJH)             |                                                              |
+| **btrack**     | Track of Study (in base file)       | 1: science track, 2: liberal arts track                      |
+| **name**       | Name                                |                                                              |
+| **male**       | Gender                              | 0: female, 1: male                                           |
+| **nid**        | National ID Number                  |                                                              |
+| **dob**        | Date of Birth                       |                                                              |
+| **han**        | Han Ethnicity                       | 0: other ethnicity, 1: Han ethnicity                         |
+| **rural**      | Rural Residency                     | 0: no, 1: yes                                                |
+| orig           | Place of Origin                     |                                                              |
+| hukou          | Hukou Type                          | 0: rural, 1: urban                                           |
+| hukou_loc      | Hukou Address                       |                                                              |
+| **onlychd**    | Only Child in Family                | 0: no, 1: yes                                                |
+| **polsta**     | Political Status                    | 0: not CYL member, 1: CYL member                             |
+| home_add       | Home Address                        |                                                              |
+| tel            | Phone Number                        |                                                              |
+| **board**      | Board at School                     | 0: no, 1: yes                                                |
+| jhsch          | Junior High School                  |                                                              |
+| **jhsch_name** | Standard Name of Junior High School |                                                              |
+| **univ**       | University Accepted                 |                                                              |
+| **univmajor**  | University Major                    |                                                              |
+| **spec**       | Specialty                           |                                                              |
+| **spec2**      | Specialty                           | 0: no specialty, 1: specialty student                        |
+| spec_rank      | Specialty Rank                      |                                                              |
+| **f_name**     | Father Name                         |                                                              |
+| **f_job**      | Father Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| f_pos          | Father Job Position                 |                                                              |
+| f_tel          | Father Phone Number                 |                                                              |
+| **f_edu**      | Father Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **f_polsta**   | Father Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
+| f_job_add      | Father Job Address                  |                                                              |
+| **f_nid**      | Father National ID Number           |                                                              |
+| **m_name**     | Mother Name                         |                                                              |
+| **m_job**      | Mother Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| m_pos          | Mother Job Position                 |                                                              |
+| m_tel          | Mother Phone Number                 |                                                              |
+| **m_edu**      | Mother Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **m_polsta**   | Mother Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
+| m_job_add      | Mother Job Address                  |                                                              |
+| **m_nid**      | Mother National ID Number           |                                                              |
 
 #### Notes
 

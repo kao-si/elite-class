@@ -4,6 +4,8 @@ library(readxl)
 library(tidyverse)
 library(lubridate)
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
 c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
@@ -61,6 +63,33 @@ c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "201
 c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971"
 
 
+# Function that replaces duplicate or incorrect values of XJH in source files with NAs 
+
+# Number of digits of XJH in each cohort (n):
+# 2003: 10
+# 2004-2007: 12
+# 2008-2014: 19
+
+# xjh is the name of XJH variable in df
+# n is the number of digits of XJH in a particular cohort
+tidyxjh <- function(df, xjh, n){
+  
+  # capture the name of df
+  df_name <- deparse(substitute(df))
+  
+  # get the number of XJH values that are being replaced
+  m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]], fromLast = TRUE) | nchar(df[[xjh]]) != n] %>% length()
+  
+  df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]], fromLast = TRUE) | nchar(df[[xjh]]) != n] <- NA
+  
+  cat("Number of XJH values being replaced in", df_name, "is", m, "\n")
+  
+  return(df)
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 # Create and Tidy Demographic Files for Each Cohort ####
 
 
@@ -97,10 +126,6 @@ c03_demo <- c03_base %>%
 
 c03_demo <- c03_demo %>% 
   mutate(
-    ssid = case_when(
-      ssid == "0" ~ NA,
-      TRUE ~ ssid
-    ),
     male = case_when(
       str_detect(male, "男") ~ "1",
       str_detect(male, "女") ~ "0",
@@ -141,6 +166,9 @@ c03_demo <- c03_demo %>%
     ),
     cohort = "2003"
   )
+
+# Further ensure that `ssid` is tidy
+c03_demo <- tidyxjh(c03_demo, "ssid", 10)
 
 ## Cohort 2004 ====
 
@@ -205,6 +233,9 @@ c04_demo <- c04_demo %>%
     ),
     cohort = "2004"
   )
+
+# Further ensure that `ssid` is tidy
+c04_demo <- tidyxjh(c04_demo, "ssid", 12)
 
 ## Cohort 2005 ====
 
@@ -272,6 +303,9 @@ c05_demo <- c05_demo %>%
     ),
     cohort = "2005"
   )
+
+# Further ensure that `ssid` is tidy
+c05_demo <- tidyxjh(c05_demo, "ssid", 12)
 
 ## Cohort 2006 ====
 
@@ -357,6 +391,9 @@ c06_demo <- c06_demo %>%
     ),
     cohort = "2006"
   )
+
+# Further ensure that `ssid` is tidy
+c06_demo <- tidyxjh(c06_demo, "ssid", 12)
 
 ## Cohort 2007 ====
 
@@ -458,6 +495,9 @@ c07_demo <- c07_demo %>%
     ),
     cohort = "2007"
   )
+
+# Further ensure that `ssid` is tidy
+c07_demo <- tidyxjh(c07_demo, "ssid", 12)
 
 ## Cohort 2008 ====
 
@@ -572,6 +612,9 @@ c08_demo <- c08_demo %>%
     cohort = "2008"
   )
 
+# Further ensure that `ssid` is tidy
+c08_demo <- tidyxjh(c08_demo, "ssid", 19)
+
 ## Cohort 2009 ====
 
 c09_demo <- c09_base %>% 
@@ -656,6 +699,9 @@ c09_demo <- c09_demo %>%
     cohort = "2009"
   )
 
+# Further ensure that `ssid` is tidy
+c09_demo <- tidyxjh(c09_demo, "ssid", 19)
+
 ## Cohort 2010 ====
 
 c10_demo <- c10_base %>% 
@@ -732,6 +778,9 @@ c10_demo <- c10_demo %>%
     ),
     cohort = "2010"
   )
+
+# Further ensure that `ssid` is tidy
+c10_demo <- tidyxjh(c10_demo, "ssid", 19)
   
 ## Cohort 2011 ====
 
@@ -848,6 +897,9 @@ c11_demo <- c11_demo %>%
     cohort = "2011"
   )
 
+# Further ensure that `ssid` is tidy
+c11_demo <- tidyxjh(c11_demo, "ssid", 19)
+
 ## Cohort 2012 ====
 
 c12_demo <- c12_base %>% 
@@ -894,10 +946,6 @@ c12_demo <- c12_base %>%
 
 c12_demo <- c12_demo %>% 
   mutate(
-    ssid = case_when(
-      str_detect(ssid, "借读") ~ NA,
-      TRUE ~ ssid
-    ),
     # Remove numeric string in `name`
     name = gsub("[0-9]", "", name),
     male = case_when(
@@ -990,6 +1038,9 @@ c12_demo <- c12_demo %>%
     ),
     cohort = "2012"
   )
+
+# Further ensure that `ssid` is tidy
+c12_demo <- tidyxjh(c12_demo, "ssid", 19)
 
 ## Cohort 2013 ====
 
@@ -1125,6 +1176,9 @@ c13_demo <- c13_demo %>%
     ),
     cohort = "2013"
   )
+
+# Further ensure that `ssid` is tidy
+c13_demo <- tidyxjh(c13_demo, "ssid", 19)
 
 ## Cohort 2014 ====
 
@@ -1266,11 +1320,17 @@ c14_demo <- c14_demo %>%
     cohort = "2014"
   )
 
+# Further ensure that `ssid` is tidy
+c14_demo <- tidyxjh(c14_demo, "ssid", 19)
+
 
 # Combine Demographic Files and Further Tidying & Processing ####
 
+
+# Combine all demographic files into a list
 demo_list <- mget(ls(pattern = "c\\d{2}_demo"))
 
+# Combine all demographic files in the list into a data frame
 demo <- bind_rows(demo_list) %>% 
   select(
     cohort, ssid, btrack, name, male, nid, dob, han, orig, hukou, hukou_loc,
@@ -1279,6 +1339,7 @@ demo <- bind_rows(demo_list) %>%
     m_name, m_job_text, m_pos_text, m_tel, m_edu, m_polsta, m_job_add, m_nid
   )
 
+## Tidy and factor variables ====
 
 demo$btrack <- factor(demo$btrack,
                  levels = c(1, 2),
@@ -1289,14 +1350,20 @@ demo$male <- factor(demo$male,
                     labels = c("Female", "Male"))
 
 # Fix rows with incorrect `nid` and thus incorrect `dob`
-# Also fix rows with incorrect `f_nid` or `m_nid`
 # Convert `dob` to Date
+# Also fix rows with incorrect `f_nid` or `m_nid`
 demo <- demo %>% 
   mutate(
     dob = case_when(
       nchar(nid) != 18 ~ NA,
+      nchar(dob) != 8 ~ NA,
       TRUE ~ dob
-    ),
+    )
+  ) %>% 
+  mutate(
+    dob = ymd(dob)
+  ) %>% 
+  mutate(
     nid = case_when(
       nchar(nid) != 18 ~ NA,
       TRUE ~ nid
@@ -1309,20 +1376,50 @@ demo <- demo %>%
       nchar(m_nid) != 18 ~ NA,
       TRUE ~ m_nid
     )
-  ) %>% 
-  mutate(
-    dob = ymd(dob)
   )
 
 demo$han <- factor(demo$han,
                     levels = c(0, 1),
                     labels = c("Other Ethnicity", "Han Ethnicity"))
 
+demo$hukou <- factor(demo$hukou,
+                   levels = c(0, 1),
+                   labels = c("Rural", "Urban"))
 
+demo$onlychd <- factor(demo$onlychd,
+                     levels = c(0, 1),
+                     labels = c("No", "Yes"))
 
+demo$polsta <- factor(demo$polsta,
+                       levels = c(0, 1),
+                       labels = c("Not CYL Member", "CYL Member"))
 
+demo$board <- factor(demo$board,
+                      levels = c(0, 1),
+                      labels = c("No", "Yes"))
 
+demo <- demo %>% 
+  mutate(
+    spec2 = case_when(
+      is.na(spec) ~ "0",
+      TRUE ~ "1"
+    )
+  )
 
+demo$spec2 <- factor(demo$spec2,
+                     levels = c(0, 1),
+                     labels = c("No Specialty", "Specialty Student"))
 
+demo$f_polsta <- factor(demo$f_polsta,
+                     levels = c(0, 1, 2),
+                     labels = c("No Party Affiliation", 
+                                "CCP Member",
+                                "Member of Other Parties"))
 
+demo$m_polsta <- factor(demo$m_polsta,
+                        levels = c(0, 1, 2),
+                        labels = c("No Party Affiliation", 
+                                   "CCP Member",
+                                   "Member of Other Parties"))
 
+## Extract "rural", "f_job", "m_job" from coding file ====

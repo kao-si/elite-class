@@ -1,7 +1,13 @@
 
 
+# Add XJH Template - Cohort 2010 Class Number Set 1
+
+
 library(readxl)
 library(tidyverse)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
@@ -15,9 +21,7 @@ c10_20110708qm <- read_excel("Raw-Data/2010/G2010/2011年7月8日期末.xlsx")
 
 c10_20111104qz <- read_excel("Raw-Data/2010/G2010/2011年11月4日期中.xlsx")
 
-
-
-# Add XJH Example - Cohort 2010 Class Number Set 1
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 ## Functions ====
