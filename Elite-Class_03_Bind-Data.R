@@ -1,5 +1,4 @@
 
-
 library(readxl)
 library(tidyverse)
 library(lubridate)
@@ -26,44 +25,46 @@ c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5", 
 # Three pairs of students share identical `zcxjh` in c10_gk
 c10_gk %>%
   filter(
-    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh) 
-  ) %>% 
+    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh)
+  ) %>%
   # Extract XJH, name, and father's name
   select(zcxjh, 姓名, jtcy1_xm)
 
 # zcxjh               姓名   jtcy1_xm
-# <chr>               <chr>  <chr>   
-# 1 2010370301000130966 孙康   孙凤林  
-# 2 2010370301000130966 常嘉琪 常建交  
-# 3 2010370301000130112 王晞   王忠    
-# 4 2010370301000130112 苏天宇 苏同伟  
-# 5 2010370301000130853 王文烨 王维刚  
+# <chr>               <chr>  <chr>
+# 1 2010370301000130966 孙康   孙凤林
+# 2 2010370301000130966 常嘉琪 常建交
+# 3 2010370301000130112 王晞   王忠
+# 4 2010370301000130112 苏天宇 苏同伟
+# 5 2010370301000130853 王文烨 王维刚
 # 6 2010370301000130853 刘阳   刘绪枝
 
 # Extract these students' XJH from c10_base
-c10_base %>% 
+c10_base %>%
   filter(
-    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"), 
+    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"),
     str_detect(父姓名mzk, "孙凤林|常建交|王忠|苏同伟|王维刚|刘绪枝")
-  ) %>% 
+  ) %>%
   select(zcxh, xm, 父姓名mzk)
 
 # zcxh                xm        父姓名mzk
-# <chr>               <chr>     <chr>    
+# <chr>               <chr>     <chr>
 # 1 2010370301001030112 苏天宇027 苏同伟200
-# 2 2010370301000130112 王晞65    王忠52   
+# 2 2010370301000130112 王晞65    王忠52
 # 3 2010370301000130583 刘阳56    刘绪枝200
 # 4 2010370301000130853 王文烨527 王维刚200
 # 5 2010370301000130966 孙康38    孙凤林200
 # 6 2010370301000130971 常嘉琪 07 常建交200
 
-# Replace correct XJH value in c10_gk, notice that the `zcxjh` column is `character`
+# Replace correct XJH value in c10_gk,
+# notice that the `zcxjh` column is `character`
 c10_gk$zcxjh[c10_gk$姓名 == "苏天宇" & c10_gk$jtcy1_xm == "苏同伟"] <- "2010370301001030112"
 c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "2010370301000130583"
 c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971"
 
 
-# Function that replaces duplicate or incorrect values of XJH in source files with NAs 
+# Function that replaces duplicate or incorrect values of XJH
+# in source files with NAs
 
 # Number of digits of XJH in each cohort (n):
 # 2003: 10
@@ -72,15 +73,17 @@ c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "
 
 # xjh is the name of XJH variable in df
 # n is the number of digits of XJH in a particular cohort
-tidyxjh <- function(df, xjh, n){
+tidyxjh <- function(df, xjh, n) {
   
   # capture the name of df
   df_name <- deparse(substitute(df))
   
   # get the number of XJH values that are being replaced
-  m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]], fromLast = TRUE) | nchar(df[[xjh]]) != n] %>% length()
+  m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
+  fromLast = TRUE) | nchar(df[[xjh]]) != n] %>% length()
   
-  df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]], fromLast = TRUE) | nchar(df[[xjh]]) != n] <- NA
+  df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
+  fromLast = TRUE) | nchar(df[[xjh]]) != n] <- NA
   
   cat("Number of XJH values being replaced in", df_name, "is", m, "\n")
   
@@ -89,17 +92,15 @@ tidyxjh <- function(df, xjh, n){
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 # Create and Tidy Demographic Files for Each Cohort ####
-
 
 ## Cohort 2003 ====
 
-c03_demo <- c03_base %>% 
+c03_demo <- c03_base %>%
   select(
-    xjh, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 联系电话, 籍贯, 
+    xjh, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 联系电话, 籍贯,
     父姓名, 父单位, 母姓名, 母单位, 家庭住址, 户口性质, birth, 科类
-  ) %>% 
+  ) %>%
   rename(
     ssid = xjh,
     name = 姓名,
@@ -124,7 +125,7 @@ c03_demo <- c03_base %>%
 
 ### Tidy variables ----
 
-c03_demo <- c03_demo %>% 
+c03_demo <- c03_demo %>%
   mutate(
     male = case_when(
       str_detect(male, "男") ~ "1",
@@ -172,11 +173,11 @@ c03_demo <- tidyxjh(c03_demo, "ssid", 10)
 
 ## Cohort 2004 ====
 
-c04_demo <- c04_base %>% 
+c04_demo <- c04_base %>%
   select(
-    xjh, 姓名, 性别, tc, zymc, 毕业学校1, 父姓名, 父单位, 母姓名, 母单位, 
+    xjh, 姓名, 性别, tc, zymc, 毕业学校1, 父姓名, 父单位, 母姓名, 母单位,
     联系电话, 出生日期, 家庭住址
-  ) %>% 
+  ) %>%
   rename(
     ssid = xjh,
     name = 姓名,
@@ -200,13 +201,13 @@ c04_demo <- c04_base %>%
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
     relationship = "one-to-one"
-  ) %>% 
+  ) %>%
   rename(
     btrack = KL,
     nid = SFZH,
     univ = YXMC,
     univmajor = ZYMC
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -214,7 +215,7 @@ c04_demo <- c04_base %>%
 
 ### Tidy variables ----
 
-c04_demo <- c04_demo %>% 
+c04_demo <- c04_demo %>%
   mutate(
     male = case_when(
       str_detect(male, "男") ~ "1",
@@ -239,11 +240,11 @@ c04_demo <- tidyxjh(c04_demo, "ssid", 12)
 
 ## Cohort 2005 ====
 
-c05_demo <- c05_base %>% 
+c05_demo <- c05_base %>%
   select(
     zcxh, xm, xb, sfzh, tc, zx, race, appe, jtzz, 父姓名, 父单位, 母姓名,
     母单位, byxx, csrq, lxdh, kl
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -262,7 +263,7 @@ c05_demo <- c05_base %>%
     dob2 = csrq,
     tel = lxdh,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -270,7 +271,7 @@ c05_demo <- c05_base %>%
 
 ### Tidy variables ----
 
-c05_demo <- c05_demo %>% 
+c05_demo <- c05_demo %>%
   mutate(
     ssid = case_when(
       # Keep `ssid` that contain only numeric strings
@@ -309,11 +310,11 @@ c05_demo <- tidyxjh(c05_demo, "ssid", 12)
 
 ## Cohort 2006 ====
 
-c06_demo <- c06_base %>% 
+c06_demo <- c06_base %>%
   select(
-    zcxh, xm, jtzz, lxdh, 父姓名, 父工作, 父职务, 父电话, 母姓名, 母工作, 
+    zcxh, xm, jtzz, lxdh, 父姓名, 父工作, 父职务, 父电话, 母姓名, 母工作,
     母职务, 母电话, sfzh, byxx, zx, xb, 民族, 政治面貌, wl
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -334,7 +335,7 @@ c06_demo <- c06_base %>%
     han = 民族,
     polsta = 政治面貌,
     btrack = wl
-  ) %>% 
+  ) %>%
   # 12 students were found to share a same `nid` with others
   # Convert the `nid` value of these rows to NA
   mutate(
@@ -342,7 +343,7 @@ c06_demo <- c06_base %>%
       duplicated(nid) | duplicated(nid, fromLast = TRUE) ~ NA,
       TRUE ~ nid
     )
-  ) %>% 
+  ) %>%
   # Extract `spec` from c06_base3
   full_join(
     select(c06_base3, zcxh, tc),
@@ -351,10 +352,10 @@ c06_demo <- c06_base %>%
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
     relationship = "one-to-one"
-  ) %>% 
+  ) %>%
   rename(
     spec = tc
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -362,7 +363,7 @@ c06_demo <- c06_base %>%
 
 ### Tidy variables ----
 
-c06_demo <- c06_demo %>% 
+c06_demo <- c06_demo %>%
   mutate(
     male = case_when(
       str_detect(male, "男") ~ "1",
@@ -397,12 +398,12 @@ c06_demo <- tidyxjh(c06_demo, "ssid", 12)
 
 ## Cohort 2007 ====
 
-c07_demo <- c07_base %>% 
+c07_demo <- c07_base %>%
   select(
     zcxh, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, zx, mark, 籍贯, 父姓名,
-    父工作单位, 父文化程度, 父政治面貌, 父电话, 母姓名, 母工作单位, 
+    父工作单位, 父文化程度, 父政治面貌, 父电话, 母姓名, 母工作单位,
     母政治面貌, 母文化程度, 母电话
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -426,7 +427,7 @@ c07_demo <- c07_base %>%
     m_polsta = 母政治面貌,
     m_edu = 母文化程度,
     m_tel = 母电话
-  ) %>% 
+  ) %>%
   # 3 students were found to share a same `nid`
   # Convert the `nid` value of these rows to NA
   mutate(
@@ -434,7 +435,7 @@ c07_demo <- c07_base %>%
       duplicated(nid) | duplicated(nid, fromLast = TRUE) ~ NA,
       TRUE ~ nid
     )
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -442,7 +443,7 @@ c07_demo <- c07_base %>%
 
 ### Tidy variables ----
 
-c07_demo <- c07_demo %>% 
+c07_demo <- c07_demo %>%
   mutate(
     male = case_when(
       str_detect(male, "男") ~ "1",
@@ -468,7 +469,7 @@ c07_demo <- c07_demo %>%
       str_detect(f_polsta, "无|群众") ~ "0",
       str_detect(f_polsta, "^党员$|中共党员|党 员") ~ "1",
       str_detect(f_polsta, "九三学社|民革党员") ~ "2",
-      TRUE ~ NA 
+      TRUE ~ NA
     ),
     m_polsta = case_when(
       str_detect(m_polsta, "无|群众") ~ "0",
@@ -501,12 +502,12 @@ c07_demo <- tidyxjh(c07_demo, "ssid", 12)
 
 ## Cohort 2008 ====
 
-c08_demo <- c08_base %>% 
+c08_demo <- c08_base %>%
   select(
     zcxh, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, tc, 籍贯31, 父姓名1zc,
     父工作单位choõ, 父文化程度choõ, 父政治面貌choõ, 父电话面貌c,
     母姓名面貌c, 母工作单位choõ, 母政治面貌choõ, 母文化程度choõ, 母电话程度c, kl
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -530,7 +531,7 @@ c08_demo <- c08_base %>%
     m_edu = 母文化程度choõ,
     m_tel = 母电话程度c,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -538,7 +539,7 @@ c08_demo <- c08_base %>%
 
 ### Tidy variables ----
 
-c08_demo <- c08_demo %>% 
+c08_demo <- c08_demo %>%
   mutate(
     # Remove numeric string and then extract the first 3 characters in `name`
     name = substr(gsub("[0-9]", "", name), 1, 3),
@@ -564,7 +565,8 @@ c08_demo <- c08_demo %>%
     # Keep string in `jhsch` that appear before the first numeric character
     jhsch = case_when(
       str_detect(jhsch, "^无") ~ NA,
-      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      regexpr("[0-9]+", jhsch) != -1
+        ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
       TRUE ~ jhsch
     ),
     # Remove numeric string and then extract the first 3 characters in `f_name`
@@ -578,12 +580,12 @@ c08_demo <- c08_demo %>%
       str_detect(m_name, "^无") ~ NA,
       is.na(m_name) ~ NA,
       TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
-    ),  
+    ),
     f_polsta = case_when(
       str_detect(f_polsta, "群众") ~ "0",
       str_detect(f_polsta, "党员") ~ "1",
       str_detect(f_polsta, "九三学社") ~ "2",
-      TRUE ~ NA 
+      TRUE ~ NA
     ),
     m_polsta = case_when(
       str_detect(m_polsta, "群众|团员") ~ "0",
@@ -617,12 +619,12 @@ c08_demo <- tidyxjh(c08_demo, "ssid", 19)
 
 ## Cohort 2009 ====
 
-c09_demo <- c09_base %>% 
+c09_demo <- c09_base %>%
   select(
     zcxh, xm, xb, byxx, byxxdh, sfzh, csrq, dszn, 籍贯zn, mz, zzmm, jtzz, hkszd,
-    lxdh, 父姓名mzk, "父工作单位x09\u09ba", 父地址单位x, 父电话单位x,            
+    lxdh, 父姓名mzk, "父工作单位x09\u09ba", 父地址单位x, 父电话单位x,
     母姓名yzb, "母工作单位xm9\u09ba", 母地址单位x, 母电话单位x, kl
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -647,7 +649,7 @@ c09_demo <- c09_base %>%
     m_job_add = 母地址单位x,
     m_tel = 母电话单位x,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -655,7 +657,7 @@ c09_demo <- c09_base %>%
 
 ### Tidy variables ----
 
-c09_demo <- c09_demo %>% 
+c09_demo <- c09_demo %>%
   mutate(
     # Remove numeric string, English alphabets, ".", and "-" in `name`
     name = gsub("[0-9]|[A-Za-z]|\\.|-", "", name),
@@ -681,7 +683,8 @@ c09_demo <- c09_demo %>%
     # Keep string in `jhsch` that appear before the first numeric character
     jhsch = case_when(
       str_detect(jhsch, "^无") ~ NA,
-      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      regexpr("[0-9]+", jhsch) != -1
+        ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
       TRUE ~ jhsch
     ),
     # Remove numeric string in `f_name`
@@ -704,10 +707,10 @@ c09_demo <- tidyxjh(c09_demo, "ssid", 19)
 
 ## Cohort 2010 ====
 
-c10_demo <- c10_base %>% 
+c10_demo <- c10_base %>%
   select(
-    zcxh, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd, kl 
-  ) %>% 
+    zcxh, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd, kl
+  ) %>%
   rename(
     ssid = zcxh,
     nid = sfzh,
@@ -719,11 +722,11 @@ c10_demo <- c10_base %>%
     polsta = zzmm,
     hukou_loc = hkszd,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract other variables from c10_gk
   full_join(
     select(
-      c10_gk, zcxjh, 姓名, 录取院校, lxdh, jtdz, grjl1_jl, jtcy1_xm, jtcy1_gzdw, 
+      c10_gk, zcxjh, 姓名, 录取院校, lxdh, jtdz, grjl1_jl, jtcy1_xm, jtcy1_gzdw,
       jtcy1_zw, jtcy1_lxdh, jtcy2_xm, jtcy2_gzdw, jtcy2_zw, jtcy2_lxdh
     ),
     by = c("ssid" = "zcxjh"),
@@ -731,7 +734,7 @@ c10_demo <- c10_base %>%
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
     relationship = "one-to-one"
-  ) %>% 
+  ) %>%
   rename(
     name = 姓名,
     univ = 录取院校,
@@ -746,7 +749,7 @@ c10_demo <- c10_base %>%
     m_job_text = jtcy2_gzdw,
     m_pos_text = jtcy2_zw,
     m_tel = jtcy2_lxdh
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -754,7 +757,7 @@ c10_demo <- c10_base %>%
 
 ### Tidy variables ----
 
-c10_demo <- c10_demo %>% 
+c10_demo <- c10_demo %>%
   mutate(
     male = case_when(
       str_detect(male, "^男") ~ "1",
@@ -781,16 +784,16 @@ c10_demo <- c10_demo %>%
 
 # Further ensure that `ssid` is tidy
 c10_demo <- tidyxjh(c10_demo, "ssid", 19)
-  
+
 ## Cohort 2011 ====
 
-c11_demo <- c11_base %>% 
+c11_demo <- c11_base %>%
   select(
     zcxh, xm, xb, sfzh, mz, zzmm, jg, byxx, tc, lxdh, jtzz,
     父姓名z1言, "父工作单位言\u07b4翬ৄ",
-    父电话单位言, 父面貌单位言, 父文化单位言, 母姓名单位言,        
+    父电话单位言, 父面貌单位言, 父文化单位言, 母姓名单位言,
     "母工作单位言\u07b4翬ৄ", 母电话单位言, 母面貌单位言, 母文化单位言
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -812,8 +815,8 @@ c11_demo <- c11_base %>%
     m_job_text = "母工作单位言\u07b4翬ৄ",
     m_tel = 母电话单位言,
     m_polsta = 母面貌单位言,
-    m_edu = 母文化单位言 
-  ) %>% 
+    m_edu = 母文化单位言
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -821,7 +824,7 @@ c11_demo <- c11_base %>%
 
 ### Tidy variables ----
 
-c11_demo <- c11_demo %>% 
+c11_demo <- c11_demo %>%
   mutate(
     # Remove numeric string in `name`
     name = gsub("[0-9]", "", name),
@@ -849,7 +852,8 @@ c11_demo <- c11_demo %>%
     # Keep string in `jhsch` that appear before the first numeric character
     jhsch = case_when(
       str_detect(jhsch, "^无") ~ NA,
-      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      regexpr("[0-9]+", jhsch) != -1
+        ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
       TRUE ~ jhsch
     ),
     # Remove numeric string and then extract the first 3 characters in `f_name`
@@ -863,12 +867,12 @@ c11_demo <- c11_demo %>%
       str_detect(m_name, "^无") ~ NA,
       is.na(m_name) ~ NA,
       TRUE ~ substr(gsub("[0-9]", "", m_name), 1, 3)
-    ),  
+    ),
     f_polsta = case_when(
       str_detect(f_polsta, "群众|^无|团员") ~ "0",
       str_detect(f_polsta, "^党员|中共党员|中国党员|共产党") ~ "1",
       str_detect(f_polsta, "九三|民建|民进|民革") ~ "2",
-      TRUE ~ NA 
+      TRUE ~ NA
     ),
     m_polsta = case_when(
       str_detect(m_polsta, "群众|^无|团员") ~ "0",
@@ -902,12 +906,12 @@ c11_demo <- tidyxjh(c11_demo, "ssid", 19)
 
 ## Cohort 2012 ====
 
-c12_demo <- c12_base %>% 
+c12_demo <- c12_base %>%
   select(
     zcxh, xm1, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
-    jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd, jtcy1dh, 
+    jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd, jtcy1dh,
     jtcy1gz, zzmm, hkxz, dszn, jdfs, xxmc, tc, kl
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm1,
@@ -936,7 +940,7 @@ c12_demo <- c12_base %>%
     jhsch = xxmc,
     spec = tc,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -944,7 +948,7 @@ c12_demo <- c12_base %>%
 
 ### Tidy variables ----
 
-c12_demo <- c12_demo %>% 
+c12_demo <- c12_demo %>%
   mutate(
     # Remove numeric string in `name`
     name = gsub("[0-9]", "", name),
@@ -991,7 +995,8 @@ c12_demo <- c12_demo %>%
     # Keep string in `jhsch` that appear before the first numeric character
     jhsch = case_when(
       str_detect(jhsch, "^无") ~ NA,
-      regexpr("[0-9]+", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
+      regexpr("[0-9]+", jhsch) != -1
+        ~ substr(jhsch, 1, regexpr("[0-9]+", jhsch) - 1),
       TRUE ~ jhsch
     ),
     # Remove numeric string and then extract the first 3 characters in `f_name`
@@ -1044,12 +1049,12 @@ c12_demo <- tidyxjh(c12_demo, "ssid", 19)
 
 ## Cohort 2013 ====
 
-c13_demo <- c13_base %>% 
+c13_demo <- c13_base %>%
   select(
     zcxh, xm, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
     jtcy2whcd, jtcy2dh, jtcy2gz, jtcy2sf, jtcy1xm, jtcy1zzmm, jtcy1whcd,
-    jtcy1dh, jtcy1gz, jtcy1sf, zzmm, hkxz, dszn, jdfs, byxx, kl 
-  ) %>% 
+    jtcy1dh, jtcy1gz, jtcy1sf, zzmm, hkxz, dszn, jdfs, byxx, kl
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -1079,7 +1084,7 @@ c13_demo <- c13_base %>%
     board = jdfs,
     jhsch = byxx,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -1087,7 +1092,7 @@ c13_demo <- c13_base %>%
 
 ### Tidy variables ----
 
-c13_demo <- c13_demo %>% 
+c13_demo <- c13_demo %>%
   mutate(
     # Remove numeric string in `name`
     name = gsub("[0-9]", "", name),
@@ -1126,10 +1131,12 @@ c13_demo <- c13_demo %>%
       str_detect(btrack, "W") ~ "2",
       TRUE ~ NA
     ),
-    # Keep string in `jhsch` that appear before the first numeric character or English alphabet
+    # Keep string in `jhsch` that appear before the first numeric character
+    # or English alphabet
     jhsch = case_when(
       str_detect(jhsch, "^无") ~ NA,
-      regexpr("[0-9]+|[A-Za-z]", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+|[A-Za-z]", jhsch) - 1),
+      regexpr("[0-9]+|[A-Za-z]", jhsch) != -1
+        ~ substr(jhsch, 1, regexpr("[0-9]+|[A-Za-z]", jhsch) - 1),
       TRUE ~ jhsch
     ),
     # Remove numeric string and then extract the first 3 characters in `f_name`
@@ -1182,12 +1189,12 @@ c13_demo <- tidyxjh(c13_demo, "ssid", 19)
 
 ## Cohort 2014 ====
 
-c14_demo <- c14_base %>% 
+c14_demo <- c14_base %>%
   select(
     zcxh, xm, xb, 特长c2, mz, sfzh, csrq, lxdh, jg, hjszd, zz, jtcy2xm,
     jtcy2zzmm, jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd,
     jtcy1dh, jtcy1gz, zzmm, hkxz, dszn, jdfs, byxx, kl
-  ) %>% 
+  ) %>%
   rename(
     ssid = zcxh,
     name = xm,
@@ -1216,7 +1223,7 @@ c14_demo <- c14_base %>%
     board = jdfs,
     jhsch = byxx,
     btrack = kl
-  ) %>% 
+  ) %>%
   # Extract `dob` from `nid`
   mutate(
     dob = substr(nid, 7, 14)
@@ -1224,7 +1231,7 @@ c14_demo <- c14_base %>%
 
 ### Tidy variables ----
 
-c14_demo <- c14_demo %>% 
+c14_demo <- c14_demo %>%
   mutate(
     # Remove numeric string and then extract the first 3 characters in `name`
     name = substr(gsub("[0-9]", "", name), 1, 3),
@@ -1269,10 +1276,12 @@ c14_demo <- c14_demo %>%
       str_detect(btrack, "W") ~ "2",
       TRUE ~ NA
     ),
-    # Keep string in `jhsch` that appear before the first numeric character or English alphabet
+    # Keep string in `jhsch` that appear before the first numeric character
+    # or English alphabet
     jhsch = case_when(
       str_detect(jhsch, "^无") ~ NA,
-      regexpr("[0-9]+|[A-Za-z]", jhsch) != -1 ~ substr(jhsch, 1, regexpr("[0-9]+|[A-Za-z]", jhsch) - 1),
+      regexpr("[0-9]+|[A-Za-z]", jhsch) != -1
+        ~ substr(jhsch, 1, regexpr("[0-9]+|[A-Za-z]", jhsch) - 1),
       TRUE ~ jhsch
     ),
     # Remove numeric string and then extract the first 3 characters in `f_name`
@@ -1323,18 +1332,17 @@ c14_demo <- c14_demo %>%
 # Further ensure that `ssid` is tidy
 c14_demo <- tidyxjh(c14_demo, "ssid", 19)
 
-
 # Combine Demographic Files and Further Tidying & Processing ####
-
 
 # Combine all demographic files into a list
 demo_list <- mget(ls(pattern = "c\\d{2}_demo"))
 
 # Combine all demographic files in the list into a data frame
-demo <- bind_rows(demo_list) %>% 
+demo <- bind_rows(demo_list) %>%
   select(
     cohort, ssid, btrack, name, male, nid, dob, han, orig, hukou, hukou_loc,
-    onlychd, polsta, home_add, tel, board, jhsch, univ, univmajor, spec, spec_rank,
+    onlychd, polsta, home_add, tel, board, jhsch,
+    univ, univmajor, spec, spec_rank,
     f_name, f_job_text, f_pos_text, f_tel, f_edu, f_polsta, f_job_add, f_nid,
     m_name, m_job_text, m_pos_text, m_tel, m_edu, m_polsta, m_job_add, m_nid
   )
@@ -1352,17 +1360,17 @@ demo$male <- factor(demo$male,
 # Fix rows with incorrect `nid` and thus incorrect `dob`
 # Convert `dob` to Date
 # Also fix rows with incorrect `f_nid` or `m_nid`
-demo <- demo %>% 
+demo <- demo %>%
   mutate(
     dob = case_when(
       nchar(nid) != 18 ~ NA,
       nchar(dob) != 8 ~ NA,
       TRUE ~ dob
     )
-  ) %>% 
+  ) %>%
   mutate(
     dob = ymd(dob)
-  ) %>% 
+  ) %>%
   mutate(
     nid = case_when(
       nchar(nid) != 18 ~ NA,
@@ -1398,7 +1406,7 @@ demo$board <- factor(demo$board,
                       levels = c(0, 1),
                       labels = c("No", "Yes"))
 
-demo <- demo %>% 
+demo <- demo %>%
   mutate(
     spec2 = case_when(
       is.na(spec) ~ "0",
@@ -1410,16 +1418,113 @@ demo$spec2 <- factor(demo$spec2,
                      levels = c(0, 1),
                      labels = c("No Specialty", "Specialty Student"))
 
+demo$f_edu <- factor(demo$f_edu,
+                  levels = 1:6,
+                  labels = c("Primary School",
+                            "Junior High School",
+                            "Senior High School/Technical School",
+                            "Associate Degree",
+                            "Undergraduate Degree",
+                            "Postgraduate Degree"))
+
+demo$m_edu <- factor(demo$m_edu,
+                  levels = 1:6,
+                  labels = c("Primary School",
+                            "Junior High School",
+                            "Senior High School/Technical School",
+                            "Associate Degree",
+                            "Undergraduate Degree",
+                            "Postgraduate Degree"))
+
 demo$f_polsta <- factor(demo$f_polsta,
                      levels = c(0, 1, 2),
-                     labels = c("No Party Affiliation", 
+                     labels = c("No Party Affiliation",
                                 "CCP Member",
                                 "Member of Other Parties"))
 
 demo$m_polsta <- factor(demo$m_polsta,
                         levels = c(0, 1, 2),
-                        labels = c("No Party Affiliation", 
+                        labels = c("No Party Affiliation",
                                    "CCP Member",
                                    "Member of Other Parties"))
 
-## Extract "rural", "f_job", "m_job" from coding file ====
+## Extract demographic variables from coding files ====
+
+# Note: Run Part III of "WC02_Variable-Coding-Files"
+
+# Extract "rural", "f_job", and "m_job"
+demo <- demo %>%
+# join coding using "ssid"
+left_join(
+  select(varcode, ssid, rural, f_job, m_job),
+  by = "ssid",
+  # Make sure NAs do not match
+  na_matches = "never"
+) %>%
+# join coding using "nid"
+left_join(
+  select(varcode, nid, rural, f_job, m_job),
+  by = "nid",
+  # Make sure NAs do not match
+  na_matches = "never"
+)
+
+# Tidy the columns
+demo <- demo %>%
+mutate(
+  rural = case_when(
+    is.na(rural.y) ~ rural.x,
+    !is.na(rural.y) ~ rural.y
+  ),
+  f_job = case_when(
+    is.na(f_job.y) ~ f_job.x,
+    !is.na(f_job.y) ~ f_job.y
+  ),
+  m_job = case_when(
+    is.na(m_job.y) ~ m_job.x,
+    !is.na(m_job.y) ~ m_job.y
+  ),
+  rural.x = NULL,
+  rural.y = NULL,
+  f_job.x = NULL,
+  f_job.y = NULL,
+  m_job.x = NULL,
+  m_job.y = NULL
+)
+
+# Extract "jhsch_name" and "jhsch_rural"
+demo <- demo %>%
+left_join(
+  select(jhschcode, jhsch, jhsch_name, jhsch_rural),
+  by = "jhsch",
+  # Make sure NAs do not match
+  na_matches = "never"
+)
+
+# Factor variables
+
+demo$rural <- factor(demo$rural,
+                          levels = c(0, 1),
+                          labels = c("No", "Yes"))
+
+demo$f_job <- factor(demo$f_job,
+                    levels = 1:6,
+                    labels = c("Peasant",
+                              "Unstable Occupation",
+                              "Self-Employed",
+                              "Enterprise Employee",
+                              "Public Institution Employee",
+                              "Civil Servant/Military Man"))
+
+demo$m_job <- factor(demo$m_job,
+                    levels = 1:6,
+                    labels = c("Peasant",
+                              "Unstable Occupation",
+                              "Self-Employed",
+                              "Enterprise Employee",
+                              "Public Institution Employee",
+                              "Civil Servant/Military Man"))
+
+demo$jhsch_rural <- factor(demo$jhsch_rural,
+                          levels = c(0, 1),
+                          labels = c("No", "Yes"))

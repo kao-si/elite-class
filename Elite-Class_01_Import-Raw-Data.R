@@ -1,11 +1,8 @@
 
-
 library(readxl)
 library(tidyverse)
 
-
 # Cohort 2003 ####
-
 
 ## Exam Files ====
 
@@ -33,9 +30,7 @@ c03_mn1 <- read_excel("Raw-Data/2003/2003级高三成绩/高三一模成绩.xlsx
 
 c03_mn2 <- read_excel("Raw-Data/2003/2003级高三成绩/高三二模成绩.xlsx")
 
-
 # Cohort 2004 ####
-
 
 ## Exam Files ====
 
@@ -117,9 +112,7 @@ c04_md1 <- read_excel("Raw-Data/2004/G2004/md1.xlsx")
 
 c04_testname <- read_excel("Raw-Data/2004/G2004/testname.xlsx")
 
-
 # Cohort 2005 ####
-
 
 ## Exam Files ====
 
@@ -265,9 +258,7 @@ c05_md1 <- read_excel("Raw-Data/2005/G2005/md1.xlsx")
 
 c05_testname <- read_excel("Raw-Data/2005/G2005/testname.xlsx")
 
-
 # Cohort 2006 ####
-
 
 ## Exam Files ====
 
@@ -423,9 +414,7 @@ c06_md <- read_excel("Raw-Data/2006/G2006/md.xlsx")
 
 c06_testname <- read_excel("Raw-Data/2006/G2006/testname.xlsx")
 
-
 # Cohort 2007 ####
-
 
 ## Exam Files ====
 
@@ -523,9 +512,7 @@ c07_md2 <- read_excel("Raw-Data/2007/G2007/md2.xlsx")
 
 c07_testname <- read_excel("Raw-Data/2007/G2007/testname.xlsx")
 
-
 # Cohort 2008 ####
-
 
 ## Exam Files ====
 
@@ -623,9 +610,7 @@ c08_md <- read_excel("Raw-Data/2008/G2008/md.xlsx")
 
 c08_testname <- read_excel("Raw-Data/2008/G2008/testname.xlsx")
 
-
 # Cohort 2009 ####
-
 
 ## Exam Files ====
 
@@ -759,9 +744,7 @@ c09_md <- read_excel("Raw-Data/2009/G2009/md.xlsx")
 
 c09_testname <- read_excel("Raw-Data/2009/G2009/testname.xlsx")
 
-
 # Cohort 2010 ####
-
 
 ## Exam Files ====
 
@@ -859,9 +842,7 @@ c10_md <- read_excel("Raw-Data/2010/G2010/md.xlsx")
 
 c10_testname <- read_excel("Raw-Data/2010/G2010/testname.xlsx")
 
-
 # Cohort 2011 ####
-
 
 ## Exam Files ====
 
@@ -959,9 +940,7 @@ c11_testname <- read_excel("Raw-Data/2011/G2011/testname.xlsx")
 
 c11_testname_a <- read_excel("Raw-Data/2011/G2011/testname 的副本.xlsx")
 
-
 # Cohort 2012 ####
-
 
 ## Exam Files ====
 
@@ -1093,9 +1072,7 @@ c12_testname_2 <- read_excel("Raw-Data/2012/G2012/testname2.xlsx")
 
 c12_testname_2_a <- read_excel("Raw-Data/2012/G2012/testname又副本.xlsx")
 
-
 # Cohort 2013 ####
-
 
 ## Exam Files ====
 
@@ -1203,9 +1180,7 @@ c13_md <- read_excel("Raw-Data/2013/G2013/md.xlsx")
 
 c13_testname <- read_excel("Raw-Data/2013/G2013/testname.xlsx")
 
-
 # Cohort 2014 ####
-
 
 ## Exam Files ====
 
@@ -1323,9 +1298,7 @@ c14_md <- read_excel("Raw-Data/2014/G2014/md.xlsx")
 
 c14_testname <- read_excel("Raw-Data/2014/G2014/testname.xlsx")
 
-
 # Processing ####
-
 
 # Combine c04_20050128qm_a and c04_20050125qm_b (Footnote 1)
 c04_20050128qm <- bind_rows(c04_20050128qm_a, c04_20050128qm_b)
@@ -1340,38 +1313,39 @@ c09_20101112qz <- bind_rows(c09_20101112qz_lk, c09_20101112qz_wk)
 # Three pairs of students share identical `zcxjh` in c10_gk
 c10_gk %>%
   filter(
-    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh) 
-  ) %>% 
+    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh)
+  ) %>%
   # Extract XJH, name, and father's name
   select(zcxjh, 姓名, jtcy1_xm)
 
 # zcxjh               姓名   jtcy1_xm
-# <chr>               <chr>  <chr>   
-# 1 2010370301000130966 孙康   孙凤林  
-# 2 2010370301000130966 常嘉琪 常建交  
-# 3 2010370301000130112 王晞   王忠    
-# 4 2010370301000130112 苏天宇 苏同伟  
-# 5 2010370301000130853 王文烨 王维刚  
+# <chr>               <chr>  <chr>
+# 1 2010370301000130966 孙康   孙凤林
+# 2 2010370301000130966 常嘉琪 常建交
+# 3 2010370301000130112 王晞   王忠
+# 4 2010370301000130112 苏天宇 苏同伟
+# 5 2010370301000130853 王文烨 王维刚
 # 6 2010370301000130853 刘阳   刘绪枝
 
 # Extract these students' XJH from c10_base
-c10_base %>% 
+c10_base %>%
   filter(
-    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"), 
+    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"),
     str_detect(父姓名mzk, "孙凤林|常建交|王忠|苏同伟|王维刚|刘绪枝")
-  ) %>% 
+  ) %>%
   select(zcxh, xm, 父姓名mzk)
 
 # zcxh                xm        父姓名mzk
-# <chr>               <chr>     <chr>    
+# <chr>               <chr>     <chr>
 # 1 2010370301001030112 苏天宇027 苏同伟200
-# 2 2010370301000130112 王晞65    王忠52   
+# 2 2010370301000130112 王晞65    王忠52
 # 3 2010370301000130583 刘阳56    刘绪枝200
 # 4 2010370301000130853 王文烨527 王维刚200
 # 5 2010370301000130966 孙康38    孙凤林200
 # 6 2010370301000130971 常嘉琪 07 常建交200
 
-# Replace correct XJH value in c10_gk, notice that the `zcxjh` column is `character`
+# Replace correct XJH value in c10_gk,
+# notice that the `zcxjh` column is `character`
 c10_gk$zcxjh[c10_gk$姓名 == "苏天宇" & c10_gk$jtcy1_xm == "苏同伟"] <- "2010370301001030112"
 c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "2010370301000130583"
 c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971" 
@@ -1381,7 +1355,6 @@ c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "
 # Remove the duplicated rows
 c12_gk <- c12_gk %>% filter(!duplicated(ksh))
 
-
 # 20 students has two duplicate rows of data in c13_gk
 # Remove the duplicated rows
 c13_gk <- c13_gk %>% filter(!duplicated(ksh))
@@ -1390,9 +1363,6 @@ c13_gk <- c13_gk %>% filter(!duplicated(ksh))
 # Remove these two rows
 c14_gk <- c14_gk %>% filter(is.na(夏考考试号) | 夏考考试号 != "17370304110227")
 
-
 # Save to .RData ####
 
-
 save.image("Raw-Data.RData")
-

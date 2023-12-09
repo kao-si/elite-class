@@ -1,6 +1,8 @@
+
 ## Import Raw Data Files to R
 
 ### General Terms
+
 - Demographics&Grades file -> **base**
 - 中考 (HSEE) -> **zk**
 - 高考 (CEE) -> **gk**
@@ -16,8 +18,11 @@
 	- 普通班排名（不计算实验班学生，平行班学生在级部的排名）-> **pt**
 	- 全部班排名 -> **qb**
 - Exam data files without XJH in this step will be marked with an **$** before their file names
+
 ### Cohort 2003
+
 #### Exam Files
+
 - c03_base <- ZBYZ2003_Demographics&Grades
 - c03_base2 <- ZBYZ2003_Demographics&Grades_2
 - c03_zkg1g2 <- 2003级中考高一高二成绩
@@ -30,9 +35,11 @@
 - **$** c03_jc5 <- 高三第5次成绩
 - **$** c03_mn1 <- 高三一模成绩
 - **$** c03_mn2 <- 高三二模成绩
+
 ### Cohort 2004
 
 #### Exam Files
+
 - c04_base <- ZBYZ2004_Demographics&Grades
 - c04_base2 <- ZBYZ2004_Demographics&Grades_2
 - c04_zkg1g2 <- 2004级中考高一高二成绩
@@ -58,7 +65,9 @@
 - **$** c04_mn1 <- 高三一模
 - c04_mn2 <- 高三二模成绩
 - c04_gk <- 2004级高考成绩
+
 #### 6d Files
+
 - c04_20050924yk_6d <- 2005年9月24日月考6d
 - c04_20051104qz_6d <- 2005年11月4日期中6d
 - c04_20051216yk_6d <- 2005年12月16日测试6d
@@ -68,7 +77,9 @@
 - c04_20060426qz_6d <- 2006年4月26日期中_新6d[^5]
 - c04_20060612yk_6d <- 2006年6月12日月考6d
 - c04_20060712qm_6d <- 2006年7月12日期末6d
+
 #### Misc Files
+
 - c04_md <- md
 - c04_md1 <- md1
 - c04_testname <- testname
@@ -76,6 +87,7 @@
 ### Cohort 2005
 
 #### Exam Files
+
 - c05_base <- ZBYZ2005_Demographics&Grades
 - c05_base2 <- ZBYZ2005_Demographics&Grades_2
 - c05_zkg1g2g3 <- 2005级中考高一高二高三成绩
@@ -106,12 +118,13 @@
 - c05_20071217jc_yj <- 2007年12月17日二摸底（应届生排名）
 - **$** c05_20080201qm_wj <- 2008年2月1日期末（含往届）
 - **$** c05_20080201qm_yj <- 2008年2月1日期末应届
-- **$** c05_20080229mn1_wj_dk <- 2008年2月29日一模（含往届三段单科）[^8]	
+- **$** c05_20080229mn1_wj_dk <- 2008年2月29日一模（含往届三段单科）[^8]
 - **$** c05_20080229mn1_wj_zh <- 2008年2月29日一模（含往届三段综合）
 - **$** c05_20080430mn2_yj <- 2008年4月30日二模应届排名
 - **$** c05_20080430mn2_wj <- 2008年4月30日二模应往届排名
 
 #### 6d Files
+
 - c05_20051106qz_6d <- 2005年11月6日期中6d
 - c05_20051106qz_2_6d <- 2005年11月6日期中之二6d[^9]
 - c05_20051222yk_6d <- 2005年12月22日月考（六段分科）6d
@@ -144,15 +157,17 @@
 - c05_20080430mn2_wj_6d <- 2008年4月30日二模应往届排名6d
 
 #### Misc Files
+
 - c05_20060426qz <- 2006年4月26日期中[^11]
--  c05_20060712qm <- 2006年7月12日期末[^12]
-- c05_md <- md 
+- c05_20060712qm <- 2006年7月12日期末[^12]
+- c05_md <- md
 - c05_md1 <- md1
 - c05_testname <- testname
 
 ### Cohort 2006
 
 #### Exam Files
+
 - c06_base <- ZBYZ2006_Demographics&Grades
 - c06_base2 <- ZBYZ2006_Demographics&Grades_2
 - c06_base3 <- ZBYZ2006_Demographics&Grades_3
@@ -197,6 +212,7 @@
 - **$** c06_20090429mn2 <- 2009年4月29日二模
 
 #### 6d Files
+
 - c06_20061005yk_6d <- 2006年10月5日测试6d
 - c06_20061106qz_6d <- 2006年11月6日期中6d
 - c06_20061106qz_qb_6d <- 2006年11月6日期中实验普通排名6d
@@ -229,12 +245,14 @@
 - c06_20090429mn2_6d <- 2009年4月29日二模6d
 
 #### Misc Files
+
 - c06_md <- md
 - c06_testname <- testname
 
 ### Cohort 2007
 
 #### Exam Files
+
 - c07_base <- ZBYZ2007_Demographics&Grades
 - c07_base2 <- ZBYZ2007_Demographics&Grades_2
 - c07_zkg1gk <- 2007级中考高一高考成绩
@@ -251,7 +269,7 @@
 - c07_20081103qz <- 2008年11月3日期中
 - c07_20090118qm <- 2009年1月18日期末
 - c07_20090415qz <- 2009年4月15日期中
-- **$** c07_20090708qm <- 2009年7月8日期末	
+- **$** c07_20090708qm <- 2009年7月8日期末
 - **$** c07_20091009jc <- 2009年10月9日测试
 - **$** c07_20091111qz <- 2009年11月11日期中
 - **$** c07_20091111qz_bxb <- 2009年11月11日期中补习班
@@ -261,6 +279,7 @@
 - **$** c07_20100430mn2_yj <- 2010年4月30日二模应届
 
 #### 6d Files
+
 - c07_20071013yk_gkkm_6d <- 2007年10月13日月考高考科目6d
 - c07_20071013yk_qbkm_6d <- 2007年10月13日月考全部科目6d
 - c07_20071118qz_6d <- 2007年11月18日期中6d
@@ -280,6 +299,7 @@
 - c07_20100430mn2_yj_6d <- 2010年4月30日二模应届6d
 
 #### Misc Files
+
 - c07_md <- md
 - c07_md1 <- md1
 - c07_md2 <- md2
@@ -288,10 +308,11 @@
 ### Cohort 2008
 
 #### Exam Files
+
 - c08_base <- ZBYZ2008_Demographics&Grades
 - **$** c08_20081106qz <- 2008年11月6日期中
 - **$** c08_20090116qm <- 2009年1月16日期末
-- c08_20090416qz <- 2009年4月16日期中	
+- c08_20090416qz <- 2009年4月16日期中
 - c08_20090709qm <- 2009年7月9日期末
 - **$** c08_20091111qz_xzb_dy <- 2009年11月11日期中按行政班分单元排名但语数外年级排名
 - **$** c08_20091111qz_zb_dy <- 2009年11月11日期中按走班分单元排名但语数外年级排名
@@ -306,7 +327,7 @@
 - **$** c08_20101008jc_bxb <- 2010年10月8日测试补习班
 - c08_20101112qz_bxb <- 2010年11月12日期中含补习班
 - c08_20101112qz_yj <- 2010年11月12日期中应届
-- c08_20101222jc_bxb <- 2010年12月22日测试含补习班	
+- c08_20101222jc_bxb <- 2010年12月22日测试含补习班
 - c08_20101222jc_yj <- 2010年12月22日测试应届
 - c08_20110122jc_wj <- 2011年1月22日测试含往届
 - c08_20110122jc_yj <- 2011年1月22日测试应届
@@ -318,6 +339,7 @@
 - c08_20110528mn3_yj <- 2011年5月28日三模应届
 
 #### 6d Files
+
 - c08_20081106qz_6d <- 2008年11月6日期中6d
 - c08_20090116qm_6d <- 2009年1月16日期末6d
 - c08_20090416qz_6d <- 2009年4月16日期中6d
@@ -335,12 +357,14 @@
 - c08_20110528mn3_yj_6d <- 2011年5月28日三模应届6d
 
 #### Misc Files
+
 - c08_md <- md
 - c08_testname <- testname
 
 ### Cohort 2009
 
 #### Exam Files
+
 - c09_base <- ZBYZ2009_Demographics&Grades
 - **$** c09_20091111qz_2p <- 2009年11月11日期中分两部分排名
 - **$** c09_20091111qz_qnj <- 2009年11月11日期中语数外全年级排名
@@ -382,6 +406,7 @@
 - **$** c09_20120527mn3_yj <- 2012年5月27日三模应届
 
 #### 6d Files
+
 - c09_20091111qz_2p_6d <- 2009年11月11日期中分两部分排名6d
 - c09_20100201qm_2p_6d <- 2010年02月1日期末分两部分排名6d
 - c09_20100304yk_6d <- 2010年03月4日测试6d
@@ -406,12 +431,14 @@
 - c09_20120527mn3_yj_6d <- 2012年5月27日三模应届6d
 
 #### Misc Files
+
 - c09_md <- md
 - c09_testname <- testname
 
 ### Cohort 2010
 
 #### Exam Files
+
 - c10_base <- ZBYZ2010_Demographics&Grades
 - c10_gk <- 2010级高考成绩
 - c10_gk_info <- 2010级高考报名信息
@@ -441,6 +468,7 @@
 - **$** c10_20130527mn3 <- 2013年5月27日三模
 
 #### 6d Files
+
 - c10_20101110yk_6d <- 2010年11月10日测试6d
 - c10_20110122qm_6d <- 2011年1月22日期末6d
 - c10_20110428qz_6d <- 2011年4月28日期中6d
@@ -449,7 +477,7 @@
 - c10_20120113qm_6d <- 2012年1月13日期末6d
 - c10_20120419qz_6d <- 2012年4月19日期中6d
 - c10_20120706qm_6d <- 2012年7月6日期末6d
-- c10_20121009jc_6d <- 2012年10月9日测试6d	
+- c10_20121009jc_6d <- 2012年10月9日测试6d
 - c10_20121108jc_yj_6d <- 2012年11月8日测试应届6d
 - c10_20121214jc_yj_6d <- 2012年12月14日测试应届6d
 - c10_20130125qm_yj_6d <- 2013年1月25日期末应届6d
@@ -459,12 +487,14 @@
 - c10_20130527mn3_6d <- 2013年5月27日三模6d
 
 #### Misc Files
+
 - c10_md <- md
 - c10_testname <- testname
 
 ### Cohort 2011
 
 #### Exam Files
+
 - c11_base <- ZBYZ2011_Demographics&Grades
 - **$** c11_gk <- 2011级高考成绩
 - c11_gk_info <- 2011级高考报名信息
@@ -492,6 +522,7 @@
 - c11_20140422mn2 <- 2014年4月44日二模[^17]
 
 #### 6d Files
+
 - c11_20111110qz_6d <- 2011年11月10日期中6d
 - c11_20120113qm_6d <- 2012年1月13日期末6d
 - c11_20120420qz_6d <- 2012年4月20日期中6d
@@ -511,13 +542,15 @@
 - c11_20140120qm_6d <- 2014年1月20期末6d
 
 #### Misc Files
+
 - c11_md <- md
-- c11_testname <- testname 
+- c11_testname <- testname
 - c11_testname_a <- testname 的副本
 
 ### Cohort 2012
 
 #### Exam Files
+
 - c12_base <- ZBYZ2012_Demographics&Grades
 - **$** c12_gk <- 2012级高考成绩
 - c12_gk_info <- 2012带高考考号
@@ -553,6 +586,7 @@
 - c12_20150526mn3 <- 2015年5月26日三模
 
 #### 6d Files
+
 - c12_20121011yk_6d <- 2012年10月11日入学测验6d
 - c12_20121115qz_6d <- 2012年11月15日期中6d
 - c12_20130105yk_6d <- 2013年1月5日测试6d
@@ -579,6 +613,7 @@
 - c12_20150506mn2_6d <- 2015年5月6日二模6d
 
 #### Misc Files
+
 - c12_md <- md
 - c12_testname <- testname
 - c12_testname_a <- testname 的副本
@@ -588,6 +623,7 @@
 ### Cohort 2013
 
 #### Exam Files
+
 - c13_base <- ZBYZ2013_Demographics&Grades
 - **$** c13_gk <- 2013级高考成绩
 - c13_20131012yk <- 2013年10月12日测试
@@ -616,6 +652,7 @@
 - c13_20160504mn2 <- 2016年5月4日二模
 
 #### 6d Files
+
 - c13_20131012yk_6d <- 2013年10月12日测试6d
 - c13_20131105qz_6d <- 2013年11月05日期中6d
 - c13_20140120qm_6d <- 2014年1月20日期末6d
@@ -640,12 +677,14 @@
 - c13_20160403jc_6d <- 2016年4月3日测试6d
 
 #### Misc Files
+
 - c13_md <- md
 - c13_testname <- testname
 
 ### Cohort 2014
 
 #### Exam Files
+
 - c14_base <- ZBYZ2014_Demographics&Grades
 - **$** c14_gk <- 2014级高考成绩
 - c14_zk <- 2014年9月入学成绩
@@ -674,7 +713,9 @@
 - c14_20170401jc <- 2017年4月1日测试
 - c14_20170505mn2 <- 2017年5月5日二模
 - c14_20170525mn3 <- 2017年5月25日三模
+
 #### 6d Files
+
 - c14_20141012yk_6d <- 2014年10月12日测试6d
 - c14_20141121qz_6d <- 2014年11月21日期中6D
 - c14_20150105yk_6d <- 2015年1月5日测试6d
@@ -700,11 +741,11 @@
 - c14_20170401jc_6d <- 2017年4月1日测试6d
 - c14_20170505mn2_6d <- 2017年5月5日二模6d
 - c14_20170525mn3_6d <- 2017年5月25日三模6d
+
 #### Misc Files
+
 - c14_md <- md
 - c14_testname <- testname
-
-
 
 ## Identify Exam Files in Different Sets of Class Number
 
@@ -1024,53 +1065,52 @@
 | c14_20170525mn3 |                    | BH                 |
 | c14_gk          |                    | 班级               |
 
-
-
 ## Variables
 
 ### Demographic Variables
 
-| Variable       | Label                               | Levels                                                       |
-| -------------- | ----------------------------------- | ------------------------------------------------------------ |
-| **ssid**       | Student Status ID (XJH)             |                                                              |
-| **btrack**     | Track of Study (in base file)       | 1: science track, 2: liberal arts track                      |
-| **name**       | Name                                |                                                              |
-| **male**       | Gender                              | 0: female, 1: male                                           |
-| **nid**        | National ID Number                  |                                                              |
-| **dob**        | Date of Birth                       |                                                              |
-| **han**        | Han Ethnicity                       | 0: other ethnicity, 1: Han ethnicity                         |
-| **rural**      | Rural Residency                     | 0: no, 1: yes                                                |
-| orig           | Place of Origin                     |                                                              |
-| hukou          | Hukou Type                          | 0: rural, 1: urban                                           |
-| hukou_loc      | Hukou Address                       |                                                              |
-| **onlychd**    | Only Child in Family                | 0: no, 1: yes                                                |
-| **polsta**     | Political Status                    | 0: not CYL member, 1: CYL member                             |
-| home_add       | Home Address                        |                                                              |
-| tel            | Phone Number                        |                                                              |
-| **board**      | Board at School                     | 0: no, 1: yes                                                |
-| jhsch          | Junior High School                  |                                                              |
-| **jhsch_name** | Standard Name of Junior High School |                                                              |
-| **univ**       | University Accepted                 |                                                              |
-| **univmajor**  | University Major                    |                                                              |
-| **spec**       | Specialty                           |                                                              |
-| **spec2**      | Specialty                           | 0: no specialty, 1: specialty student                        |
-| spec_rank      | Specialty Rank                      |                                                              |
-| **f_name**     | Father Name                         |                                                              |
-| **f_job**      | Father Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| f_pos          | Father Job Position                 |                                                              |
-| f_tel          | Father Phone Number                 |                                                              |
-| **f_edu**      | Father Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **f_polsta**   | Father Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
-| f_job_add      | Father Job Address                  |                                                              |
-| **f_nid**      | Father National ID Number           |                                                              |
-| **m_name**     | Mother Name                         |                                                              |
-| **m_job**      | Mother Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| m_pos          | Mother Job Position                 |                                                              |
-| m_tel          | Mother Phone Number                 |                                                              |
-| **m_edu**      | Mother Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **m_polsta**   | Mother Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
-| m_job_add      | Mother Job Address                  |                                                              |
-| **m_nid**      | Mother National ID Number           |                                                              |
+| Variable        | Label                               | Levels                                                       |
+| --------------- | ----------------------------------- | ------------------------------------------------------------ |
+| **ssid**        | Student Status ID (XJH)             |                                                              |
+| **btrack**      | Track of Study (in base file)       | 1: science track, 2: liberal arts track                      |
+| **name**        | Name                                |                                                              |
+| **male**        | Gender                              | 0: female, 1: male                                           |
+| **nid**         | National ID Number                  |                                                              |
+| **dob**         | Date of Birth                       |                                                              |
+| **han**         | Han Ethnicity                       | 0: other ethnicity, 1: Han ethnicity                         |
+| **rural**       | Rural Residency                     | 0: no, 1: yes                                                |
+| orig            | Place of Origin                     |                                                              |
+| hukou           | Hukou Type                          | 0: rural, 1: urban                                           |
+| hukou_loc       | Hukou Address                       |                                                              |
+| **onlychd**     | Only Child in Family                | 0: no, 1: yes                                                |
+| **polsta**      | Political Status                    | 0: not CYL member, 1: CYL member                             |
+| home_add        | Home Address                        |                                                              |
+| tel             | Phone Number                        |                                                              |
+| **board**       | Board at School                     | 0: no, 1: yes                                                |
+| jhsch           | Junior High School                  |                                                              |
+| **jhsch_name**  | Standard Name of Junior High School |                                                              |
+| **jhsch_rural** | Rural Junior High School            | 0: no, 1: yes                                                |
+| **univ**        | University Accepted                 |                                                              |
+| **univmajor**   | University Major                    |                                                              |
+| **spec**        | Specialty                           |                                                              |
+| **spec2**       | Specialty                           | 0: no specialty, 1: specialty student                        |
+| spec_rank       | Specialty Rank                      |                                                              |
+| **f_name**      | Father Name                         |                                                              |
+| **f_job**       | Father Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| f_pos           | Father Job Position                 |                                                              |
+| f_tel           | Father Phone Number                 |                                                              |
+| **f_edu**       | Father Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **f_polsta**    | Father Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
+| f_job_add       | Father Job Address                  |                                                              |
+| **f_nid**       | Father National ID Number           |                                                              |
+| **m_name**      | Mother Name                         |                                                              |
+| **m_job**       | Mother Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| m_pos           | Mother Job Position                 |                                                              |
+| m_tel           | Mother Phone Number                 |                                                              |
+| **m_edu**       | Mother Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **m_polsta**    | Mother Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
+| m_job_add       | Mother Job Address                  |                                                              |
+| **m_nid**       | Mother National ID Number           |                                                              |
 
 #### Notes
 
@@ -1119,10 +1159,9 @@
 | m_job_add             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    | 0    |
 | **m_nid**             | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
 
-
 ### Exam-Varying Variables
 
-#### Exam Prefixes 
+#### Exam Prefixes
 
 Collect information of **14** exams for each student in a cohort
 
@@ -1131,7 +1170,7 @@ Collect information of **14** exams for each student in a cohort
 - Mock Exam 1 & 2: **g3k1, g3k2**
 - CEE: **cee**
 
- #### Subject Suffixes
+#### Subject Suffixes
 
 1. 文理科类: \_trk
 2. 班号: \_cls
@@ -1173,8 +1212,6 @@ Collect information of **14** exams for each student in a cohort
   - 从高三开始设立，根据高二几次考试的成绩选拔全年级前36名学生组成，成立之后组成人员亦有进出流动发生
   - 上课与晚自习在一起，实质等同“实验班”
   - 每个年级只设立一个“虚拟班”
-
-
 
 ## Footnotes
 
