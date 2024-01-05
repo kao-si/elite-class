@@ -205,7 +205,7 @@ haven::write_sav(df_jhsch, "Variable-Coding-Files/初中学校统一名称文件
 
 # Prepare final data frame of variable coding for use in the data set
 
-# Four variables to be added to the data set:
+# Five variables to be added to the data set:
 # (1) rural
 # (2) f_job
 # (3) m_job

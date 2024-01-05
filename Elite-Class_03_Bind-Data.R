@@ -1448,9 +1448,106 @@ demo$m_polsta <- factor(demo$m_polsta,
                                    "CCP Member",
                                    "Member of Other Parties"))
 
-## Extract demographic variables from coding files ====
+## Prepare coding files (Part III in WC02) ====
 
-# Note: Run Part III of "WC02_Variable-Coding-Files"
+# Five variables to be added to the data set:
+# (1) rural
+# (2) f_job
+# (3) m_job
+# (4) jhsch_name
+# (5) jhsch_rural
+
+# Variables (1) - (3)
+
+# Load the completed working files and rename variables
+
+# Unique identifier in "varcode1": "ssid"
+varcode1 <- read_excel("Variable-Coding-Files/住址工作分类文件_完成_2023Dec.xlsx", col_types = "text", trim_ws = TRUE)
+
+colnames(varcode1) <- c("cohort", "ssid", "name", "jhsch", "address", "city",
+                       "f_name", "f_job_text", "f_job",
+                       "m_name", "m_job_text", "m_job")
+
+# Unique identifier in "varcode2": "nid"
+varcode2 <- read_excel("Variable-Coding-Files/住址工作分类文件_补充_完成_2023Dec.xlsx", col_types = "text", trim_ws = TRUE)
+
+colnames(varcode2) <- c("cohort", "ssid", "name", "nid",
+                        "hukou_loc", "address", "city",
+                        "f_name", "f_job_text", "f_job",
+                        "m_name", "m_job_text", "m_job")
+
+# Bind the two data frames
+varcode <- bind_rows(varcode1, varcode2, .id = "file") %>%
+  select(
+    file, cohort, ssid, nid, name, address, city,
+    f_name, f_job_text, f_job,
+    m_name, m_job_text, m_job
+  )
+
+# Further process variable coding issues
+
+# Create and process variable `rural`
+varcode <- varcode %>%
+  # recode `city` to create `rural`
+  mutate(
+    rural = case_when(
+      city == "1" ~ "0",
+      city == "0" ~ "1",
+      TRUE ~ NA
+    )
+  ) %>%
+  # correct coding of certain residential addresses as identified by the coder
+  mutate(
+    rural = case_when(
+      str_detect(address, "李家窑|夏家庄|后峪|窝瞳|五龙|良庄|安上|珑山|祥和园|竹林小区") ~ "0",
+      TRUE ~ rural
+    )
+  )
+
+# Process variables `f_job` and `m_job`
+varcode <- varcode %>%
+  mutate(
+    f_job = case_when(
+      str_detect(f_job_text, "自来水公司") ~ "5",
+      str_detect(f_job_text, "邮政局") ~ "5",
+      str_detect(f_job_text, "供电所") ~ "5",
+      str_detect(f_job_text, "鲁山林场") ~ "5",
+      str_detect(f_job_text, "电信局") ~ "5",
+      str_detect(f_job_text, "粮食局") ~ "6",
+      str_detect(f_job_text, "街道办事处") ~ "6",
+      TRUE ~ f_job
+    ),
+    m_job = case_when(
+      str_detect(m_job_text, "自来水公司") ~ "5",
+      str_detect(m_job_text, "邮政局") ~ "5",
+      str_detect(m_job_text, "供电所") ~ "5",
+      str_detect(m_job_text, "鲁山林场") ~ "5",
+      str_detect(m_job_text, "电信局") ~ "5",
+      str_detect(m_job_text, "粮食局") ~ "6",
+      str_detect(m_job_text, "街道办事处") ~ "6",
+      TRUE ~ m_job
+    )
+  )
+
+# Variables (4) - (5)
+
+# Load the completed working file and rename variables
+
+jhschcode <- read_excel("Variable-Coding-Files/初中学校统一名称文件_完成_2023Dec.xlsx", col_types = "text", trim_ws = TRUE)
+
+colnames(jhschcode) <- c("jhsch", "jhsch_name", "jhsch_city")
+
+# Recode `jhsch_city` to create `jhsch_rural`
+jhschcode <- jhschcode %>%
+mutate(
+  jhsch_rural = case_when(
+    jhsch_city == "1" ~ "0",
+    jhsch_city == "0" ~ "1",
+    TRUE ~ NA
+  )
+)
+
+## Extract demographic variables from coding files ====
 
 # Extract "rural", "f_job", and "m_job"
 demo <- demo %>%
@@ -1528,3 +1625,14 @@ demo$m_job <- factor(demo$m_job,
 demo$jhsch_rural <- factor(demo$jhsch_rural,
                           levels = c(0, 1),
                           labels = c("No", "Yes"))
+
+## Select variables to finalize the demographic file ====
+
+demo <- demo %>%
+select(
+  cohort, name, ssid, nid, dob,
+  male, rural, onlychd, board, jhsch_name, jhsch_rural,
+  han, polsta, spec, spec_rank, spec2, btrack, univ, univmajor,
+  f_name, f_job, f_edu, f_polsta, f_nid,
+  m_name, m_job, m_edu, m_polsta, m_nid
+)

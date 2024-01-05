@@ -1071,30 +1071,31 @@
 
 | Variable        | Label                               | Levels                                                       |
 | --------------- | ----------------------------------- | ------------------------------------------------------------ |
-| **ssid**        | Student Status ID (XJH)             |                                                              |
-| **btrack**      | Track of Study (in base file)       | 1: science track, 2: liberal arts track                      |
+| **cohort**      | Enrollment Cohort                   |                                                              |
 | **name**        | Name                                |                                                              |
-| **male**        | Gender                              | 0: female, 1: male                                           |
+| **ssid**        | Student Status ID (XJH)             |                                                              |
 | **nid**         | National ID Number                  |                                                              |
 | **dob**         | Date of Birth                       |                                                              |
-| **han**         | Han Ethnicity                       | 0: other ethnicity, 1: Han ethnicity                         |
+| **male**        | Gender                              | 0: female, 1: male                                           |
 | **rural**       | Rural Residency                     | 0: no, 1: yes                                                |
 | orig            | Place of Origin                     |                                                              |
 | hukou           | Hukou Type                          | 0: rural, 1: urban                                           |
 | hukou_loc       | Hukou Address                       |                                                              |
-| **onlychd**     | Only Child in Family                | 0: no, 1: yes                                                |
-| **polsta**      | Political Status                    | 0: not CYL member, 1: CYL member                             |
 | home_add        | Home Address                        |                                                              |
 | tel             | Phone Number                        |                                                              |
+| **onlychd**     | Only Child in Family                | 0: no, 1: yes                                                |
 | **board**       | Board at School                     | 0: no, 1: yes                                                |
 | jhsch           | Junior High School                  |                                                              |
 | **jhsch_name**  | Standard Name of Junior High School |                                                              |
 | **jhsch_rural** | Rural Junior High School            | 0: no, 1: yes                                                |
+| **han**         | Han Ethnicity                       | 0: other ethnicity, 1: Han ethnicity                         |
+| **polsta**      | Political Status                    | 0: not CYL member, 1: CYL member                             |
+| **spec**        | Specialty                           |                                                              |
+| **spec_rank**   | Specialty Rank                      |                                                              |
+| **spec2**       | Specialty                           | 0: no specialty, 1: specialty student                        |
+| **btrack**      | Track of Study (in base file)       | 1: science track, 2: liberal arts track                      |
 | **univ**        | University Accepted                 |                                                              |
 | **univmajor**   | University Major                    |                                                              |
-| **spec**        | Specialty                           |                                                              |
-| **spec2**       | Specialty                           | 0: no specialty, 1: specialty student                        |
-| spec_rank       | Specialty Rank                      |                                                              |
 | **f_name**      | Father Name                         |                                                              |
 | **f_job**       | Father Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
 | f_pos           | Father Job Position                 |                                                              |
