@@ -1626,7 +1626,7 @@ demo$jhsch_rural <- factor(demo$jhsch_rural,
                           levels = c(0, 1),
                           labels = c("No", "Yes"))
 
-## Select variables to finalize the demographic file ====
+## Select variables to finalize the demographic files ====
 
 demo <- demo %>%
 select(
@@ -1636,3 +1636,147 @@ select(
   f_name, f_job, f_edu, f_polsta, f_nid,
   m_name, m_job, m_edu, m_polsta, m_nid
 )
+
+# Split the finalized "demo" data frame by cohort and
+# extract individual data frames
+
+demo_list2 <- split(demo, demo$cohort)
+
+for (df_name in names(demo_list2)) {
+  dfname <- paste0("c", df_name, "_demo")
+  assign(dfname, demo_list2[[df_name]])
+}
+
+# Join Exam Variables ####
+
+# Function that selects and renames the variables in an exam file
+
+# df is the exam file
+# prefix is the exam prefix; e.g., prefix = "hsee"
+# for first three variables, name "!!!" if missing; e.g., trk = "!!!"
+# for other variables, no action needed if missing
+srev <- function(df, prefix, trk, cls, cid,
+tot = "总成绩", chn = "语文", mat = "数学", eng = "英语",
+phy = "物理", che = "化学", bio = "生物",
+geo = "地理", his = "历史", pol = "政治",
+sci = "理综", lib = "文综", gen = "能力", com = "综合") {
+  
+  # full list of variables to be included
+  full_vars <- c(trk, cls, cid, tot, chn, mat, eng, phy, che, bio,
+  geo, his, pol, sci, lib, gen, com)
+
+  # variables that exist in the current exam file
+  select_vars <- intersect(full_vars, colnames(df))
+
+  # variables that do not exist in the current exam file
+  miss_vars <- setdiff(full_vars, colnames(df))
+
+  # create the data frame for joining
+  df1 <- df %>%
+  dplyr::select(ssid, all_of(select_vars))
+
+  # add missing columns with NA values
+  for (col in miss_vars) {
+    df1[[col]] <- NA
+  }
+
+  # reorder the columns
+  df1 <- df1 %>%
+  dplyr::select(ssid, all_of(full_vars))
+
+  # rename the variables
+  var_names <- paste0(prefix, "_", c("trk", "cls", "cid", "tot", "chn", "mat",
+  "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib", "gen", "com"))
+
+  colnames(df1) <- c("ssid", var_names)
+
+  return(df1)
+}
+
+# Function that joins all exam variables in one cohort
+
+jev <- function(cohort) {
+
+  # get the files
+  df_demo <- get(paste0("c", cohort, "_demo"))
+  df_hsee <- get(paste0("c", cohort, "_hsee"))
+  df_g1m1 <- get(paste0("c", cohort, "_g1m1"))
+  df_g1f1 <- get(paste0("c", cohort, "_g1f1"))
+  df_g1m2 <- get(paste0("c", cohort, "_g1m2"))
+  df_g1f2 <- get(paste0("c", cohort, "_g1f2"))
+  df_g2m1 <- get(paste0("c", cohort, "_g2m1"))
+  df_g2f1 <- get(paste0("c", cohort, "_g2f1"))
+  df_g2m2 <- get(paste0("c", cohort, "_g2m2"))
+  df_g2f2 <- get(paste0("c", cohort, "_g2f2"))
+  df_g3m1 <- get(paste0("c", cohort, "_g3m1"))
+  df_g3f1 <- get(paste0("c", cohort, "_g3f1"))
+  df_g3k1 <- get(paste0("c", cohort, "_g3k1"))
+  df_g3k2 <- get(paste0("c", cohort, "_g3k2"))
+  df_cee <- get(paste0("c", cohort, "_cee"))
+
+  # mismatch checks
+  n1 <- df_demo %>% dplyr::anti_join(df_hsee) %>% nrow()
+  n2 <- df_demo %>% dplyr::anti_join(df_g1m1) %>% nrow()
+  n3 <- df_demo %>% dplyr::anti_join(df_g1f1) %>% nrow()
+  n4 <- df_demo %>% dplyr::anti_join(df_g1m2) %>% nrow()
+  n5 <- df_demo %>% dplyr::anti_join(df_g1f2) %>% nrow()
+  n6 <- df_demo %>% dplyr::anti_join(df_g2m1) %>% nrow()
+  n7 <- df_demo %>% dplyr::anti_join(df_g2f1) %>% nrow()
+  n8 <- df_demo %>% dplyr::anti_join(df_g2m2) %>% nrow()
+  n9 <- df_demo %>% dplyr::anti_join(df_g2f2) %>% nrow()
+  n10 <- df_demo %>% dplyr::anti_join(df_g3m1) %>% nrow()
+  n11 <- df_demo %>% dplyr::anti_join(df_g3f1) %>% nrow()
+  n12 <- df_demo %>% dplyr::anti_join(df_g3k1) %>% nrow()
+  n13 <- df_demo %>% dplyr::anti_join(df_g3k2) %>% nrow()
+  n14 <- df_demo %>% dplyr::anti_join(df_cee) %>% nrow()
+
+  cat("Comparing the demo file to each exam file, numbers of mismatches are:",
+  n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14)
+
+  # perform the join
+  df <- df_demo %>%
+  dplyr::full_join(
+    df_hsee, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g1m1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g1f1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g1m2, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g1f2, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g2m1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g2f1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g2m2, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g2f2, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g3m1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g3f1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g3k1, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_g3k2, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  ) %>%
+  dplyr::full_join(
+    df_cee, by = "ssid", na_matches = "never", relationship = "one-to-one"
+  )
+
+  return(df)
+}
