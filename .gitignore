@@ -11,3 +11,4 @@ Raw-Data/**
 *.rds
 *.xlsx
 *.sav
+.Rapp.history

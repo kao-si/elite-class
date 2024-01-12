@@ -47,26 +47,30 @@ cui2 <- function(df, bh, xm, uiv = "cls_name") {
 }
 
 # Function that replaces duplicate or incorrect values of XJH
-# in source files with NAs
-
-# Number of digits of XJH in each cohort (n):
-# 2003: 10
-# 2004-2007: 12
-# 2008-2014: 19
+# with NAs and rename XJH column as "ssid" in source files
 
 # xjh is the name of XJH variable in df
-# n is the number of digits of XJH in a particular cohort
-tidyxjh <- function(df, xjh, n) {
+tidyxjh <- function(df, xjh) {
   
   # capture the name of df
   df_name <- deparse(substitute(df))
+
+  # number of digits of XJH in each cohort:
+  # 2003: 10
+  # 2004-2007: 12
+  # 2008-2014: 19
+  nchar_xjh <- c(10, 12, 19)
   
   # get the number of XJH values that are being replaced
   m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | nchar(df[[xjh]]) != n] %>% length()
+  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] %>% length()
   
+  # replace XJH values with NAs
   df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | nchar(df[[xjh]]) != n] <- NA
+  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] <- NA
+
+  # rename XJH column to "ssid"
+  colnames(df)[colnames(df) == xjh] <- "ssid"
   
   cat("Number of XJH values being replaced in", df_name, "is", m, "\n")
   
@@ -91,15 +95,15 @@ mis <- function(df) {
   return(mismatch)
 }
 
-# Function that corrects XJH values in source files with
-# relatively more mismatched XJH values
+# Function that corrects XJH values in source files with a
+# relatively large number of mismatched XJH values
 
-# df is the file with relatively more mismatched XJH values
+# df is the file with a relatively large number of mismatched XJH values
 # xjh is the name of XJH variable in df
 # check is the check file
 # dfxjh is the name of XJH variable from df in check
 # fxjh is the name of the first XJH variable in check
-repmis <- function(df, xjh, check, dfxjh, fxjh) {
+repmis <- function(df, xjh = "ssid", check, dfxjh, fxjh) {
   
   misdf <- dplyr::filter(check, !!rlang::sym(dfxjh) != !!rlang::sym(fxjh))
   
@@ -155,20 +159,20 @@ fillna <- function(df, uiv = "cls_name") {
   return(df)
 }
 
-# Function that replaces incorrect XJH values in the target file that has
-# duplicate values of the unique identifier
+# Function that replaces incorrect XJH values caused by
+# duplicate values of the unique identifier in the target file
 
 # df1 is the target file
 # df2 is a chosen source file
 # xhv1 is the name of the XH variable in df1
 # xhv2 is the name of the XH variable in df2
-# xjhv1 is the name of the XJH variable in df1 ("ssid")
+# xjhv1 is the name of the XJH variable in df1
 # xjhv2 is the name of the XJH variable in df2
 
 # Use dup_print function to see if the target file has duplicate values
 # in "cls_name" and if the chosen source file is appropriate
-dup_print <- function(df1, df2, xhv1, xhv2, xjhv2,
-                      xjhv1 = "ssid", uiv = "cls_name") {
+dup_print <- function(df1, df2, xhv1, xhv2,
+xjhv1 = "ssid", xjhv2 = "ssid", uiv = "cls_name") {
   
   # Capture the name of df1
   df1_name <- deparse(substitute(df1))
@@ -202,13 +206,13 @@ dup_print <- function(df1, df2, xhv1, xhv2, xjhv2,
   
 }
 
-dup <- function(df1, df2, xhv1, xhv2, xjhv2,
-                xjhv1 = "ssid", uiv = "cls_name") {
+dup <- function(df1, df2, xhv1, xhv2,
+xjhv1 = "ssid", xjhv2 = "ssid", uiv = "cls_name") {
   
   # Capture the name of df1
   df1_name <- deparse(substitute(df1))
   
-  df1_dup <- df1 %>% 
+  df1_dup <- df1 %>%
     dplyr::group_by(!!rlang::sym(uiv)) %>%
     dplyr::filter(n() > 1) %>%
     dplyr::select(!!rlang::sym(uiv), !!rlang::sym(xhv1), !!rlang::sym(xjhv1))
@@ -255,11 +259,11 @@ c10_20111104qz <- cui(c10_20111104qz, bh = "BH1", xm = "姓名")
 c10_base <- cui2(c10_base, bh = "bhx", xm = "xm")
 
 # Tidy XJH values in source files
-c10_20101110yk <- tidyxjh(c10_20101110yk, xjh = "XJH", n = 19)
-c10_20110122qm <- tidyxjh(c10_20110122qm, xjh = "XJH", n = 19)
-c10_20110428qz <- tidyxjh(c10_20110428qz, xjh = "XJH", n = 19)
-c10_20111104qz <- tidyxjh(c10_20111104qz, xjh = "XJH", n = 19)
-c10_base <- tidyxjh(c10_base, xjh = "zcxh", n = 19)
+c10_20101110yk <- tidyxjh(c10_20101110yk, xjh = "XJH")
+c10_20110122qm <- tidyxjh(c10_20110122qm, xjh = "XJH")
+c10_20110428qz <- tidyxjh(c10_20110428qz, xjh = "XJH")
+c10_20111104qz <- tidyxjh(c10_20111104qz, xjh = "XJH")
+c10_base <- tidyxjh(c10_base, xjh = "zcxh")
 
 
 ## Step 2: Check XJH ====
@@ -268,11 +272,11 @@ c10_base <- tidyxjh(c10_base, xjh = "zcxh", n = 19)
 # Double confirm that XJH values are consistent across all source files
 
 # Gather XJH from all source files using full_join
-check1001 <- select(c10_20101110yk, cls_name, XJH) %>%
-  full_join(select(c10_20110122qm, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>%
-  full_join(select(c10_20110428qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
-  full_join(select(c10_20111104qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
-  full_join(select(c10_base, cls_name, zcxh), by = "cls_name", na_matches = "never", multiple = "any")
+check1001 <- select(c10_20101110yk, cls_name, ssid) %>%
+  full_join(select(c10_20110122qm, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
+  full_join(select(c10_20110428qz, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>% 
+  full_join(select(c10_20111104qz, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>% 
+  full_join(select(c10_base, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any")
 
 # Perform the check using function 'mis'
 mis(check1001)
@@ -291,9 +295,9 @@ mis(check1001)
 ## Deal with the `repmis` function and continue to treat the file
 ## "c10_20110122qm" as a source file
 
-repmis_print(check1001, "XJH.y", "XJH.x")
+repmis_print(check1001, "ssid.y", "ssid.x")
 
-c10_20110122qm <- repmis(c10_20110122qm, "XJH", check1001, "XJH.y", "XJH.x")
+c10_20110122qm <- repmis(c10_20110122qm, "ssid", check1001, "ssid.y", "ssid.x")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -306,10 +310,10 @@ c10_20110122qm <- repmis(c10_20110122qm, "XJH", check1001, "XJH.y", "XJH.x")
 
 # Left_join XJH from all source files to the target file
 c10_20110708qm <- c10_20110708qm %>%
-  left_join(select(c10_20101110yk, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>%
-  left_join(select(c10_20110428qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
-  left_join(select(c10_20111104qz, cls_name, XJH), by = "cls_name", na_matches = "never", multiple = "any") %>% 
-  left_join(select(c10_base, cls_name, zcxh), by = "cls_name", na_matches = "never", multiple = "any")
+  left_join(select(c10_20101110yk, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
+  left_join(select(c10_20110428qz, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>% 
+  left_join(select(c10_20111104qz, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>% 
+  left_join(select(c10_base, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any")
 
 # Perform the function 'fillna', which will
 # (1) keep only the XJH values extracted from the first source file above
@@ -325,10 +329,10 @@ c10_20110708qm <- fillna(c10_20110708qm)
 c10_20110708qm %>% count(cls_name) %>% filter(n > 1)
 
 # >>> Make sure the chosen source file is appropriate using function `dup_print`
-dup_print(c10_20110708qm, c10_20101110yk, xhv1 = "XH", xhv2 = "XH", xjhv2 = "XJH")
+dup_print(c10_20110708qm, c10_20101110yk, xhv1 = "XH", xhv2 = "XH")
 
 # Perform the replacement using function 'dup'
-c10_20110708qm <- dup(c10_20110708qm, c10_20101110yk, xhv1 = "XH", xhv2 = "XH", xjhv2 = "XJH")
+c10_20110708qm <- dup(c10_20110708qm, c10_20101110yk, xhv1 = "XH", xhv2 = "XH")
 
 
 ## Step 5: Check the Completed Target File ====

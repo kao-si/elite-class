@@ -28,26 +28,30 @@ cui2 <- function(df, bh, xm, uiv = "cls_name") {
 }
 
 # Function that replaces duplicate or incorrect values of XJH
-# in source files with NAs
-
-# Number of digits of XJH in each cohort (n):
-# 2003: 10
-# 2004-2007: 12
-# 2008-2014: 19
+# with NAs and rename XJH column as "ssid" in source files
 
 # xjh is the name of XJH variable in df
-# n is the number of digits of XJH in a particular cohort
-tidyxjh <- function(df, xjh, n) {
+tidyxjh <- function(df, xjh) {
   
   # capture the name of df
   df_name <- deparse(substitute(df))
+
+  # number of digits of XJH in each cohort:
+  # 2003: 10
+  # 2004-2007: 12
+  # 2008-2014: 19
+  nchar_xjh <- c(10, 12, 19)
   
   # get the number of XJH values that are being replaced
   m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | nchar(df[[xjh]]) != n] %>% length()
+  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] %>% length()
   
+  # replace XJH values with NAs
   df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | nchar(df[[xjh]]) != n] <- NA
+  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] <- NA
+
+  # rename XJH column to "ssid"
+  colnames(df)[colnames(df) == xjh] <- "ssid"
   
   cat("Number of XJH values being replaced in", df_name, "is", m, "\n")
   
@@ -72,15 +76,15 @@ mis <- function(df) {
   return(mismatch)
 }
 
-# Function that corrects XJH values in source files with
-# relatively more mismatched XJH values
+# Function that corrects XJH values in source files with a
+# relatively large number of mismatched XJH values
 
-# df is the file with relatively more mismatched XJH values
+# df is the file with a relatively large number of mismatched XJH values
 # xjh is the name of XJH variable in df
 # check is the check file
 # dfxjh is the name of XJH variable from df in check
 # fxjh is the name of the first XJH variable in check
-repmis <- function(df, xjh, check, dfxjh, fxjh) {
+repmis <- function(df, xjh = "ssid", check, dfxjh, fxjh) {
   
   misdf <- dplyr::filter(check, !!rlang::sym(dfxjh) != !!rlang::sym(fxjh))
   
@@ -136,20 +140,20 @@ fillna <- function(df, uiv = "cls_name") {
   return(df)
 }
 
-# Function that replaces incorrect XJH values in the target file that has
-# duplicate values of the unique identifier
+# Function that replaces incorrect XJH values caused by
+# duplicate values of the unique identifier in the target file
 
 # df1 is the target file
 # df2 is a chosen source file
 # xhv1 is the name of the XH variable in df1
 # xhv2 is the name of the XH variable in df2
-# xjhv1 is the name of the XJH variable in df1 ("ssid")
+# xjhv1 is the name of the XJH variable in df1
 # xjhv2 is the name of the XJH variable in df2
 
 # Use dup_print function to see if the target file has duplicate values
 # in "cls_name" and if the chosen source file is appropriate
-dup_print <- function(df1, df2, xhv1, xhv2, xjhv2,
-                      xjhv1 = "ssid", uiv = "cls_name") {
+dup_print <- function(df1, df2, xhv1, xhv2,
+xjhv1 = "ssid", xjhv2 = "ssid", uiv = "cls_name") {
   
   # Capture the name of df1
   df1_name <- deparse(substitute(df1))
@@ -183,13 +187,13 @@ dup_print <- function(df1, df2, xhv1, xhv2, xjhv2,
   
 }
 
-dup <- function(df1, df2, xhv1, xhv2, xjhv2,
-                xjhv1 = "ssid", uiv = "cls_name") {
+dup <- function(df1, df2, xhv1, xhv2,
+xjhv1 = "ssid", xjhv2 = "ssid", uiv = "cls_name") {
   
   # Capture the name of df1
   df1_name <- deparse(substitute(df1))
   
-  df1_dup <- df1 %>% 
+  df1_dup <- df1 %>%
     dplyr::group_by(!!rlang::sym(uiv)) %>%
     dplyr::filter(n() > 1) %>%
     dplyr::select(!!rlang::sym(uiv), !!rlang::sym(xhv1), !!rlang::sym(xjhv1))

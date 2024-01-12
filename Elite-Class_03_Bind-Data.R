@@ -64,26 +64,30 @@ c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "
 
 
 # Function that replaces duplicate or incorrect values of XJH
-# in source files with NAs
-
-# Number of digits of XJH in each cohort (n):
-# 2003: 10
-# 2004-2007: 12
-# 2008-2014: 19
+# with NAs and rename XJH column as "ssid" in source files
 
 # xjh is the name of XJH variable in df
-# n is the number of digits of XJH in a particular cohort
-tidyxjh <- function(df, xjh, n) {
+tidyxjh <- function(df, xjh) {
   
   # capture the name of df
   df_name <- deparse(substitute(df))
+
+  # number of digits of XJH in each cohort:
+  # 2003: 10
+  # 2004-2007: 12
+  # 2008-2014: 19
+  nchar_xjh <- c(10, 12, 19)
   
   # get the number of XJH values that are being replaced
   m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | nchar(df[[xjh]]) != n] %>% length()
+  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] %>% length()
   
+  # replace XJH values with NAs
   df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | nchar(df[[xjh]]) != n] <- NA
+  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] <- NA
+
+  # rename XJH column to "ssid"
+  colnames(df)[colnames(df) == xjh] <- "ssid"
   
   cat("Number of XJH values being replaced in", df_name, "is", m, "\n")
   
@@ -169,7 +173,7 @@ c03_demo <- c03_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c03_demo <- tidyxjh(c03_demo, "ssid", 10)
+c03_demo <- tidyxjh(c03_demo, "ssid")
 
 ## Cohort 2004 ====
 
@@ -236,7 +240,7 @@ c04_demo <- c04_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c04_demo <- tidyxjh(c04_demo, "ssid", 12)
+c04_demo <- tidyxjh(c04_demo, "ssid")
 
 ## Cohort 2005 ====
 
@@ -306,7 +310,7 @@ c05_demo <- c05_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c05_demo <- tidyxjh(c05_demo, "ssid", 12)
+c05_demo <- tidyxjh(c05_demo, "ssid")
 
 ## Cohort 2006 ====
 
@@ -394,7 +398,7 @@ c06_demo <- c06_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c06_demo <- tidyxjh(c06_demo, "ssid", 12)
+c06_demo <- tidyxjh(c06_demo, "ssid")
 
 ## Cohort 2007 ====
 
@@ -498,7 +502,7 @@ c07_demo <- c07_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c07_demo <- tidyxjh(c07_demo, "ssid", 12)
+c07_demo <- tidyxjh(c07_demo, "ssid")
 
 ## Cohort 2008 ====
 
@@ -615,7 +619,7 @@ c08_demo <- c08_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c08_demo <- tidyxjh(c08_demo, "ssid", 19)
+c08_demo <- tidyxjh(c08_demo, "ssid")
 
 ## Cohort 2009 ====
 
@@ -703,7 +707,7 @@ c09_demo <- c09_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c09_demo <- tidyxjh(c09_demo, "ssid", 19)
+c09_demo <- tidyxjh(c09_demo, "ssid")
 
 ## Cohort 2010 ====
 
@@ -783,7 +787,7 @@ c10_demo <- c10_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c10_demo <- tidyxjh(c10_demo, "ssid", 19)
+c10_demo <- tidyxjh(c10_demo, "ssid")
 
 ## Cohort 2011 ====
 
@@ -902,7 +906,7 @@ c11_demo <- c11_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c11_demo <- tidyxjh(c11_demo, "ssid", 19)
+c11_demo <- tidyxjh(c11_demo, "ssid")
 
 ## Cohort 2012 ====
 
@@ -1045,7 +1049,7 @@ c12_demo <- c12_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c12_demo <- tidyxjh(c12_demo, "ssid", 19)
+c12_demo <- tidyxjh(c12_demo, "ssid")
 
 ## Cohort 2013 ====
 
@@ -1185,7 +1189,7 @@ c13_demo <- c13_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c13_demo <- tidyxjh(c13_demo, "ssid", 19)
+c13_demo <- tidyxjh(c13_demo, "ssid")
 
 ## Cohort 2014 ====
 
@@ -1330,7 +1334,7 @@ c14_demo <- c14_demo %>%
   )
 
 # Further ensure that `ssid` is tidy
-c14_demo <- tidyxjh(c14_demo, "ssid", 19)
+c14_demo <- tidyxjh(c14_demo, "ssid")
 
 # Combine Demographic Files and Further Tidying & Processing ####
 
@@ -1653,7 +1657,7 @@ for (df_name in names(demo_list2)) {
 
 # df is the exam file
 # prefix is the exam prefix; e.g., prefix = "hsee"
-# for first three variables, name "!!!" if missing; e.g., trk = "!!!"
+# for first three variables, name argument name if missing; e.g., trk = "trk"
 # for other variables, no action needed if missing
 srev <- function(df, prefix, trk, cls, cid,
 tot = "总成绩", chn = "语文", mat = "数学", eng = "英语",
@@ -1730,7 +1734,7 @@ jev <- function(cohort) {
   n13 <- df_demo %>% dplyr::anti_join(df_g3k2) %>% nrow()
   n14 <- df_demo %>% dplyr::anti_join(df_cee) %>% nrow()
 
-  cat("Comparing the demo file to each exam file, numbers of mismatches are:",
+  cat("Joining the demo file to each exam file, numbers of mismatches are:",
   n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14)
 
   # perform the join
