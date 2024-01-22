@@ -1300,17 +1300,20 @@ c14_testname <- read_excel("Raw-Data/2014/G2014/testname.xlsx")
 
 # Processing ####
 
-# Combine c04_20050128qm_a and c04_20050125qm_b (Footnote 1)
+# (1) Combine c04_20050128qm_a and c04_20050125qm_b (Footnote 1)
 c04_20050128qm <- bind_rows(c04_20050128qm_a, c04_20050128qm_b)
 
-# Add Ability score to c05_20070701qm_hnl (Footnote 7)
+# (2) Add Ability score to c05_20070701qm_hnl (Footnote 7)
 c05_20070701qm_hnl$能力 <- c05_20070701qm_hnl$总成绩 - c05_20070701qm_bhnl$总成绩
 
-# Combine c09_20101112_qz_lk and c09_20101112_qz_wk (Footnote 15)
+# (3) Combine c09_20101112_qz_lk and c09_20101112_qz_wk (Footnote 15)
+
+# Replace NA with "W" in column c09_20101112_qz_wk$KL
+c09_20101112qz_wk$KL <- "W"
+
 c09_20101112qz <- bind_rows(c09_20101112qz_lk, c09_20101112qz_wk)
 
-
-# Three pairs of students share identical `zcxjh` in c10_gk
+# (4) Three pairs of students share identical `zcxjh` in c10_gk
 c10_gk %>%
   filter(
     duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh)
@@ -1351,18 +1354,18 @@ c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "201
 c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971" 
 
 
-# 47 students has two duplicate rows of data in c12_gk
+# (5) 47 students has two duplicate rows of data in c12_gk
 # Remove the duplicated rows
 c12_gk <- c12_gk %>% filter(!duplicated(ksh))
 
-# 20 students has two duplicate rows of data in c13_gk
+# (6) 20 students has two duplicate rows of data in c13_gk
 # Remove the duplicated rows
 c13_gk <- c13_gk %>% filter(!duplicated(ksh))
 
-# One student has two rows of (different) data in c14_gk
+# (7) One student has two rows of (different) data in c14_gk
 # Remove these two rows
 c14_gk <- c14_gk %>% filter(is.na(夏考考试号) | 夏考考试号 != "17370304110227")
 
 # Save to .RData ####
 
-save.image("Raw-Data.RData")
+# save.image("Raw-Data.RData")
