@@ -854,7 +854,7 @@
 
 ### Cohort 2007
 
-| Data File           | Class Number Set 1   | Class Number Set 4 |
+| Data File           | Class Number Set 1   | Class Number Set 2 |
 | ------------------- | -------------------- | ------------------ |
 | c07_base            | bh0710/bh0802/bh0809 | bh                 |
 | c07_zkg1gk          | bh0710               |                    |
