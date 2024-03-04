@@ -268,7 +268,7 @@ c06_base2 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_2.xlsx", col
 
 c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx", col_types = "text", trim_ws = TRUE)
 
-c06_gk <- read_excel("Raw-Data/2006/2006级高考成绩.XLS")
+c06_gk <- read_excel("Raw-Data/2006/2006级高考成绩.xls", sheet = "Sheet2")
 
 c06_zk <- read_excel("Raw-Data/2006/G2006/入学成绩.xlsx")
 
@@ -1368,4 +1368,4 @@ c14_gk <- c14_gk %>% filter(is.na(夏考考试号) | 夏考考试号 != "1737030
 
 # Save to .RData ####
 
-# save.image("Raw-Data.RData")
+save.image("Raw-Data.RData")

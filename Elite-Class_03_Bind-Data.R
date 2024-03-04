@@ -1,100 +1,9 @@
 
+# Run "Elite-Class_02_Add-SSID(XJH).R" before running this script
+
 library(readxl)
 library(tidyverse)
 library(lubridate)
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-c03_base <- read_excel("Raw-Data/2003/ZBYZ2003_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
-c04_base <- read_excel("Raw-Data/2004/ZBYZ2004_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
-c05_base <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
-c06_base <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
-c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS", col_types = "text", trim_ws = TRUE)
-c08_base <- read_excel("Raw-Data/2008/ZBYZ2008_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c09_base <- read_excel("Raw-Data/2009/ZBYZ2009_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c11_base <- read_excel("Raw-Data/2011/ZBYZ2011_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c12_base <- read_excel("Raw-Data/2012/ZBYZ2012_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c13_base <- read_excel("Raw-Data/2013/ZBYZ2013_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c14_base <- read_excel("Raw-Data/2014/ZBYZ2014_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
-c04_gk <- read_excel("Raw-Data/2004/G2004/高考成绩.xlsx", col_types = "text", trim_ws = TRUE)
-c06_base3 <- read_excel("Raw-Data/2006/ZBYZ2006_Demographics&Grades_3.xlsx", col_types = "text", trim_ws = TRUE)
-# See 01 File for correction of XJH values in c10_gk
-c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5", col_types = "text", trim_ws = TRUE)
-
-# Three pairs of students share identical `zcxjh` in c10_gk
-c10_gk %>%
-  filter(
-    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh)
-  ) %>%
-  # Extract XJH, name, and father's name
-  select(zcxjh, 姓名, jtcy1_xm)
-
-# zcxjh               姓名   jtcy1_xm
-# <chr>               <chr>  <chr>
-# 1 2010370301000130966 孙康   孙凤林
-# 2 2010370301000130966 常嘉琪 常建交
-# 3 2010370301000130112 王晞   王忠
-# 4 2010370301000130112 苏天宇 苏同伟
-# 5 2010370301000130853 王文烨 王维刚
-# 6 2010370301000130853 刘阳   刘绪枝
-
-# Extract these students' XJH from c10_base
-c10_base %>%
-  filter(
-    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"),
-    str_detect(父姓名mzk, "孙凤林|常建交|王忠|苏同伟|王维刚|刘绪枝")
-  ) %>%
-  select(zcxh, xm, 父姓名mzk)
-
-# zcxh                xm        父姓名mzk
-# <chr>               <chr>     <chr>
-# 1 2010370301001030112 苏天宇027 苏同伟200
-# 2 2010370301000130112 王晞65    王忠52
-# 3 2010370301000130583 刘阳56    刘绪枝200
-# 4 2010370301000130853 王文烨527 王维刚200
-# 5 2010370301000130966 孙康38    孙凤林200
-# 6 2010370301000130971 常嘉琪 07 常建交200
-
-# Replace correct XJH value in c10_gk,
-# notice that the `zcxjh` column is `character`
-c10_gk$zcxjh[c10_gk$姓名 == "苏天宇" & c10_gk$jtcy1_xm == "苏同伟"] <- "2010370301001030112"
-c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "2010370301000130583"
-c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971"
-
-
-# Function that replaces duplicate or incorrect values of XJH
-# with NAs and rename XJH column as "ssid" in source files
-
-# xjh is the name of XJH variable in df
-tidyxjh <- function(df, xjh) {
-  
-  # capture the name of df
-  df_name <- deparse(substitute(df))
-
-  # number of digits of XJH in each cohort:
-  # 2003: 10
-  # 2004-2007: 12
-  # 2008-2014: 19
-  nchar_xjh <- c(10, 12, 19)
-  
-  # get the number of XJH values that are being replaced
-  m <- df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] %>% length()
-  
-  # replace XJH values with NAs
-  df[[xjh]][duplicated(df[[xjh]]) | duplicated(df[[xjh]],
-  fromLast = TRUE) | !nchar(df[[xjh]]) %in% nchar_xjh] <- NA
-
-  # rename XJH column to "ssid"
-  colnames(df)[colnames(df) == xjh] <- "ssid"
-  
-  cat("Number of XJH values being replaced in", df_name, "is", m, "\n")
-  
-  return(df)
-}
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Create and Tidy Demographic Files for Each Cohort ####
 
@@ -102,11 +11,10 @@ tidyxjh <- function(df, xjh) {
 
 c03_demo <- c03_base %>%
   select(
-    xjh, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 联系电话, 籍贯,
+    ssid, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 联系电话, 籍贯,
     父姓名, 父单位, 母姓名, 母单位, 家庭住址, 户口性质, birth, 科类
   ) %>%
   rename(
-    ssid = xjh,
     name = 姓名,
     male = 性别,
     board = zx,
@@ -172,18 +80,14 @@ c03_demo <- c03_demo %>%
     cohort = "2003"
   )
 
-# Further ensure that `ssid` is tidy
-c03_demo <- tidyxjh(c03_demo, "ssid")
-
 ## Cohort 2004 ====
 
 c04_demo <- c04_base %>%
   select(
-    xjh, 姓名, 性别, tc, zymc, 毕业学校1, 父姓名, 父单位, 母姓名, 母单位,
+    ssid, 姓名, 性别, tc, zymc, 毕业学校1, 父姓名, 父单位, 母姓名, 母单位,
     联系电话, 出生日期, 家庭住址
   ) %>%
   rename(
-    ssid = xjh,
     name = 姓名,
     male = 性别,
     spec = tc,
@@ -199,8 +103,8 @@ c04_demo <- c04_base %>%
   ) %>%
   # Extract `btrack`, `nid`, `univ`, and `univmajor` from c04_gk
   full_join(
-    select(c04_gk, HKKH, KL, SFZH, YXMC, ZYMC),
-    by = c("ssid" = "HKKH"),
+    select(c04_gk, ssid, KL, SFZH, YXMC, ZYMC),
+    by = "ssid",
     # Make sure NAs do not match
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
@@ -239,18 +143,14 @@ c04_demo <- c04_demo %>%
     cohort = "2004"
   )
 
-# Further ensure that `ssid` is tidy
-c04_demo <- tidyxjh(c04_demo, "ssid")
-
 ## Cohort 2005 ====
 
 c05_demo <- c05_base %>%
   select(
-    zcxh, xm, xb, sfzh, tc, zx, race, appe, jtzz, 父姓名, 父单位, 母姓名,
+    ssid, xm, xb, sfzh, tc, zx, race, appe, jtzz, 父姓名, 父单位, 母姓名,
     母单位, byxx, csrq, lxdh, kl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     male = xb,
     nid = sfzh,
@@ -309,18 +209,14 @@ c05_demo <- c05_demo %>%
     cohort = "2005"
   )
 
-# Further ensure that `ssid` is tidy
-c05_demo <- tidyxjh(c05_demo, "ssid")
-
 ## Cohort 2006 ====
 
 c06_demo <- c06_base %>%
   select(
-    zcxh, xm, jtzz, lxdh, 父姓名, 父工作, 父职务, 父电话, 母姓名, 母工作,
+    ssid, xm, jtzz, lxdh, 父姓名, 父工作, 父职务, 父电话, 母姓名, 母工作,
     母职务, 母电话, sfzh, byxx, zx, xb, 民族, 政治面貌, wl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     home_add = jtzz,
     tel = lxdh,
@@ -397,19 +293,15 @@ c06_demo <- c06_demo %>%
     cohort = "2006"
   )
 
-# Further ensure that `ssid` is tidy
-c06_demo <- tidyxjh(c06_demo, "ssid")
-
 ## Cohort 2007 ====
 
 c07_demo <- c07_base %>%
   select(
-    zcxh, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, zx, mark, 籍贯, 父姓名,
+    ssid, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, zx, mark, 籍贯, 父姓名,
     父工作单位, 父文化程度, 父政治面貌, 父电话, 母姓名, 母工作单位,
     母政治面貌, 母文化程度, 母电话
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     male = xb,
     han = mz,
@@ -501,19 +393,15 @@ c07_demo <- c07_demo %>%
     cohort = "2007"
   )
 
-# Further ensure that `ssid` is tidy
-c07_demo <- tidyxjh(c07_demo, "ssid")
-
 ## Cohort 2008 ====
 
 c08_demo <- c08_base %>%
   select(
-    zcxh, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, tc, 籍贯31, 父姓名1zc,
+    ssid, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, tc, 籍贯31, 父姓名1zc,
     父工作单位choõ, 父文化程度choõ, 父政治面貌choõ, 父电话面貌c,
     母姓名面貌c, 母工作单位choõ, 母政治面貌choõ, 母文化程度choõ, 母电话程度c, kl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     male = xb,
     han = mz,
@@ -618,19 +506,15 @@ c08_demo <- c08_demo %>%
     cohort = "2008"
   )
 
-# Further ensure that `ssid` is tidy
-c08_demo <- tidyxjh(c08_demo, "ssid")
-
 ## Cohort 2009 ====
 
 c09_demo <- c09_base %>%
   select(
-    zcxh, xm, xb, byxx, byxxdh, sfzh, csrq, dszn, 籍贯zn, mz, zzmm, jtzz, hkszd,
+    ssid, xm, xb, byxx, byxxdh, sfzh, csrq, dszn, 籍贯zn, mz, zzmm, jtzz, hkszd,
     lxdh, 父姓名mzk, "父工作单位x09\u09ba", 父地址单位x, 父电话单位x,
     母姓名yzb, "母工作单位xm9\u09ba", 母地址单位x, 母电话单位x, kl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     male = xb,
     jhsch = byxx,
@@ -706,17 +590,13 @@ c09_demo <- c09_demo %>%
     cohort = "2009"
   )
 
-# Further ensure that `ssid` is tidy
-c09_demo <- tidyxjh(c09_demo, "ssid")
-
 ## Cohort 2010 ====
 
 c10_demo <- c10_base %>%
   select(
-    zcxh, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd, kl
+    ssid, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd, kl
   ) %>%
   rename(
-    ssid = zcxh,
     nid = sfzh,
     male = xb,
     dob2 = csrq,
@@ -730,10 +610,10 @@ c10_demo <- c10_base %>%
   # Extract other variables from c10_gk
   full_join(
     select(
-      c10_gk, zcxjh, 姓名, 录取院校, lxdh, jtdz, grjl1_jl, jtcy1_xm, jtcy1_gzdw,
+      c10_gk, ssid, 姓名, 录取院校, lxdh, jtdz, grjl1_jl, jtcy1_xm, jtcy1_gzdw,
       jtcy1_zw, jtcy1_lxdh, jtcy2_xm, jtcy2_gzdw, jtcy2_zw, jtcy2_lxdh
     ),
-    by = c("ssid" = "zcxjh"),
+    by = "ssid",
     # Make sure NAs do not match
     na_matches = "never",
     # Make sure the relationship between the matching variables is one-to-one
@@ -786,20 +666,16 @@ c10_demo <- c10_demo %>%
     cohort = "2010"
   )
 
-# Further ensure that `ssid` is tidy
-c10_demo <- tidyxjh(c10_demo, "ssid")
-
 ## Cohort 2011 ====
 
 c11_demo <- c11_base %>%
   select(
-    zcxh, xm, xb, sfzh, mz, zzmm, jg, byxx, tc, lxdh, jtzz,
+    ssid, xm, xb, sfzh, mz, zzmm, jg, byxx, tc, lxdh, jtzz,
     父姓名z1言, "父工作单位言\u07b4翬ৄ",
     父电话单位言, 父面貌单位言, 父文化单位言, 母姓名单位言,
     "母工作单位言\u07b4翬ৄ", 母电话单位言, 母面貌单位言, 母文化单位言
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     male = xb,
     nid = sfzh,
@@ -905,19 +781,15 @@ c11_demo <- c11_demo %>%
     cohort = "2011"
   )
 
-# Further ensure that `ssid` is tidy
-c11_demo <- tidyxjh(c11_demo, "ssid")
-
 ## Cohort 2012 ====
 
 c12_demo <- c12_base %>%
   select(
-    zcxh, xm1, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
+    ssid, xm1, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
     jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd, jtcy1dh,
     jtcy1gz, zzmm, hkxz, dszn, jdfs, xxmc, tc, kl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm1,
     nid = sfzh,
     male = xb,
@@ -1048,19 +920,15 @@ c12_demo <- c12_demo %>%
     cohort = "2012"
   )
 
-# Further ensure that `ssid` is tidy
-c12_demo <- tidyxjh(c12_demo, "ssid")
-
 ## Cohort 2013 ====
 
 c13_demo <- c13_base %>%
   select(
-    zcxh, xm, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
+    ssid, xm, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
     jtcy2whcd, jtcy2dh, jtcy2gz, jtcy2sf, jtcy1xm, jtcy1zzmm, jtcy1whcd,
     jtcy1dh, jtcy1gz, jtcy1sf, zzmm, hkxz, dszn, jdfs, byxx, kl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     nid = sfzh,
     male = xb,
@@ -1188,19 +1056,15 @@ c13_demo <- c13_demo %>%
     cohort = "2013"
   )
 
-# Further ensure that `ssid` is tidy
-c13_demo <- tidyxjh(c13_demo, "ssid")
-
 ## Cohort 2014 ====
 
 c14_demo <- c14_base %>%
   select(
-    zcxh, xm, xb, 特长c2, mz, sfzh, csrq, lxdh, jg, hjszd, zz, jtcy2xm,
+    ssid, xm, xb, 特长c2, mz, sfzh, csrq, lxdh, jg, hjszd, zz, jtcy2xm,
     jtcy2zzmm, jtcy2whcd, jtcy2dh, jtcy2gz, jtcy1xm, jtcy1zzmm, jtcy1whcd,
     jtcy1dh, jtcy1gz, zzmm, hkxz, dszn, jdfs, byxx, kl
   ) %>%
   rename(
-    ssid = zcxh,
     name = xm,
     male = xb,
     spec = 特长c2,
@@ -1333,10 +1197,7 @@ c14_demo <- c14_demo %>%
     cohort = "2014"
   )
 
-# Further ensure that `ssid` is tidy
-c14_demo <- tidyxjh(c14_demo, "ssid")
-
-# Combine Demographic Files and Further Tidying & Processing ####
+# Further Process and Tidy Demographic Files ####
 
 # Combine all demographic files into a list
 demo_list <- mget(ls(pattern = "c\\d{2}_demo"))
@@ -1651,9 +1512,9 @@ for (df_name in names(demo_list2)) {
   assign(dfname, demo_list2[[df_name]])
 }
 
-# Join Exam Variables ####
+# Join Exam Variables with Demographic Files ####
 
-# Function that selects and renames the variables in an exam file
+# Function that selects and renames variables in an exam file
 
 # df is the exam file
 # prefix is the exam prefix; e.g., prefix = "hsee"
@@ -1693,11 +1554,14 @@ sci = "理综", lib = "文综", gen = "能力", com = "综合") {
   "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib", "gen", "com"))
 
   colnames(df1) <- c("ssid", var_names)
+  
+  # convert all columns to character
+  df1 <- purrr::map_df(df1, as.character)
 
   return(df1)
 }
 
-# Function that joins all exam variables in one cohort
+# Function that joins exam variables with demographic file in a cohort
 
 jev <- function(cohort) {
 
@@ -1734,8 +1598,21 @@ jev <- function(cohort) {
   n13 <- df_demo %>% dplyr::anti_join(df_g3k2) %>% nrow()
   n14 <- df_demo %>% dplyr::anti_join(df_cee) %>% nrow()
 
-  cat("Joining the demo file to each exam file, numbers of mismatches are:",
-  n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14)
+  cat("Joining the demo file to each exam file, numbers of mismatches are:\n",
+  "hsee:", n1, "\n",
+  "g1m1:", n2, "\n",
+  "g1f1:", n3, "\n",
+  "g1m2:", n4, "\n",
+  "g1f2:", n5, "\n",
+  "g2m1:", n6, "\n",
+  "g2f1:", n7, "\n",
+  "g2m2:", n8, "\n",
+  "g2f2:", n9, "\n",
+  "g3m1:", n10, "\n",
+  "g3f1:", n11, "\n",
+  "g3k1:", n12, "\n",
+  "g3k2:", n13, "\n",
+  "cee:", n14, "\n")
 
   # perform the join
   df <- df_demo %>%
@@ -1780,7 +1657,461 @@ jev <- function(cohort) {
   ) %>%
   dplyr::full_join(
     df_cee, by = "ssid", na_matches = "never", relationship = "one-to-one"
-  )
+  ) %>% 
+  # keep rows with valid values of "ssid"
+  dplyr::filter(!is.na(ssid))
+  
+  # check number of columns in df
+  n_col <- ncol(df)
+  
+  # check number of rows in df
+  n_row <- nrow(df)
+  
+  cat("Number of columns in", paste0("c", cohort, " is ", n_col), "\n",
+      "Number of rows in", paste0("c", cohort, " is ", n_row), "\n")
 
   return(df)
 }
+
+## Cohort 2003 ====
+
+c2003_hsee <- srev(df = c03_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                 tot = "rxcj")
+
+c2003_g1m1 <- srev(df = c03_base, prefix = "g1m1", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj11z")
+
+c2003_g1f1 <- srev(df = c03_base, prefix = "g1f1", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj11m")
+
+c2003_g1m2 <- srev(df = c03_base, prefix = "g1m2", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj12z")
+
+c2003_g1f2 <- srev(df = c03_base, prefix = "g1f2", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj12mf")
+
+c2003_g2m1 <- srev(df = c03_base, prefix = "g2m1", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj21z")
+
+c2003_g2f1 <- srev(df = c03_base, prefix = "g2f1", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj21m")
+
+c2003_g2m2 <- srev(df = c03_base, prefix = "g2m2", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj22z")
+
+c2003_g2f2 <- srev(df = c03_base, prefix = "g2f2", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "cj22m")
+
+c2003_g3m1 <- srev(df = c03_jc2, prefix = "g3m1", trk = "trk", cls = "bh", cid = "xh")
+
+c2003_g3f1 <- srev(df = c03_jc4, prefix = "g3f1", trk = "trk", cls = "bh", cid = "xh")
+
+c2003_g3k1 <- srev(df = c03_mn1, prefix = "g3k1", trk = "trk", cls = "bh", cid = "xh")
+
+c2003_g3k2 <- srev(df = c03_mn2, prefix = "g3k2", trk = "trk", cls = "bh", cid = "xh")
+
+c2003_cee <- srev(df = c03_gk, prefix = "cee", trk = "trk", cls = "班级", cid = "cid",
+                   tot = "gkzf", chn = "yw", mat = "sx", eng = "yy", com = "zh")
+
+# Join exam variables with demographic file
+c2003 <- jev("2003")
+
+## Cohort 2004 ====
+
+c2004_hsee <- srev(df = c04_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "rxcj")
+
+c2004_g1m1 <- srev(df = c04_base, prefix = "g1m1", trk = "trk", cls = "bh0506", cid = "xh0506",
+                   tot = "cj11z")
+
+c2004_g1f1 <- srev(df = c04_20050128qm, prefix = "g1f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2004_g1m2 <- srev(df = c04_base, prefix = "g1m2", trk = "trk", cls = "bh0506", cid = "xh0506",
+                   tot = "cj12z")
+
+c2004_g1f2 <- srev(df = c04_20050630qm, prefix = "g1f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2004_g2m1 <- srev(df = c04_20051104qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2004_g2f1 <- srev(df = c04_20060115qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2004_g2m2 <- srev(df = c04_20060426qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2004_g2f2 <- srev(df = c04_20060712qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2004_g3m1 <- srev(df = c04_20061012yk, prefix = "g3m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2004_g3f1 <- srev(df = c04_jc2, prefix = "g3f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2004_g3k1 <- srev(df = c04_mn1, prefix = "g3k1", trk = "trk", cls = "BH", cid = "XH")
+
+c2004_g3k2 <- srev(df = c04_mn2, prefix = "g3k2", trk = "WL", cls = "cls", cid = "cid", 
+                   tot = "AA", chn = "YY", mat = "SS", eng = "EE", phy = "WW",
+                   che = "HH", bio = "BB", geo = "DD", his = "LL", pol = "ZZ",
+                   sci = "LZ", lib = "WZ", gen = "XX")
+
+c2004_cee <- srev(df = c04_gk, prefix = "cee", trk = "KL", cls = "BJ", cid = "cid", 
+                  tot = "ZF", chn = "YW", mat = "SX", eng = "YY", gen = "NL",
+                  com = "ZH")
+
+# Join exam variables with demographic file
+c2004 <- jev("2004")
+
+## Cohort 2005 ====
+
+c2005_hsee <- srev(df = c05_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+
+c2005_g1m1 <- srev(df = c05_20051106qz, prefix = "g1m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g1f1 <- srev(df = c05_20060115qm, prefix = "g1f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g1m2 <- srev(df = c05_base, prefix = "g1m2", trk = "kl", cls = "bh", cid = "xh", 
+                   tot = "cj12z")
+
+c2005_g1f2 <- srev(df = c05_base, prefix = "g1f2", trk = "kl", cls = "bh", cid = "xh", 
+                   tot = "cj12m")
+
+c2005_g2m1 <- srev(df = c05_20061106qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g2f1 <- srev(df = c05_20070206qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g2m2 <- srev(df = c05_20070429qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g2f2 <- srev(df = c05_20070701qm_hnl, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g3m1 <- srev(df = c05_20071110qz_wj, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g3f1 <- srev(df = c05_20080201qm_wj, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2005_g3k1 <- srev(df = c05_20080229mn1_wj_zh, prefix = "g3k1", trk = "KL", cls = "BH", 
+                   cid = "XH")
+
+c2005_g3k2 <- srev(df = c05_20080430mn2_wj, prefix = "g3k2", trk = "KL", cls = "BH", cid = "cid")
+
+c2005_cee <- srev(df = c05_gk, prefix = "cee", trk = "trk", cls = "班级", cid = "cid", 
+                  tot = "总分", eng = "外语")
+
+# Join exam variables with demographic file
+c2005 <- jev("2005")
+
+## Cohort 2006 ====
+
+c2006_hsee <- srev(df = c06_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+
+c2006_g1m1 <- srev(df = c06_20061106qz_xb, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2006_g1f1 <- srev(df = c06_20070206qm_qb, prefix = "g1f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g1m2 <- srev(df = c06_20070429qz_qb, prefix = "g1m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g1f2 <- srev(df = c06_20070701qm_qb, prefix = "g1f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g2m1 <- srev(df = c06_20071115qz_qb, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g2f1 <- srev(df = c06_20080126qm_qb, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g2m2 <- srev(df = c06_20080505qz_qbkm, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g2f2 <- srev(df = c06_20080707qm_qb, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g3m1 <- srev(df = c06_20081106jc_before, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2006_g3f1 <- srev(df = c06_20090115qm, prefix = "g3f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2006_g3k1 <- srev(df = c06_20090315mn1, prefix = "g3k1", trk = "trk", cls = "BH", cid = "cid")
+
+c2006_g3k2 <- srev(df = c06_20090429mn2, prefix = "g3k2", trk = "trk", cls = "BH", cid = "XH")
+
+c2006_cee <- srev(df = c06_gk, prefix = "cee", trk = "trk", cls = "班号", cid = "cid", 
+                  tot = "gkzf", chn = "gkkm1", mat = "gkkm2", eng = "gkkm3",
+                  gen = "jbnl", com = "zhkm")
+
+# Join exam variables with demographic file
+c2006 <- jev("2006")
+
+## Cohort 2007 ====
+
+c2007_hsee <- srev(df = c07_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid", 
+                   tot = "rxcj")
+
+c2007_g1m1 <- srev(df = c07_20071118qz, prefix = "g1m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g1f1 <- srev(df = c07_20080125qm_qbkm, prefix = "g1f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g1m2 <- srev(df = c07_20080506qz, prefix = "g1m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g1f2 <- srev(df = c07_20080706qm, prefix = "g1f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g2m1 <- srev(df = c07_20081103qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g2f1 <- srev(df = c07_20090118qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g2m2 <- srev(df = c07_20090415qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g2f2 <- srev(df = c07_20090708qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g3m1 <- srev(df = c07_20091111qz, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2007_g3f1 <- srev(df = c07_20100203qm_wj, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+# Create an empty df (with a column named "ssid") for c2007_g3k1
+df_empty <- data.frame(ssid = NA)
+
+c2007_g3k1 <- srev(df = df_empty, prefix = "g3k1", trk = "trk", cls = "cls", cid = "cid")
+
+c2007_g3k2 <- srev(df = c07_20100430mn2_wj, prefix = "g3k2", trk = "KL", cls = "BH", cid = "cid")
+
+c2007_cee <- srev(df = c07_gk, prefix = "cee", trk = "trk", cls = "bh", cid = "cid",
+                  tot = "zf", chn = "yw", mat = "sx", eng = "yy", gen = "nl", 
+                  com = "zonghe")
+
+# Join exam variables with demographic file
+c2007 <- jev("2007")
+
+## Cohort 2008 ====
+
+c2008_hsee <- srev(df = c08_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid", 
+                   tot = "rxcj")
+
+c2008_g1m1 <- srev(df = c08_20081106qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2008_g1f1 <- srev(df = c08_20090116qm, prefix = "g1f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2008_g1m2 <- srev(df = c08_20090416qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2008_g1f2 <- srev(df = c08_20090709qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
+
+c2008_g2m1 <- srev(df = c08_20091111qz_zb_dy, prefix = "g2m1", trk = "KLKL", cls = "BH", cid = "XH")
+
+c2008_g2f1 <- srev(df = c08_20100201qm_dy_2, prefix = "g2f1", trk = "KL1", cls = "BH", cid = "XH")
+
+c2008_g2m2 <- srev(df = c08_20100429qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2008_g2f2 <- srev(df = c08_20100715qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2008_g3m1 <- srev(df = c08_20101112qz_yj, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2008_g3f1 <- srev(df = c08_20110122jc_wj, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2008_g3k1 <- srev(df = c08_20110318mn1_wj, prefix = "g3k1", trk = "KL", cls = "BH", cid = "cid")
+
+c2008_g3k2 <- srev(df = c08_20110427mn2_wj, prefix = "g3k2", trk = "KL", cls = "BH", cid = "XH")
+
+c2008_cee <- srev(df = c08_20110318mn1_wj, prefix = "cee", trk = "KL", cls = "BH", cid = "cid")
+
+# Join exam variables with demographic file
+c2008 <- jev("2008")
+
+## Cohort 2009 ====
+
+c2009_hsee <- srev(df = c09_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid", 
+                   tot = "rxcj")
+
+c2009_g1m1 <- srev(df = c09_20091111qz_2p, prefix = "g1m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g1f1 <- srev(df = c09_20100201qm_2p, prefix = "g1f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g1m2 <- srev(df = c09_20100430qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2009_g1f2 <- srev(df = c09_20100715qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
+
+c2009_g2m1 <- srev(df = c09_20101112qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g2f1 <- srev(df = c09_20110122qm_xzb, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g2m2 <- srev(df = c09_20110428qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g2f2 <- srev(df = c09_20110708qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g3m1 <- srev(df = c09_20111106qz_wj, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2009_g3f1 <- srev(df = c09_20120113qm_wj_bzh, prefix = "g3f1", trk = "KL", cls = "BH", cid = "cid")
+
+c2009_g3k1 <- srev(df = c09_20120303mn1_wj, prefix = "g3k1", trk = "KL", cls = "BH", cid = "cid")
+
+c2009_g3k2 <- srev(df = c09_20120427mn2_wj, prefix = "g3k2", trk = "KL", cls = "BH", cid = "cid")
+
+c2009_cee <- srev(df = c09_20120303mn1_wj, prefix = "cee", trk = "KL", cls = "BH", cid = "cid")
+
+# Join exam variables with demographic file
+c2009 <- jev("2009")
+
+## Cohort 2010 ====
+
+c2010_hsee <- srev(df = c10_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid", 
+                   tot = "rxcj")
+
+c2010_g1m1 <- srev(df = c10_20101110yk, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2010_g1f1 <- srev(df = c10_20110122qm, prefix = "g1f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2010_g1m2 <- srev(df = c10_20110428qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2010_g1f2 <- srev(df = c10_20110708qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
+
+c2010_g2m1 <- srev(df = c10_20111104qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2010_g2f1 <- srev(df = c10_20120113qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2010_g2m2 <- srev(df = c10_20120419qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2010_g2f2 <- srev(df = c10_20120706qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2010_g3m1 <- srev(df = c10_20121108jc_wj, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2010_g3f1 <- srev(df = c10_20130125qm_wj, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2010_g3k1 <- srev(df = c10_20130307mn1_wj, prefix = "g2m1", trk = "KL", cls = "BH", cid = "cid")
+
+c2010_g3k2 <- srev(df = c10_20130426mn2_wj, prefix = "g3k2", trk = "KL", cls = "BH", cid = "cid")
+
+c2010_cee <- srev(df = c10_gk, prefix = "cee", trk = "trk", cls = "班", cid = "cid",
+                  tot = "总分")
+
+# Join exam variables with demographic file
+c2010 <- jev("2010")
+
+## Cohort 2011 ====
+
+c2011_hsee <- srev(df = c11_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+
+c2011_g1m1 <- srev(df = c11_20111110qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2011_g1f1 <- srev(df = c11_20120113qm, prefix = "g1f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2011_g1m2 <- srev(df = c11_20120420qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2011_g1f2 <- srev(df = c11_20120701qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
+
+c2011_g2m1 <- srev(df = c11_20121114qz_xzb, prefix = "g2m1", trk = "KL", cls = "BHJ", cid = "XHJ")
+
+c2011_g2f1 <- srev(df = c11_20130130qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2011_g2m2 <- srev(df = c11_20130507qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2011_g2f2 <- srev(df = c11_20130707qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2011_g3m1 <- srev(df = c11_20131107qz, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2011_g3f1 <- srev(df = c11_20140120qm, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2011_g3k1 <- srev(df = c11_20140306mn1, prefix = "g3k1", trk = "KL", cls = "BH", cid = "cid")
+
+c2011_g3k2 <- srev(df = c11_20140422mn2, prefix = "g3k2", trk = "KL", cls = "BH", cid = "XH")
+
+c2011_cee <- srev(df = c11_gk, prefix = "cee", trk = "kldh", cls = "cls", cid = "cid",
+                  tot = "总分")
+
+# Join exam variables with demographic file
+c2011 <- jev("2011")
+
+## Cohort 2012 ====
+
+c2012_hsee <- srev(df = c12_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                  tot = "rxcj")
+
+c2012_g1m1 <- srev(df = c12_20121115qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2012_g1f1 <- srev(df = c12_20130130qm, prefix = "g1f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2012_g1m2 <- srev(df = c12_20130504qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2012_g1f2 <- srev(df = c12_20130708qm, prefix = "g1f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g2m1 <- srev(df = c12_20131112qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g2f1 <- srev(df = c12_20140115qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g2m2 <- srev(df = c12_20140422qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g2f2 <- srev(df = c12_20140708qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g3m1 <- srev(df = c12_20141112qz, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g3f1 <- srev(df = c12_20150202qm_b, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_g3k1 <- srev(df = c12_20150315mn1, prefix = "g3k1", trk = "KL", cls = "BH", cid = "cid")
+
+c2012_g3k2 <- srev(df = c12_20150506mn2, prefix = "g3k2", trk = "KL", cls = "BH", cid = "XH")
+
+c2012_cee <- srev(df = c12_gk, prefix = "cee", trk = "trk", cls = "bh", cid = "cid",
+                  tot = "zf")
+
+# Join exam variables with demographic file
+c2012 <- jev("2012")
+
+## Cohort 2013 ====
+
+c2013_hsee <- srev(df = c13_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "rxcj")
+
+c2013_g1m1 <- srev(df = c13_20131105qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2013_g1f1 <- srev(df = c13_20140120qm, prefix = "g1f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2013_g1m2 <- srev(df = c13_20140420qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2013_g1f2 <- srev(df = c13_20140703qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
+
+c2013_g2m1 <- srev(df = c13_20141117qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g2f1 <- srev(df = c13_20150201qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g2m2 <- srev(df = c13_20150508qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g2f2 <- srev(df = c13_20150707qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g3m1 <- srev(df = c13_20151102qz, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g3f1 <- srev(df = c13_20160128qm, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g3k1 <- srev(df = c13_20160306mn1, prefix = "g3k1", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_g3k2 <- srev(df = c13_20160504mn2, prefix = "g3k2", trk = "KL", cls = "BH", cid = "XH")
+
+c2013_cee <- srev(df = c13_gk, prefix = "cee", trk = "kl", cls = "bh", cid = "xh",
+                  tot = "总分")
+
+# Join exam variables with demographic file
+c2013 <- jev("2013")
+
+## Cohort 2014 ====
+
+c2014_hsee <- srev(df = c14_gk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+
+c2014_g1m1 <- srev(df = c14_20141121qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
+
+c2014_g1f1 <- srev(df = c14_20150205qm, prefix = "g1f1", trk = "trk", cls = "BH", cid = "XH")
+
+c2014_g1m2 <- srev(df = c14_20150427qz, prefix = "g1m2", trk = "trk", cls = "BH", cid = "XH")
+
+c2014_g1f2 <- srev(df = c14_20150705qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
+
+c2014_g2m1 <- srev(df = c14_20151112qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g2f1 <- srev(df = c14_20160127qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g2m2 <- srev(df = c14_20160510qz, prefix = "g2m2", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g2f2 <- srev(df = c14_20160607qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g3m1 <- srev(df = c14_20161116qz, prefix = "g3m1", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g3f1 <- srev(df = c14_20170114qm, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g3k1 <- srev(df = c14_20170305mn1, prefix = "g3k1", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_g3k2 <- srev(df = c14_20170505mn2, prefix = "g3k2", trk = "KL", cls = "BH", cid = "XH")
+
+c2014_cee <- srev(df = c14_gk, prefix = "cee", trk = "文理科", cls = "班级", cid = "cid",
+                  tot = "总分")
+
+# Join exam variables with demographic file
+c2014 <- jev("2014")
+
+# Save Data ####
+
+# Combine data of all cohorts into one data frame
+data <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows()
+
+save(data, file = "Data.RData")

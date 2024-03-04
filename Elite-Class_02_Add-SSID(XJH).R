@@ -1,6 +1,10 @@
 
-library(readxl)
 library(tidyverse)
+
+# Load Raw Data ####
+
+# Load raw data created from "Elite-Class_01_Import-Raw-Data.R"
+load("Raw-Data.RData")
 
 # Functions ####
 
@@ -430,7 +434,7 @@ c03_gk <- fillna(c03_gk)
 # c03_gk %>% count(cls_name) %>% filter(n > 1)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
-# c03_gk$ssid[c03_gk$cls_name == "13_李鹏"] <- NA
+c03_gk$ssid[c03_gk$cls_name == "13_李鹏"] <- NA
 
 # Cohort 2004 ####
 
@@ -920,7 +924,7 @@ c05_20070928jc_wj <- cui(c05_20070928jc_wj, bh = "BH", xm = "姓名")
 c05_20071110qz_wj <- cui(c05_20071110qz_wj, bh = "BH", xm = "姓名")
 c05_20071217jc_wj <- cui(c05_20071217jc_wj, bh = "BH", xm = "姓名")
 c05_20080201qm_wj <- cui(c05_20080201qm_wj, bh = "BH", xm = "姓名") # Target file
-c05_20080229mn1_wj_dk <- cui(c05_20080229mn1_wj_dk, bh = "BH", xm = "姓名") # Target file
+c05_20080229mn1_wj_zh <- cui(c05_20080229mn1_wj_zh, bh = "BH", xm = "姓名") # Target file
 c05_20080430mn2_wj <- cui(c05_20080430mn2_wj, bh = "BH", xm = "姓名") # Target file
 c05_base <- cui(c05_base, bh = "bh", xm = "xm")
 
@@ -940,7 +944,7 @@ c05_20071110qz_wj <- tidyxjh(c05_20071110qz_wj, xjh = "XJH")
 c05_20071217jc_wj <- tidyxjh(c05_20071217jc_wj, xjh = "XJH")
 c05_base <- tidyxjh(c05_base, xjh = "zcxh")
 
-# Tidy XJH value for c05_gk
+# Tidy XJH value for c05_gk (no class number variable)
 c05_gk <- tidyxjh(c05_gk, xjh = "注册学籍号")
 
 ### >>Add XJH to **c05_zk** ----
@@ -1009,10 +1013,10 @@ c05_20080201qm_wj <- fillna(c05_20080201qm_wj)
 # Perform the replacement using function 'dup'
 c05_20080201qm_wj <- dup(c05_20080201qm_wj, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
 
-### >>Add XJH to **c05_20080229mn1_wj_dk** ----
+### >>Add XJH to **c05_20080229mn1_wj_zh** ----
 
 # Left_join XJH from all source files to the target file
-c05_20080229mn1_wj_dk <- c05_20080229mn1_wj_dk %>%
+c05_20080229mn1_wj_zh <- c05_20080229mn1_wj_zh %>%
   left_join(select(c05_zkg1g2g3, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
   left_join(select(c05_20060818yk, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
   left_join(select(c05_20061005yk, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
@@ -1029,18 +1033,18 @@ c05_20080229mn1_wj_dk <- c05_20080229mn1_wj_dk %>%
   left_join(select(c05_base, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any")
 
 # Perform the function 'fillna'
-c05_20080229mn1_wj_dk <- fillna(c05_20080229mn1_wj_dk)
+c05_20080229mn1_wj_zh <- fillna(c05_20080229mn1_wj_zh)
 
 #### Deal with Cases with Duplicate Values of Unique Identifier ----
 
 # >>> Quick check for duplicate values in "cls_name"
-# c05_20080229mn1_wj_dk %>% count(cls_name) %>% filter(n > 1)
+# c05_20080229mn1_wj_zh %>% count(cls_name) %>% filter(n > 1)
 
 # >>> Make sure the chosen source file is appropriate using function `dup_print`
-# dup_print(c05_20080229mn1_wj_dk, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
+# dup_print(c05_20080229mn1_wj_zh, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
 
 # Perform the replacement using function 'dup'
-c05_20080229mn1_wj_dk <- dup(c05_20080229mn1_wj_dk, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
+c05_20080229mn1_wj_zh <- dup(c05_20080229mn1_wj_zh, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
 
 ### >>Add XJH to **c05_20080430mn2_wj** ----
 
