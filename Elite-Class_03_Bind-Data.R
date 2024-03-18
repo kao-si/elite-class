@@ -1961,7 +1961,7 @@ c2010_g3m1 <- srev(df = c10_20121108jc_wj, prefix = "g3m1", trk = "KL", cls = "B
 
 c2010_g3f1 <- srev(df = c10_20130125qm_wj, prefix = "g3f1", trk = "KL", cls = "BH", cid = "XH")
 
-c2010_g3k1 <- srev(df = c10_20130307mn1_wj, prefix = "g2m1", trk = "KL", cls = "BH", cid = "cid")
+c2010_g3k1 <- srev(df = c10_20130307mn1_wj, prefix = "g3k1", trk = "KL", cls = "BH", cid = "cid")
 
 c2010_g3k2 <- srev(df = c10_20130426mn2_wj, prefix = "g3k2", trk = "KL", cls = "BH", cid = "cid")
 
@@ -2112,6 +2112,6 @@ c2014 <- jev("2014")
 # Save Data ####
 
 # Combine data of all cohorts into one data frame
-data <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows()
+data <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows(.id = "cohortid")
 
-save(data, file = "Data.RData")
+write_rds(data, "Data.rds")

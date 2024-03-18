@@ -122,7 +122,7 @@ c05_base2 <- read_excel("Raw-Data/2005/ZBYZ2005_Demographics&Grades_2.xlsx", col
 
 c05_zkg1g2g3 <- read_excel("Raw-Data/2005/2005级中考高一高二高三成绩.XLS")
 
-c05_gk <- read_excel("Raw-Data/2005/2005级高考成绩.XLS")
+c05_gk <- read_excel("Raw-Data/2005/2005级高考成绩.XLS", sheet = "全级")
 
 c05_zk <- read_excel("Raw-Data/2005/G2005/2005年入学成绩.xlsx")
 
@@ -752,7 +752,7 @@ c10_base <- read_excel("Raw-Data/2010/ZBYZ2010_Demographics&Grades.xlsx", col_ty
 
 c10_gk <- read_excel("Raw-Data/2010/2010级高考成绩.xls", sheet = "Sheet5", col_types = "text", trim_ws = TRUE)
 
-c10_gk_info <- read_excel("Raw-Data/2010/2010级高考报名信息.xls") 
+c10_gk_info <- read_excel("Raw-Data/2010/2010级高考报名信息.xls", sheet = "Sheet4")
 
 c10_20101110yk <- read_excel("Raw-Data/2010/G2010/2010年11月10日测试.xlsx")
 
@@ -848,7 +848,7 @@ c10_testname <- read_excel("Raw-Data/2010/G2010/testname.xlsx")
 
 c11_base <- read_excel("Raw-Data/2011/ZBYZ2011_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
-c11_gk <- read_excel("Raw-Data/2011/2011级高考成绩.xls")
+c11_gk <- read_excel("Raw-Data/2011/2011级高考成绩.xls", sheet = "Sheet1")
 
 c11_gk_info <- read_excel("Raw-Data/2011/2011级高考报名.xls")
 
@@ -1186,7 +1186,7 @@ c13_testname <- read_excel("Raw-Data/2013/G2013/testname.xlsx")
 
 c14_base <- read_excel("Raw-Data/2014/ZBYZ2014_Demographics&Grades.xlsx", col_types = "text", trim_ws = TRUE)
 
-c14_gk <- read_excel("Raw-Data/2014/2014级高考成绩.xls") 
+c14_gk <- read_excel("Raw-Data/2014/2014级高考成绩.xls", sheet = "文件合并MICRO")
 
 c14_zk <- read_excel("Raw-Data/2014/G2014/2014年9月入学成绩.xlsx")
 

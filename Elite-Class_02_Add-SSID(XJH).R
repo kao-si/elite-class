@@ -254,6 +254,9 @@ c03_zk <- c03_zk %>%
 # Perform the function 'fillna'
 c03_zk <- fillna(c03_zk)
 
+# Further make sure "ssid" is tidy
+c03_zk <- tidyxjh(c03_zk, xjh = "ssid")
+
 ## Class Number Set 2 ====
 
 ### Create Unique Identifier & Tidy XJH in Source Files ----
@@ -292,6 +295,9 @@ c03_jc1 <- fillna(c03_jc1)
 c03_jc1$ssid[c03_jc1$cls_name == "1_王春燕"] <- NA
 c03_jc1$ssid[c03_jc1$cls_name == "26_孙玫洁"] <- NA
 
+# Further make sure "ssid" is tidy
+c03_jc1 <- tidyxjh(c03_jc1, xjh = "ssid")
+
 ### >>Add XJH to **c03_jc2** ----
 
 # Left_join XJH from all source files to the target file
@@ -312,6 +318,9 @@ c03_jc2 <- fillna(c03_jc2)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_jc2$ssid[c03_jc2$cls_name == "13_李鹏"] <- NA
+
+# Further make sure "ssid" is tidy
+c03_jc2 <- tidyxjh(c03_jc2, xjh = "ssid")
 
 ### >>Add XJH to **c03_jc3** ----
 
@@ -334,6 +343,9 @@ c03_jc3 <- fillna(c03_jc3)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_jc3$ssid[c03_jc3$cls_name == "13_李鹏"] <- NA
 
+# Further make sure "ssid" is tidy
+c03_jc3 <- tidyxjh(c03_jc3, xjh = "ssid")
+
 ### >>Add XJH to **c03_jc4** ----
 
 # Left_join XJH from all source files to the target file
@@ -354,6 +366,9 @@ c03_jc4 <- fillna(c03_jc4)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_jc4$ssid[c03_jc4$cls_name == "13_李鹏"] <- NA
+
+# Further make sure "ssid" is tidy
+c03_jc4 <- tidyxjh(c03_jc4, xjh = "ssid")
 
 ### >>Add XJH to **c03_jc5** ----
 
@@ -376,6 +391,9 @@ c03_jc5 <- fillna(c03_jc5)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_jc5$ssid[c03_jc5$cls_name == "13_李鹏"] <- NA
 
+# Further make sure "ssid" is tidy
+c03_jc5 <- tidyxjh(c03_jc5, xjh = "ssid")
+
 ### >>Add XJH to **c03_mn1** ----
 
 # Left_join XJH from all source files to the target file
@@ -396,6 +414,9 @@ c03_mn1 <- fillna(c03_mn1)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_mn1$ssid[c03_mn1$cls_name == "13_李鹏"] <- NA
+
+# Further make sure "ssid" is tidy
+c03_mn1 <- tidyxjh(c03_mn1, xjh = "ssid")
 
 ### >>Add XJH to **c03_mn2** ----
 
@@ -418,6 +439,9 @@ c03_mn2 <- fillna(c03_mn2)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_mn2$ssid[c03_mn2$cls_name == "13_李鹏"] <- NA
 
+# Further make sure "ssid" is tidy
+c03_mn2 <- tidyxjh(c03_mn2, xjh = "ssid")
+
 ### >>Add XJH to **c03_gk** ----
 
 # Left_join XJH from all source files to the target file
@@ -435,6 +459,9 @@ c03_gk <- fillna(c03_gk)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c03_gk$ssid[c03_gk$cls_name == "13_李鹏"] <- NA
+
+# Further make sure "ssid" is tidy
+c03_gk <- tidyxjh(c03_gk, xjh = "ssid")
 
 # Cohort 2004 ####
 
@@ -480,6 +507,9 @@ c04_20050128qm$ssid[c04_20050128qm$cls_name == "10_李振" & c04_20050128qm$XH =
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_20050128qm$ssid[c04_20050128qm$cls_name == "8_张帅"] <- NA
 
+# Further make sure "ssid" is tidy
+c04_20050128qm <- tidyxjh(c04_20050128qm, xjh = "ssid")
+
 ### >>Add XJH to **c04_20050324yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -501,6 +531,9 @@ c04_20050324yk <- fillna(c04_20050324yk)
 # Perform the replacement using function 'dup'
 c04_20050324yk <- dup(c04_20050324yk, c04_base, xhv1 = "D_XH", xhv2 = "xh0506")
 
+# Further make sure "ssid" is tidy
+c04_20050324yk <- tidyxjh(c04_20050324yk, xjh = "ssid")
+
 ### >>Add XJH to **c04_20050630qm** ----
 
 # Left_join XJH from all source files to the target file
@@ -521,6 +554,9 @@ c04_20050630qm <- fillna(c04_20050630qm)
 
 # Perform the replacement using function 'dup'
 c04_20050630qm <- dup(c04_20050630qm, c04_base, xhv1 = "XH", xhv2 = "xh0506")
+
+# Further make sure "ssid" is tidy
+c04_20050630qm <- tidyxjh(c04_20050630qm, xjh = "ssid")
 
 ## Class Number Set 2 ====
 
@@ -572,6 +608,9 @@ c04_20050924yk <- fillna(c04_20050924yk)
 # Perform the replacement using function 'dup'
 c04_20050924yk <- dup(c04_20050924yk, c04_base, xhv1 = "XH", xhv2 = "xh")
 
+# Further make sure "ssid" is tidy
+c04_20050924yk <- tidyxjh(c04_20050924yk, xjh = "ssid")
+
 ### >>Add XJH to **c04_20051104qz** ----
 
 # Left_join XJH from all source files to the target file
@@ -593,6 +632,9 @@ c04_20051104qz <- fillna(c04_20051104qz)
 
 # Perform the replacement using function 'dup'
 c04_20051104qz <- dup(c04_20051104qz, c04_base, xhv1 = "XH", xhv2 = "xh")
+
+# Further make sure "ssid" is tidy
+c04_20051104qz <- tidyxjh(c04_20051104qz, xjh = "ssid")
 
 ### >>Add XJH to **c04_20051216yk** ----
 
@@ -616,6 +658,9 @@ c04_20051216yk <- fillna(c04_20051216yk)
 # Perform the replacement using function 'dup'
 c04_20051216yk <- dup(c04_20051216yk, c04_base, xhv1 = "XH", xhv2 = "xh")
 
+# Further make sure "ssid" is tidy
+c04_20051216yk <- tidyxjh(c04_20051216yk, xjh = "ssid")
+
 ### >>Add XJH to **c04_20060115qm** ----
 
 # Left_join XJH from all source files to the target file
@@ -637,6 +682,9 @@ c04_20060115qm <- fillna(c04_20060115qm)
 
 # Perform the replacement using function 'dup'
 c04_20060115qm <- dup(c04_20060115qm, c04_base, xhv1 = "XH", xhv2 = "xh")
+
+# Further make sure "ssid" is tidy
+c04_20060115qm <- tidyxjh(c04_20060115qm, xjh = "ssid")
 
 ### >>Add XJH to **c04_20060212yk** ----
 
@@ -660,6 +708,9 @@ c04_20060212yk <- fillna(c04_20060212yk)
 # Perform the replacement using function 'dup'
 c04_20060212yk <- dup(c04_20060212yk, c04_base, xhv1 = "XH", xhv2 = "xh")
 
+# Further make sure "ssid" is tidy
+c04_20060212yk <- tidyxjh(c04_20060212yk, xjh = "ssid")
+
 ### >>Add XJH to **c04_20060324yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -681,6 +732,9 @@ c04_20060324yk <- fillna(c04_20060324yk)
 
 # Perform the replacement using function 'dup'
 c04_20060324yk <- dup(c04_20060324yk, c04_base, xhv1 = "XH", xhv2 = "xh")
+
+# Further make sure "ssid" is tidy
+c04_20060324yk <- tidyxjh(c04_20060324yk, xjh = "ssid")
 
 ### >>Add XJH to **c04_20060426qz** ----
 
@@ -704,6 +758,9 @@ c04_20060426qz <- fillna(c04_20060426qz)
 # Perform the replacement using function 'dup'
 c04_20060426qz <- dup(c04_20060426qz, c04_base, xhv1 = "XH", xhv2 = "xh")
 
+# Further make sure "ssid" is tidy
+c04_20060426qz <- tidyxjh(c04_20060426qz, xjh = "ssid")
+
 ### >>Add XJH to **c04_20060612yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -725,6 +782,9 @@ c04_20060612yk <- fillna(c04_20060612yk)
 
 # Perform the replacement using function 'dup'
 c04_20060612yk <- dup(c04_20060612yk, c04_base, xhv1 = "XH", xhv2 = "xh")
+
+# Further make sure "ssid" is tidy
+c04_20060612yk <- tidyxjh(c04_20060612yk, xjh = "ssid")
 
 ### >>Add XJH to **c04_20060712qm** ----
 
@@ -748,6 +808,9 @@ c04_20060712qm <- fillna(c04_20060712qm)
 # Perform the replacement using function 'dup'
 c04_20060712qm <- dup(c04_20060712qm, c04_base, xhv1 = "XH", xhv2 = "xh")
 
+# Further make sure "ssid" is tidy
+c04_20060712qm <- tidyxjh(c04_20060712qm, xjh = "ssid")
+
 ### >>Add XJH to **c04_20060902yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -769,6 +832,9 @@ c04_20060902yk <- fillna(c04_20060902yk)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_20060902yk$ssid[c04_20060902yk$cls_name == "10_李振"] <- NA
+
+# Further make sure "ssid" is tidy
+c04_20060902yk <- tidyxjh(c04_20060902yk, xjh = "ssid")
 
 ### >>Add XJH to **c04_20061012yk** ----
 
@@ -792,6 +858,9 @@ c04_20061012yk <- fillna(c04_20061012yk)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_20061012yk$ssid[c04_20061012yk$cls_name == "10_李振"] <- NA
 
+# Further make sure "ssid" is tidy
+c04_20061012yk <- tidyxjh(c04_20061012yk, xjh = "ssid")
+
 ### >>Add XJH to **c04_jc1** ----
 
 # Left_join XJH from all source files to the target file
@@ -813,6 +882,9 @@ c04_jc1 <- fillna(c04_jc1)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_jc1$ssid[c04_jc1$cls_name == "10_李振"] <- NA
+
+# Further make sure "ssid" is tidy
+c04_jc1 <- tidyxjh(c04_jc1, xjh = "ssid")
 
 ### >>Add XJH to **c04_jc2** ----
 
@@ -836,6 +908,9 @@ c04_jc2 <- fillna(c04_jc2)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_jc2$ssid[c04_jc2$cls_name == "10_李振"] <- NA
 
+# Further make sure "ssid" is tidy
+c04_jc2 <- tidyxjh(c04_jc2, xjh = "ssid")
+
 ### >>Add XJH to **c04_jc3** ----
 
 # Left_join XJH from all source files to the target file
@@ -857,6 +932,9 @@ c04_jc3 <- fillna(c04_jc3)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_jc3$ssid[c04_jc3$cls_name == "10_李振"] <- NA
+
+# Further make sure "ssid" is tidy
+c04_jc3 <- tidyxjh(c04_jc3, xjh = "ssid")
 
 ### >>Add XJH to **c04_jc4** ----
 
@@ -880,6 +958,9 @@ c04_jc4 <- fillna(c04_jc4)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_jc4$ssid[c04_jc4$cls_name == "10_李振"] <- NA
 
+# Further make sure "ssid" is tidy
+c04_jc4 <- tidyxjh(c04_jc4, xjh = "ssid")
+
 ### >>Add XJH to **c04_mn1** ----
 
 # Left_join XJH from all source files to the target file
@@ -901,6 +982,9 @@ c04_mn1 <- fillna(c04_mn1)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c04_mn1$ssid[c04_mn1$cls_name == "10_李振"] <- NA
+
+# Further make sure "ssid" is tidy
+c04_mn1 <- tidyxjh(c04_mn1, xjh = "ssid")
 
 # Cohort 2005 ####
 
@@ -980,6 +1064,9 @@ c05_zk <- fillna(c05_zk)
 # Perform the replacement using function 'dup'
 c05_zk <- dup(c05_zk, c05_20060818yk, xhv1 = "XH", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c05_zk <- tidyxjh(c05_zk, xjh = "ssid")
+
 ### >>Add XJH to **c05_20080201qm_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -1013,6 +1100,9 @@ c05_20080201qm_wj <- fillna(c05_20080201qm_wj)
 # Perform the replacement using function 'dup'
 c05_20080201qm_wj <- dup(c05_20080201qm_wj, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c05_20080201qm_wj <- tidyxjh(c05_20080201qm_wj, xjh = "ssid")
+
 ### >>Add XJH to **c05_20080229mn1_wj_zh** ----
 
 # Left_join XJH from all source files to the target file
@@ -1045,6 +1135,9 @@ c05_20080229mn1_wj_zh <- fillna(c05_20080229mn1_wj_zh)
 
 # Perform the replacement using function 'dup'
 c05_20080229mn1_wj_zh <- dup(c05_20080229mn1_wj_zh, c05_20071217jc_wj, xhv1 = "XH", xhv2 = "XH")
+
+# Further make sure "ssid" is tidy
+c05_20080229mn1_wj_zh <- tidyxjh(c05_20080229mn1_wj_zh, xjh = "ssid")
 
 ### >>Add XJH to **c05_20080430mn2_wj** ----
 
@@ -1081,6 +1174,9 @@ c05_20080430mn2_wj$ssid[c05_20080430mn2_wj$cls_name == "28_孙荣雪"] <- NA
 c05_20080430mn2_wj$ssid[c05_20080430mn2_wj$cls_name == "6_李晓"] <- NA
 c05_20080430mn2_wj$ssid[c05_20080430mn2_wj$cls_name == "7_王宁"] <- NA
 
+# Further make sure "ssid" is tidy
+c05_20080430mn2_wj <- tidyxjh(c05_20080430mn2_wj, xjh = "ssid")
+
 ## Class Number Set 2 ====
 
 ### Create Unique Identifier & Tidy XJH in Source Files ----
@@ -1104,6 +1200,9 @@ c05_20051106qz <- c05_20051106qz %>%
 # Perform the function 'fillna'
 c05_20051106qz <- fillna(c05_20051106qz)
 
+# Further make sure "ssid" is tidy
+c05_20051106qz <- tidyxjh(c05_20051106qz, xjh = "ssid")
+
 ### >>Add XJH to **c05_20051222yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -1124,6 +1223,9 @@ c05_20051222yk <- fillna(c05_20051222yk)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c05_20051222yk$ssid[c05_20051222yk$cls_name == "13_王浩铭"] <- NA
+
+# Further make sure "ssid" is tidy
+c05_20051222yk <- tidyxjh(c05_20051222yk, xjh = "ssid")
 
 ### >>Add XJH to **c05_20060115qm** ----
 
@@ -1146,6 +1248,9 @@ c05_20060115qm <- fillna(c05_20060115qm)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c05_20060115qm$ssid[c05_20060115qm$cls_name == "13_王浩铭"] <- NA
 
+# Further make sure "ssid" is tidy
+c05_20060115qm <- tidyxjh(c05_20060115qm, xjh = "ssid")
+
 ### >>Add XJH to **c05_20060212yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -1167,6 +1272,9 @@ c05_20060212yk <- fillna(c05_20060212yk)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c05_20060212yk$ssid[c05_20060212yk$cls_name == "13_王浩铭"] <- NA
 
+# Further make sure "ssid" is tidy
+c05_20060212yk <- tidyxjh(c05_20060212yk, xjh = "ssid")
+
 ### >>Add XJH to **c05_20060324yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -1187,6 +1295,9 @@ c05_20060324yk <- fillna(c05_20060324yk)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c05_20060324yk$ssid[c05_20060324yk$cls_name == "13_王浩铭"] <- NA
+
+# Further make sure "ssid" is tidy
+c05_20060324yk <- tidyxjh(c05_20060324yk, xjh = "ssid")
 
 # Cohort 2006 ####
 
@@ -1227,6 +1338,9 @@ c06_20061106qz_xb <- fillna(c06_20061106qz_xb)
 # Perform the replacement using function 'dup'
 c06_20061106qz_xb <- dup(c06_20061106qz_xb, c06_20061226yk_qb, xhv1 = "XH", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c06_20061106qz_xb <- tidyxjh(c06_20061106qz_xb, xjh = "ssid")
+
 ## Class Number Set 1 ====
 
 ### Create Unique Identifier & Tidy XJH in Source Files ----
@@ -1258,6 +1372,9 @@ c06_zk <- fillna(c06_zk)
 # Perform the replacement
 c06_zk$ssid[c06_zk$cls_name == "21_张悦" & c06_zk$XH == 61] <- c06_base$ssid[c06_base$cls_name == "21_张悦" & c06_base$xh1 == "61"]
 
+# Further make sure "ssid" is tidy
+c06_zk <- tidyxjh(c06_zk, xjh = "ssid")
+
 ### >>Add XJH to **c06_20061005yk** ----
 
 # Left_join XJH from all source files to the target file
@@ -1278,6 +1395,9 @@ c06_20061005yk <- fillna(c06_20061005yk)
 
 # Perform the replacement using function 'dup'
 c06_20061005yk <- dup(c06_20061005yk, c06_base, xhv1 = "XH", xhv2 = "xh1")
+
+# Further make sure "ssid" is tidy
+c06_20061005yk <- tidyxjh(c06_20061005yk, xjh = "ssid")
 
 ## Class Number Set 3 ====
 
@@ -1320,7 +1440,6 @@ c06_20080707qm_qb <- tidyxjh(c06_20080707qm_qb, xjh = "XJH")
 c06_gk <- tidyxjh(c06_gk, xjh = "hkkh")
 
 ### >>Add XJH to **c06_20081007jc_qb** ----
-
 c06_20081007jc_qb <- c06_20081007jc_qb %>%
   left_join(select(c06_20070917yk_qb, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
   left_join(select(c06_20071115qz_qb, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
@@ -1345,6 +1464,9 @@ c06_20081007jc_qb <- fillna(c06_20081007jc_qb)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c06_20081007jc_qb$ssid[c06_20081007jc_qb$cls_name == "25_李悦"] <- NA
 c06_20081007jc_qb$ssid[c06_20081007jc_qb$cls_name == "9_石君怡"] <- NA
+
+# Further make sure "ssid" is tidy
+c06_20081007jc_qb <- tidyxjh(c06_20081007jc_qb, xjh = "ssid")
 
 ### >>Add XJH to **c06_20081106jc_before** ----
 
@@ -1373,6 +1495,9 @@ c06_20081106jc_before <- fillna(c06_20081106jc_before)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c06_20081106jc_before$ssid[c06_20081106jc_before$cls_name == "25_李悦"] <- NA
 
+# Further make sure "ssid" is tidy
+c06_20081106jc_before <- tidyxjh(c06_20081106jc_before, xjh = "ssid")
+
 ### >>Add XJH to **c06_20090115qm** ----
 
 # Left_join XJH from all source files to the target file
@@ -1399,6 +1524,9 @@ c06_20090115qm <- fillna(c06_20090115qm)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c06_20090115qm$ssid[c06_20090115qm$cls_name == "25_李悦"] <- NA
+
+# Further make sure "ssid" is tidy
+c06_20090115qm <- tidyxjh(c06_20090115qm, xjh = "ssid")
 
 ### >>Add XJH to **c06_20090215jc** ----
 
@@ -1427,6 +1555,9 @@ c06_20090215jc <- fillna(c06_20090215jc)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c06_20090215jc$ssid[c06_20090215jc$cls_name == "25_李悦"] <- NA
 
+# Further make sure "ssid" is tidy
+c06_20090215jc <- tidyxjh(c06_20090215jc, xjh = "ssid")
+
 ### >>Add XJH to **c06_20090315mn1** ----
 
 # Left_join XJH from all source files to the target file
@@ -1453,6 +1584,9 @@ c06_20090315mn1 <- fillna(c06_20090315mn1)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c06_20090315mn1$ssid[c06_20090315mn1$cls_name == "25_李悦"] <- NA
+
+# Further make sure "ssid" is tidy
+c06_20090315mn1 <- tidyxjh(c06_20090315mn1, xjh = "ssid")
 
 ### >>Add XJH to **c06_20090429mn2** ----
 
@@ -1482,6 +1616,9 @@ c06_20090429mn2 <- fillna(c06_20090429mn2)
 c06_20090429mn2$ssid[c06_20090429mn2$cls_name == "25_李悦"] <- NA
 c06_20090429mn2$ssid[c06_20090429mn2$cls_name == "23_刘洋"] <- NA
 
+# Further make sure "ssid" is tidy
+c06_20090429mn2 <- tidyxjh(c06_20090429mn2, xjh = "ssid")
+
 # Cohort 2007 ####
 
 ## Class Number Set 1 ====
@@ -1509,7 +1646,6 @@ c07_20080706qm <- tidyxjh(c07_20080706qm, xjh = "XJH")
 c07_base <- tidyxjh(c07_base, xjh = "zcxh")
 
 # Correct XJH values in two exam files using 'repmis' function
-
 check0701 <- select(c07_20071013yk_qbkm, cls_name, ssid) %>%
   full_join(select(c07_20071118qz, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
   full_join(select(c07_20071220yk, cls_name, ssid), by = "cls_name", na_matches = "never", multiple = "any") %>%
@@ -1523,9 +1659,15 @@ check0701 <- select(c07_20071013yk_qbkm, cls_name, ssid) %>%
 # repmis_print(check0701, "ssid.x.x.x.x", "ssid.x")
 c07_zkg1gk <- repmis(c07_zkg1gk, "ssid", check0701, "ssid.x.x.x.x", "ssid.x")
 
+# Further make sure "ssid" is tidy
+c07_zkg1gk <- tidyxjh(c07_zkg1gk, xjh = "ssid")
+
 # c07_base
 # repmis_print(check0701, "ssid.y.y.y.y", "ssid.x")
 c07_base <- repmis(c07_base, "ssid", check0701, "ssid.y.y.y.y", "ssid.x")
+
+# Further make sure "ssid" is tidy
+c07_base <- tidyxjh(c07_base, xjh = "ssid")
 
 ## Class Number Set 2 ====
 
@@ -1560,6 +1702,9 @@ c07_20090708qm <- c07_20090708qm %>%
 # Perform the function 'fillna'
 c07_20090708qm <- fillna(c07_20090708qm)
 
+# Further make sure "ssid" is tidy
+c07_20090708qm <- tidyxjh(c07_20090708qm, xjh = "ssid")
+
 ### >>Add XJH to **c07_20091009jc** ----
 
 # Left_join XJH from all source files to the target file
@@ -1571,6 +1716,9 @@ c07_20091009jc <- c07_20091009jc %>%
 
 # Perform the function 'fillna'
 c07_20091009jc <- fillna(c07_20091009jc)
+
+# Further make sure "ssid" is tidy
+c07_20091009jc <- tidyxjh(c07_20091009jc, xjh = "ssid")
 
 ### >>Add XJH to **c07_20091111qz** ----
 
@@ -1584,6 +1732,9 @@ c07_20091111qz <- c07_20091111qz %>%
 # Perform the function 'fillna'
 c07_20091111qz <- fillna(c07_20091111qz)
 
+# Further make sure "ssid" is tidy
+c07_20091111qz <- tidyxjh(c07_20091111qz, xjh = "ssid")
+
 ### >>Add XJH to **c07_20100203qm_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -1595,6 +1746,9 @@ c07_20100203qm_wj <- c07_20100203qm_wj %>%
 
 # Perform the function 'fillna'
 c07_20100203qm_wj <- fillna(c07_20100203qm_wj)
+
+# Further make sure "ssid" is tidy
+c07_20100203qm_wj <- tidyxjh(c07_20100203qm_wj, xjh = "ssid")
 
 ### >>Add XJH to **c07_20100430mn2_wj** ----
 
@@ -1608,6 +1762,9 @@ c07_20100430mn2_wj <- c07_20100430mn2_wj %>%
 # Perform the function 'fillna'
 c07_20100430mn2_wj <- fillna(c07_20100430mn2_wj)
 
+# Further make sure "ssid" is tidy
+c07_20100430mn2_wj <- tidyxjh(c07_20100430mn2_wj, xjh = "ssid")
+
 ### >>Add XJH to **c07_gk** ----
 
 # Left_join XJH from all source files to the target file
@@ -1619,6 +1776,9 @@ c07_gk <- c07_gk %>%
 
 # Perform the function 'fillna'
 c07_gk <- fillna(c07_gk)
+
+# Further make sure "ssid" is tidy
+c07_gk <- tidyxjh(c07_gk, xjh = "ssid")
 
 # Cohort 2008 ####
 
@@ -1661,6 +1821,9 @@ c08_20081106qz <- fillna(c08_20081106qz)
 # Perform the replacement using function 'dup'
 c08_20081106qz <- dup(c08_20081106qz, c08_20090416qz, xhv1 = "XH", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c08_20081106qz <- tidyxjh(c08_20081106qz, xjh = "ssid")
+
 ### >>Add XJH to **c08_20090116qm** ----
 
 # Left_join XJH from all source files to the target file
@@ -1682,6 +1845,9 @@ c08_20090116qm <- fillna(c08_20090116qm)
 
 # Perform the replacement using function 'dup'
 c08_20090116qm <- dup(c08_20090116qm, c08_20090416qz, xhv1 = "XH", xhv2 = "XH")
+
+# Further make sure "ssid" is tidy
+c08_20090116qm <- tidyxjh(c08_20090116qm, xjh = "ssid")
 
 ### >>Add XJH to **c08_20091111qz_xzb** ----
 
@@ -1705,6 +1871,9 @@ c08_20091111qz_xzb <- fillna(c08_20091111qz_xzb)
 # Perform the replacement using function 'dup'
 c08_20091111qz_xzb <- dup(c08_20091111qz_xzb, c08_20090416qz, xhv1 = "XH", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c08_20091111qz_xzb <- tidyxjh(c08_20091111qz_xzb, xjh = "ssid")
+
 ## Class Number Set 2 ====
 
 ### Create Unique Identifier & Tidy XJH in Source Files ----
@@ -1717,12 +1886,14 @@ c08_20100715qm <- cui(c08_20100715qm, bh = "BH", xm = "姓名") # Target file
 c08_base <- cui2(c08_base, bh = "bh0909", xm = "xm")
 
 ### >>Add XJH to **c08_20091111qz_zb_dy** ----
-
 c08_20091111qz_zb_dy <- c08_20091111qz_zb_dy %>% filter(!duplicated(KSH)) %>%
   left_join(select(c08_20091111qz_xzb, KSH, ssid),
             by = "KSH",
             na_matches = "never",
             relationship = "one-to-one")
+
+# Further make sure "ssid" is tidy
+c08_20091111qz_zb_dy <- tidyxjh(c08_20091111qz_zb_dy, xjh = "ssid")
 
 ### >>Add XJH to **c08_20100201qm_dy_2** ----
 
@@ -1745,6 +1916,9 @@ c08_20100201qm_dy_2 <- fillna(c08_20100201qm_dy_2)
 # Perform the replacement using function 'dup'
 c08_20100201qm_dy_2 <- dup(c08_20100201qm_dy_2, c08_base, xhv1 = "XH", xhv2 = "xh0909")
 
+# Further make sure "ssid" is tidy
+c08_20100201qm_dy_2 <- tidyxjh(c08_20100201qm_dy_2, xjh = "ssid")
+
 ### >>Add XJH to **c08_20100429qz** ----
 
 # Left_join XJH from all source files to the target file
@@ -1766,6 +1940,9 @@ c08_20100429qz <- fillna(c08_20100429qz)
 # Perform the replacement using function 'dup'
 c08_20100429qz <- dup(c08_20100429qz, c08_base, xhv1 = "XH", xhv2 = "xh0909")
 
+# Further make sure "ssid" is tidy
+c08_20100429qz <- tidyxjh(c08_20100429qz, xjh = "ssid")
+
 ### >>Add XJH to **c08_20100715qm** ----
 
 # Left_join XJH from all source files to the target file
@@ -1786,6 +1963,9 @@ c08_20100715qm <- fillna(c08_20100715qm)
 
 # Perform the replacement using function 'dup'
 c08_20100715qm <- dup(c08_20100715qm, c08_base, xhv1 = "XH", xhv2 = "xh0909")
+
+# Further make sure "ssid" is tidy
+c08_20100715qm <- tidyxjh(c08_20100715qm, xjh = "ssid")
 
 ## Class Number Set 3 ====
 
@@ -1820,6 +2000,9 @@ c08_20110122jc_wj <- c08_20110122jc_wj %>%
 # Perform the function 'fillna'
 c08_20110122jc_wj <- fillna(c08_20110122jc_wj)
 
+# Further make sure "ssid" is tidy
+c08_20110122jc_wj <- tidyxjh(c08_20110122jc_wj, xjh = "ssid")
+
 ### >>Add XJH to **c08_20110318mn1_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -1845,6 +2028,9 @@ c08_20110318mn1_wj <- fillna(c08_20110318mn1_wj)
 
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c08_20110318mn1_wj$ssid[c08_20110318mn1_wj$cls_name == "2_李晨"] <- NA
+
+# Further make sure "ssid" is tidy
+c08_20110318mn1_wj <- tidyxjh(c08_20110318mn1_wj, xjh = "ssid")
 
 # Cohort 2009 ####
 
@@ -1878,6 +2064,9 @@ c09_20091111qz_2p <- c09_20091111qz_2p %>%
 # Perform the function 'fillna'
 c09_20091111qz_2p <- fillna(c09_20091111qz_2p)
 
+# Further make sure "ssid" is tidy
+c09_20091111qz_2p <- tidyxjh(c09_20091111qz_2p, xjh = "ssid")
+
 ### >>Add XJH to **c09_20100430qz** ----
 
 # Left_join XJH from all source files to the target file
@@ -1889,6 +2078,9 @@ c09_20100430qz <- c09_20100430qz %>%
 
 # Perform the function 'fillna'
 c09_20100430qz <- fillna(c09_20100430qz)
+
+# Further make sure "ssid" is tidy
+c09_20100430qz <- tidyxjh(c09_20100430qz, xjh = "ssid")
 
 ## Class Number Set 2 ====
 
@@ -1914,6 +2106,9 @@ c09_20101112qz <- c09_20101112qz %>%
 
 # Perform the function 'fillna'
 c09_20101112qz <- fillna(c09_20101112qz)
+
+# Further make sure "ssid" is tidy
+c09_20101112qz <- tidyxjh(c09_20101112qz, xjh = "ssid")
 
 ## Class Number Set 3 ====
 
@@ -1956,6 +2151,9 @@ c09_20120113qm_wj_bzh <- c09_20120113qm_wj_bzh %>%
 # Perform the function 'fillna'
 c09_20120113qm_wj_bzh <- fillna(c09_20120113qm_wj_bzh)
 
+# Further make sure "ssid" is tidy
+c09_20120113qm_wj_bzh <- tidyxjh(c09_20120113qm_wj_bzh, xjh = "ssid")
+
 ### >>Add XJH to **c09_20120303mn1_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -1970,6 +2168,9 @@ c09_20120303mn1_wj <- c09_20120303mn1_wj %>%
 
 # Perform the function 'fillna'
 c09_20120303mn1_wj <- fillna(c09_20120303mn1_wj)
+
+# Further make sure "ssid" is tidy
+c09_20120303mn1_wj <- tidyxjh(c09_20120303mn1_wj, xjh = "ssid")
 
 ### >>Add XJH to **c09_20120326jc_wj** ----
 
@@ -1986,6 +2187,9 @@ c09_20120326jc_wj <- c09_20120326jc_wj %>%
 # Perform the function 'fillna'
 c09_20120326jc_wj <- fillna(c09_20120326jc_wj)
 
+# Further make sure "ssid" is tidy
+c09_20120326jc_wj <- tidyxjh(c09_20120326jc_wj, xjh = "ssid")
+
 ### >>Add XJH to **c09_20120427mn2_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -2001,6 +2205,9 @@ c09_20120427mn2_wj <- c09_20120427mn2_wj %>%
 # Perform the function 'fillna'
 c09_20120427mn2_wj <- fillna(c09_20120427mn2_wj)
 
+# Further make sure "ssid" is tidy
+c09_20120427mn2_wj <- tidyxjh(c09_20120427mn2_wj, xjh = "ssid")
+
 ### >>Add XJH to **c09_20120527mn3_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -2015,6 +2222,9 @@ c09_20120527mn3_wj <- c09_20120527mn3_wj %>%
 
 # Perform the function 'fillna'
 c09_20120527mn3_wj <- fillna(c09_20120527mn3_wj)
+
+# Further make sure "ssid" is tidy
+c09_20120527mn3_wj <- tidyxjh(c09_20120527mn3_wj, xjh = "ssid")
 
 # Cohort 2010 ####
 
@@ -2059,6 +2269,9 @@ c10_20110122qm <- fillna(c10_20110122qm)
 # Perform the replacement using function 'dup'
 c10_20110122qm <- dup(c10_20110122qm, c10_20101110yk, xhv1 = "XH", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c10_20110122qm <- tidyxjh(c10_20110122qm, xjh = "ssid")
+
 ### >>Add XJH to **c10_20110708qm** ----
 
 # Left_join XJH from all source files to the target file
@@ -2081,6 +2294,9 @@ c10_20110708qm <- fillna(c10_20110708qm)
 
 # Perform the replacement using function 'dup'
 c10_20110708qm <- dup(c10_20110708qm, c10_20101110yk, xhv1 = "XH", xhv2 = "XH")
+
+# Further make sure "ssid" is tidy
+c10_20110708qm <- tidyxjh(c10_20110708qm, xjh = "ssid")
 
 ## Class Number Set 2 ====
 
@@ -2130,6 +2346,9 @@ check1002 <- select(c10_20111104qz, cls_name, ssid) %>%
 # repmis_print(check1002, "ssid.x.x.x.x.x", "ssid.x")
 c10_20130426mn2_wj <- repmis(c10_20130426mn2_wj, "ssid", check1002, "ssid.x.x.x.x.x", "ssid.x")
 
+# Further make sure "ssid" is tidy
+c10_20130426mn2_wj <- tidyxjh(c10_20130426mn2_wj, xjh = "ssid")
+
 ### >>Add XJH to **c10_20121108jc_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -2159,6 +2378,9 @@ c10_20121108jc_wj <- fillna(c10_20121108jc_wj)
 
 # Perform the replacement using function 'dup'
 c10_20121108jc_wj <- dup(c10_20121108jc_wj, c10_20121009jc_wj, xhv1 = "XH", xhv2 = "XH")
+
+# Further make sure "ssid" is tidy
+c10_20121108jc_wj <- tidyxjh(c10_20121108jc_wj, xjh = "ssid")
 
 ### >>Add XJH to **c10_20130401yk_wj** ----
 
@@ -2192,6 +2414,9 @@ c10_20130401yk_wj$ssid[c10_20130401yk_wj$cls_name == "26_张帅"] <- NA
 c10_20130401yk_wj$ssid[c10_20130401yk_wj$cls_name == "29_陈阳"] <- NA
 c10_20130401yk_wj$ssid[c10_20130401yk_wj$cls_name == "4_赵文豪"] <- NA
 
+# Further make sure "ssid" is tidy
+c10_20130401yk_wj <- tidyxjh(c10_20130401yk_wj, xjh = "ssid")
+
 ### >>Add XJH to **c10_20130527mn3_wj** ----
 
 # Left_join XJH from all source files to the target file
@@ -2223,6 +2448,9 @@ c10_20130527mn3_wj <- fillna(c10_20130527mn3_wj)
 c10_20130527mn3_wj$ssid[c10_20130527mn3_wj$cls_name == "26_张帅"] <- NA
 c10_20130527mn3_wj$ssid[c10_20130527mn3_wj$cls_name == "29_陈阳"] <- NA
 c10_20130527mn3_wj$ssid[c10_20130527mn3_wj$cls_name == "4_赵文豪"] <- NA
+
+# Further make sure "ssid" is tidy
+c10_20130527mn3_wj <- tidyxjh(c10_20130527mn3_wj, xjh = "ssid")
 
 # Cohort 2011 ####
 
@@ -2305,6 +2533,9 @@ c11_20130325yk <- fillna(c11_20130325yk)
 # Assign NA to "ssid" of students with duplicate "cls_name" values (unable to distinguish those students)
 c11_20130325yk$ssid[c11_20130325yk$cls_name == "29_刘琦"] <- NA
 
+# Further make sure "ssid" is tidy
+c11_20130325yk <- tidyxjh(c11_20130325yk, xjh = "ssid")
+
 ### >>Add XJH to **c11_gk** ----
 
 c11_gk <- c11_gk %>% filter(!duplicated(ksh)) %>% 
@@ -2313,6 +2544,9 @@ c11_gk <- c11_gk %>% filter(!duplicated(ksh)) %>%
             na_matches = "never",
             relationship = "one-to-one") %>% 
   rename(ssid = zcxjh)
+
+# Further make sure "ssid" is tidy
+c11_gk <- tidyxjh(c11_gk, xjh = "ssid")
 
 # Cohort 2012 ####
 
@@ -2356,6 +2590,9 @@ c12_20121011yk <- c12_20121011yk %>%
 
 # Perform the function 'fillna'
 c12_20121011yk <- fillna(c12_20121011yk)
+
+# Further make sure "ssid" is tidy
+c12_20121011yk <- tidyxjh(c12_20121011yk, xjh = "ssid")
 
 ## Class Number Set 2 ====
 
@@ -2429,6 +2666,9 @@ c12_gk <- c12_gk %>%
 
 # Perform the function 'fillna'
 c12_gk <- fillna(c12_gk)
+
+# Further make sure "ssid" is tidy
+c12_gk <- tidyxjh(c12_gk, xjh = "ssid")
 
 # Cohort 2013 ####
 
@@ -2528,6 +2768,9 @@ c13_gk <- fillna(c13_gk)
 # Perform the replacement using function 'dup'
 c13_gk <- dup(c13_gk, c13_20151217jc, xhv1 = "xh", xhv2 = "XH")
 
+# Further make sure "ssid" is tidy
+c13_gk <- tidyxjh(c13_gk, xjh = "ssid")
+
 # Cohort 2014 ####
 
 ## Class Number Set 1 ====
@@ -2573,6 +2816,9 @@ c14_20150305yk <- c14_20150305yk %>%
 
 # Perform the function 'fillna'
 c14_20150305yk <- fillna(c14_20150305yk)
+
+# Further make sure "ssid" is tidy
+c14_20150305yk <- tidyxjh(c14_20150305yk, xjh = "ssid")
 
 ## Class Number Set 2 ====
 
@@ -2643,3 +2889,6 @@ c14_gk <- c14_gk %>%
 
 # Perform the function 'fillna'
 c14_gk <- fillna(c14_gk)
+
+# Further make sure "ssid" is tidy
+c14_gk <- tidyxjh(c14_gk, xjh = "ssid")
