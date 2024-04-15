@@ -2114,4 +2114,19 @@ c2014 <- jev("2014")
 # Combine data of all cohorts into one data frame
 data <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows(.id = "cohortid")
 
+# Tidy cohort columns
+data <- data %>%
+  mutate(
+    cohort = substr(cohortid, 2, 5),
+    cohortid = NULL
+  )
+
+# Combine "cohort" and "ssid" to form another id column
+data$cssid <- paste(data$cohort, data$ssid, sep = "_")
+
+# Reorder columns
+data <- data %>%
+  select(cohort, ssid, cssid, everything())
+
+# Save data to .rds
 write_rds(data, "Data.rds")
