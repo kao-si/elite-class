@@ -56,7 +56,7 @@
 - **$** c04_20060426qz <- 2006年4月26日期中_新[^3]
 - **$** c04_20060612yk <- 2006年6月12日月考
 - **$** c04_20060712qm <- 2006年7月12日期末
-- **$** c04_20060902yk <- 2006年9月2日月考
+- **$** c04_20060902yk <- 2006年9月2日月考[^4]
 - **$** c04_20061012yk <- 2006年10月12日摸底考[^4]
 - **$** c04_jc1 <- 高三一次检测
 - **$** c04_jc2 <- 高三二次检测
@@ -1197,14 +1197,14 @@ Collect information of **14** exams for each student in a cohort
 | Exam | Data File | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | hsee | c03_zk    | NA   | NA   | NA   | rxcj   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g1m1 | c03_base  | NA   | NA   | NA   | cj11z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g1f1 | c03_base  | NA   | NA   | NA   | cj11m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g1m2 | c03_base  | NA   | NA   | NA   | cj12z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g1f2 | c03_base  | NA   | NA   | NA   | cj12mf | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g2m1 | c03_base  | NA   | NA   | NA   | cj21z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g2f1 | c03_base  | NA   | NA   | NA   | cj21m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g2m2 | c03_base  | NA   | NA   | NA   | cj22z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g2f2 | c03_base  | NA   | NA   | NA   | cj22m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g1m1 | c03_base  | NA   | bh2m | xh2m | cj11z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g1f1 | c03_base  | NA   | bh2m | xh2m | cj11m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g1m2 | c03_base  | NA   | bh2m | xh2m | cj12z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g1f2 | c03_base  | NA   | bh2m | xh2m | cj12mf | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g2m1 | c03_base  | NA   | bh   | xh   | cj21z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g2f1 | c03_base  | NA   | bh   | xh   | cj21m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g2m2 | c03_base  | NA   | bh   | xh   | cj22z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| g2f2 | c03_base  | NA   | bh   | xh   | cj22m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g3m1 | c03_jc2   | NA   | bh   | xh   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | g3f1 | c03_jc4   | NA   | bh   | xh   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | g3k1 | c03_mn1   | NA   | bh   | xh   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
@@ -1219,13 +1219,13 @@ Collect information of **14** exams for each student in a cohort
 | g1m1 | c04_base       | NA   | bh0506 | xh0506 | cj11z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1f1 | c04_20050128qm | KL   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | NA   | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1m2 | c04_base       | NA   | bh0506 | xh0506 | cj12z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
-| g1f2 | c04_20050630qm | KL   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | NA   | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
+| g1f2 | c04_base       | NA   | bh0506 | xh0506 | cj12m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g2m1 | c04_20051104qz | KL   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g2f1 | c04_20060115qm | KL   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g2m2 | c04_20060426qz | KL   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g2f2 | c04_20060712qm | KL   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | 能力 | NA   |
-| g3m1 | c04_20061012yk | NA   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
-| g3f1 | c04_jc2        | NA   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
+| g3m1 | c04_jc2        | NA   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
+| g3f1 | c04_jc4        | NA   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | g3k1 | c04_mn1        | NA   | BH     | XH     | 总成绩 | 语文 | 数学 | 英语 | 物理 | NA   | NA   | NA   | NA   | 政治 | 理综 | 文综 | NA   | NA   |
 | g3k2 | c04_mn2        | WL   | NA     | NA     | AA     | YY   | SS   | EE   | WW   | HH   | BB   | DD   | LL   | ZZ   | LZ   | WZ   | XX   | NA   |
 | cee  | c04_gk         | KL   | BJ     | NA     | ZF     | YW   | SX   | YY   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NL   | ZH   |
@@ -1423,6 +1423,7 @@ Collect information of **14** exams for each student in a cohort
 ## Miscellaneous Notes
 
 - 6d files：六档线; 总分及每学科成绩分六档，文科理科每学科的六档线不同; 记录每个班级每学科不同档次学生人数以及对应的任课教师
+- 2008, 2009两届无高考成绩，在分析高考成绩时这两届的高考成绩用一模成绩代替
 - 期中期末考试：（基本上是）全市统一组织命题，组织考试，组织阅卷
 - 模拟考试：一模二模很重要， 形式上亦模仿高考：全市统一组织命题，组织考试，组织阅卷，交换监考（外校老师加本校老师监考）；三模不重要亦不是全市组织统一考试
 - 文科理科（基本上）每门科目的试卷都不同
@@ -1444,9 +1445,9 @@ Collect information of **14** exams for each student in a cohort
 ## Footnotes
 
 [^1]:  2005年1月28日期末考试分A卷和B卷，其中A卷文件为1-20班数据，B卷文件为21-22班数据。会将两个文件合并(# Processing)
-[^2]:  2005年6月期末未明确具体时间，20050630为估计时间
+[^2]:  此文件中的总成绩与c04_base中的cj12z相同，故应为高一第二学期期中考试而非期末考试
 [^3]: 无"_旧"版文件，故此处照常标注
-[^4]: 文件md和20061012摸底考相同，文件md1为某次考试学生对应准考证号（不确定具体考试时间，非0902和1012摸底）
+[^4]: c04_20060902yk与c04_jc1相同；c04_20061012yk与c04_jc2相同，亦同文件md相同；文件md1为某次考试学生对应准考证号（不确定具体考试时间，非0902和1012摸底）
 [^5]: 同 Footnote 3
 [^6]: 20051106"期中"和"期中之二"两文件相同
 [^7]: 该次测验数据分为(1)不含能力学科计算总分以及(2)包含能力学科计算总分。在后续处理中该次测验可使用(2)文件。能力学科分数可由(2)的总分减去(1)的总分得出(# Processing)

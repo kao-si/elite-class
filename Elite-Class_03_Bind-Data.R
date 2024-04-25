@@ -1678,28 +1678,28 @@ jev <- function(cohort) {
 c2003_hsee <- srev(df = c03_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
                  tot = "rxcj")
 
-c2003_g1m1 <- srev(df = c03_base, prefix = "g1m1", trk = "trk", cls = "cls", cid = "cid",
+c2003_g1m1 <- srev(df = c03_base, prefix = "g1m1", trk = "trk", cls = "bh2m", cid = "xh2m",
                    tot = "cj11z")
 
-c2003_g1f1 <- srev(df = c03_base, prefix = "g1f1", trk = "trk", cls = "cls", cid = "cid",
+c2003_g1f1 <- srev(df = c03_base, prefix = "g1f1", trk = "trk", cls = "bh2m", cid = "xh2m",
                    tot = "cj11m")
 
-c2003_g1m2 <- srev(df = c03_base, prefix = "g1m2", trk = "trk", cls = "cls", cid = "cid",
+c2003_g1m2 <- srev(df = c03_base, prefix = "g1m2", trk = "trk", cls = "bh2m", cid = "xh2m",
                    tot = "cj12z")
 
-c2003_g1f2 <- srev(df = c03_base, prefix = "g1f2", trk = "trk", cls = "cls", cid = "cid",
+c2003_g1f2 <- srev(df = c03_base, prefix = "g1f2", trk = "trk", cls = "bh2m", cid = "xh2m",
                    tot = "cj12mf")
 
-c2003_g2m1 <- srev(df = c03_base, prefix = "g2m1", trk = "trk", cls = "cls", cid = "cid",
+c2003_g2m1 <- srev(df = c03_base, prefix = "g2m1", trk = "trk", cls = "bh", cid = "xh",
                    tot = "cj21z")
 
-c2003_g2f1 <- srev(df = c03_base, prefix = "g2f1", trk = "trk", cls = "cls", cid = "cid",
+c2003_g2f1 <- srev(df = c03_base, prefix = "g2f1", trk = "trk", cls = "bh", cid = "xh",
                    tot = "cj21m")
 
-c2003_g2m2 <- srev(df = c03_base, prefix = "g2m2", trk = "trk", cls = "cls", cid = "cid",
+c2003_g2m2 <- srev(df = c03_base, prefix = "g2m2", trk = "trk", cls = "bh", cid = "xh",
                    tot = "cj22z")
 
-c2003_g2f2 <- srev(df = c03_base, prefix = "g2f2", trk = "trk", cls = "cls", cid = "cid",
+c2003_g2f2 <- srev(df = c03_base, prefix = "g2f2", trk = "trk", cls = "bh", cid = "xh",
                    tot = "cj22m")
 
 c2003_g3m1 <- srev(df = c03_jc2, prefix = "g3m1", trk = "trk", cls = "bh", cid = "xh")
@@ -1729,7 +1729,8 @@ c2004_g1f1 <- srev(df = c04_20050128qm, prefix = "g1f1", trk = "KL", cls = "BH",
 c2004_g1m2 <- srev(df = c04_base, prefix = "g1m2", trk = "trk", cls = "bh0506", cid = "xh0506",
                    tot = "cj12z")
 
-c2004_g1f2 <- srev(df = c04_20050630qm, prefix = "g1f2", trk = "KL", cls = "BH", cid = "XH")
+c2004_g1f2 <- srev(df = c04_base, prefix = "g1f2", trk = "trk", cls = "bh0506", cid = "xh0506",
+                   tot = "cj12m")
 
 c2004_g2m1 <- srev(df = c04_20051104qz, prefix = "g2m1", trk = "KL", cls = "BH", cid = "XH")
 
@@ -1739,9 +1740,9 @@ c2004_g2m2 <- srev(df = c04_20060426qz, prefix = "g2m2", trk = "KL", cls = "BH",
 
 c2004_g2f2 <- srev(df = c04_20060712qm, prefix = "g2f2", trk = "KL", cls = "BH", cid = "XH")
 
-c2004_g3m1 <- srev(df = c04_20061012yk, prefix = "g3m1", trk = "trk", cls = "BH", cid = "XH")
+c2004_g3m1 <- srev(df = c04_jc2, prefix = "g3m1", trk = "trk", cls = "BH", cid = "XH")
 
-c2004_g3f1 <- srev(df = c04_jc2, prefix = "g3f1", trk = "trk", cls = "BH", cid = "XH")
+c2004_g3f1 <- srev(df = c04_jc4, prefix = "g3f1", trk = "trk", cls = "BH", cid = "XH")
 
 c2004_g3k1 <- srev(df = c04_mn1, prefix = "g3k1", trk = "trk", cls = "BH", cid = "XH")
 
