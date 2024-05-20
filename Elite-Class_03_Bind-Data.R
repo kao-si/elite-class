@@ -1675,7 +1675,7 @@ jev <- function(cohort) {
 
 ## Cohort 2003 ====
 
-c2003_hsee <- srev(df = c03_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+c2003_hsee <- srev(df = c03_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
                  tot = "rxcj")
 
 c2003_g1m1 <- srev(df = c03_base, prefix = "g1m1", trk = "trk", cls = "bh2m", cid = "xh2m",
@@ -1760,7 +1760,8 @@ c2004 <- jev("2004")
 
 ## Cohort 2005 ====
 
-c2005_hsee <- srev(df = c05_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+c2005_hsee <- srev(df = c05_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "rxcj")
 
 c2005_g1m1 <- srev(df = c05_20051106qz, prefix = "g1m1", trk = "KL", cls = "BH", cid = "XH")
 
@@ -1797,7 +1798,8 @@ c2005 <- jev("2005")
 
 ## Cohort 2006 ====
 
-c2006_hsee <- srev(df = c06_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+c2006_hsee <- srev(df = c06_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "rxcj")
 
 c2006_g1m1 <- srev(df = c06_20061106qz_xb, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
 
@@ -1974,7 +1976,8 @@ c2010 <- jev("2010")
 
 ## Cohort 2011 ====
 
-c2011_hsee <- srev(df = c11_zk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+c2011_hsee <- srev(df = c11_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "rxcj")
 
 c2011_g1m1 <- srev(df = c11_20111110qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
 
@@ -1984,7 +1987,7 @@ c2011_g1m2 <- srev(df = c11_20120420qz, prefix = "g1m2", trk = "trk", cls = "BH"
 
 c2011_g1f2 <- srev(df = c11_20120701qm, prefix = "g1f2", trk = "trk", cls = "BH", cid = "XH")
 
-c2011_g2m1 <- srev(df = c11_20121114qz_xzb, prefix = "g2m1", trk = "KL", cls = "BHJ", cid = "XHJ")
+c2011_g2m1 <- srev(df = c11_20121114qz_xzb, prefix = "g2m1", trk = "KLKL", cls = "BHJ", cid = "XHJ")
 
 c2011_g2f1 <- srev(df = c11_20130130qm, prefix = "g2f1", trk = "KL", cls = "BH", cid = "XH")
 
@@ -2078,7 +2081,8 @@ c2013 <- jev("2013")
 
 ## Cohort 2014 ====
 
-c2014_hsee <- srev(df = c14_gk, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid")
+c2014_hsee <- srev(df = c14_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
+                   tot = "rxcj")
 
 c2014_g1m1 <- srev(df = c14_20141121qz, prefix = "g1m1", trk = "trk", cls = "BH", cid = "XH")
 

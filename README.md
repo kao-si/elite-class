@@ -1196,7 +1196,7 @@ Collect information of **14** exams for each student in a cohort
 
 | Exam | Data File | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| hsee | c03_zk    | NA   | NA   | NA   | rxcj   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| hsee | c03_base  | NA   | NA   | NA   | rxcj   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1m1 | c03_base  | NA   | bh2m | xh2m | cj11z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1f1 | c03_base  | NA   | bh2m | xh2m | cj11m  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1m2 | c03_base  | NA   | bh2m | xh2m | cj12z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
@@ -1234,7 +1234,7 @@ Collect information of **14** exams for each student in a cohort
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| hsee | c05_zk                | NA   | NA   | NA   | 总成绩 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| hsee | c05_base              | NA   | NA   | NA   | rxcj   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1m1 | c05_20051106qz        | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | NA   | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1f1 | c05_20060115qm        | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | NA   | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1m2 | c05_base              | kl   | bh   | xh   | cj12z  | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
@@ -1253,7 +1253,7 @@ Collect information of **14** exams for each student in a cohort
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5     | 6     | 7     | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ----- | ----- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| hsee | c06_zk                | NA   | NA   | NA   | 总成绩 | NA    | NA    | NA    | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| hsee | c06_base              | NA   | NA   | NA   | rxcj   | NA    | NA    | NA    | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1m1 | c06_20061106qz_xb     | NA   | BH   | XH   | 总成绩 | 语文  | 数学  | 英语  | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1f1 | c06_20070206qm_qb     | KL   | BH   | XH   | 总成绩 | 语文  | 数学  | 英语  | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1m2 | c06_20070429qz_qb     | KL   | BH   | XH   | 总成绩 | 语文  | 数学  | 英语  | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
@@ -1348,12 +1348,12 @@ Collect information of **14** exams for each student in a cohort
 
 | Exam | Data File          | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ------------------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| hsee | c11_zk             | NA   | NA   | NA   | 总成绩 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| hsee | c11_base           | NA   | NA   | NA   | rxcj   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1m1 | c11_20111110qz     | NA   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1f1 | c11_20120113qm     | NA   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1m2 | c11_20120420qz     | NA   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1f2 | c11_20120701qm     | NA   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
-| g2m1 | c11_20121114qz_xzb | KL   | BHJ  | XHJ  | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
+| g2m1 | c11_20121114qz_xzb | KLKL | BHJ  | XHJ  | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g2f1 | c11_20130130qm     | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g2m2 | c11_20130507qz     | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g2f2 | c11_20130707qm     | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
@@ -1405,7 +1405,7 @@ Collect information of **14** exams for each student in a cohort
 
 | Exam | Data File       | 1      | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------- | ------ | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| hsee | c14_zk          | NA     | NA   | NA   | 总成绩 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
+| hsee | c14_base        | NA     | NA   | NA   | rxcj   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   |
 | g1m1 | c14_20141121qz  | NA     | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1f1 | c14_20150205qm  | NA     | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |
 | g1m2 | c14_20150427qz  | NA     | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | NA   | NA   | NA   | NA   |

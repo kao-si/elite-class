@@ -100,6 +100,147 @@ data[score_col] <- map_df(data[score_col], as.numeric)
 # Replace negative values and 0s with NA
 data[score_col][data[score_col] <= 0] <- NA
 
+## Anomalous exam scores ====
+
+# Replicate of comprehensive test scores
+
+# 2004_g3k1, phy == sci
+# Replace phy values with NA
+data$phy[data$cohort == "2004" & data$exam == "g3k1" & data$phy == data$sci] <- NA
+
+# 2006_g3k1, che == sci
+# Replace che values with NA
+data$che[data$cohort == "2006" & data$exam == "g3k1" & data$che == data$sci] <- NA
+
+# 2005_g3m1, bio == lib
+# Replace bio values with NA
+data$bio[data$cohort == "2005" & data$exam == "g3m1" & data$bio == data$lib] <- NA
+
+# 2005_g3m1, geo == sci
+# Replace geo values with NA
+data$geo[data$cohort == "2005" & data$exam == "g3m1" & data$geo == data$sci] <- NA
+
+# 2004_g3k1 & 2006_g3k1, pol == lib
+# Replace pol values with NA
+data$pol[data$cohort %in% c("2004", "2006") & data$exam == "g3k1" & data$pol == data$lib] <- NA
+
+# gen scores
+
+# 2004_g3m1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+data$gen[data$cohort == "2004" & data$exam == "g3m1" & 
+data$trk == "Science Track"] <- data$his[data$cohort == "2004" &
+data$exam == "g3m1" & data$trk == "Science Track"]
+
+data$gen[data$cohort == "2004" & data$exam == "g3m1" & 
+data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2004" &
+data$exam == "g3m1" & data$trk == "Liberal Arts Track"]
+
+data$his[data$cohort == "2004" & data$exam == "g3m1" & 
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2004" & data$exam == "g3m1" & 
+data$trk == "Liberal Arts Track"] <- NA
+
+# 2004_g3f1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+data$gen[data$cohort == "2004" & data$exam == "g3f1" & 
+data$trk == "Science Track"] <- data$his[data$cohort == "2004" &
+data$exam == "g3f1" & data$trk == "Science Track"]
+
+data$gen[data$cohort == "2004" & data$exam == "g3f1" & 
+data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2004" &
+data$exam == "g3f1" & data$trk == "Liberal Arts Track"]
+
+data$his[data$cohort == "2004" & data$exam == "g3f1" & 
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2004" & data$exam == "g3f1" & 
+data$trk == "Liberal Arts Track"] <- NA
+
+# 2004_g3k1, gen score recorded under pol for Science Track and under phy for Liberal Arts Track
+data$gen[data$cohort == "2004" & data$exam == "g3k1" & 
+data$trk == "Science Track"] <- data$pol[data$cohort == "2004" &
+data$exam == "g3k1" & data$trk == "Science Track"]
+
+data$gen[data$cohort == "2004" & data$exam == "g3k1" & 
+data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2004" &
+data$exam == "g3k1" & data$trk == "Liberal Arts Track"]
+
+data$pol[data$cohort == "2004" & data$exam == "g3k1" & 
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2004" & data$exam == "g3k1" & 
+data$trk == "Liberal Arts Track"] <- NA
+
+# 2005_g2f2, gen score recorded under pol for Science Track and under phy for Liberal Arts Track
+# gen scores have been created for this exam in the Import Raw Data step
+data$pol[data$cohort == "2005" & data$exam == "g2f2" & 
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2005" & data$exam == "g2f2" & 
+data$trk == "Liberal Arts Track"] <- NA
+
+# 2005_g3m1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+data$gen[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
+data$trk == "Science Track"] <- data$his[data$cohort == "2005" &
+data$exam == "g3m1" & !is.na(data$trk) & data$trk == "Science Track"]
+
+data$gen[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
+data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2005" &
+data$exam == "g3m1" & !is.na(data$trk) & data$trk == "Liberal Arts Track"]
+
+data$his[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
+data$trk == "Liberal Arts Track"] <- NA
+
+# 2006_g3f1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+data$gen[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
+data$trk == "Science Track"] <- data$his[data$cohort == "2006" &
+data$exam == "g3f1" & !is.na(data$trk) & data$trk == "Science Track"]
+
+data$gen[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
+data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2006" &
+data$exam == "g3f1" & !is.na(data$trk) & data$trk == "Liberal Arts Track"]
+
+data$his[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
+data$trk == "Liberal Arts Track"] <- NA
+
+# 2006_g3k1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+data$gen[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
+data$trk == "Science Track"] <- data$his[data$cohort == "2006" &
+data$exam == "g3k1" & !is.na(data$trk) & data$trk == "Science Track"]
+
+data$gen[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
+data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2006" &
+data$exam == "g3k1" & !is.na(data$trk) & data$trk == "Liberal Arts Track"]
+
+data$his[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
+data$trk == "Science Track"] <- NA
+
+data$phy[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
+data$trk == "Liberal Arts Track"] <- NA
+
+# Plausibly pure errors
+
+# A "com" score of 128 was erroneously typed as 728
+data$com[data$com == 728] <- 128
+
+# Other Notes
+
+# 1) Extra scores in his in Science Track in 2008_g2m2; they are NOT part of tot
+
+# 2) Scores in pol in Science Track in 2009_g2f1/g2m2, but they are part of tot
+
+# 3) Extra scores in pol in Science Track and extra scores in phy in Liberal
+# Arts Track in 2011_g2f1; they are NOT part of tot
+
+# 4) Different combinations of subjects are present for 2008_g2m1/g2f1,
+# 2009_g1m1/g1f1, and 2011_g2m1; they all sum up to tot
+
 ## Study track ====
 
 # Identify students in science track using their exam scores in Grade 3
@@ -156,6 +297,10 @@ data <- data %>%
   )
 
 ## Comprehensive test scores ====
+
+# For later analyses, use comprehensive test scores(sci/lib), do not use scores
+# of composing subjects (phy, che, bio/pol, his, geo) or "com" score
+
 data <- data %>%
   # when "sci" or "lib" is NA, first replace with "com"
   mutate(
@@ -169,7 +314,7 @@ data <- data %>%
     )
   ) %>% 
   # continue to replace NAs of "sci" and "lib" with the sum of scores of
-  # the three composing subjects (only when all three subjects have scores)
+  # the three composing subjects (when all three subjects have scores)
   mutate(
     sci = case_when(
       is.na(sci) ~ rowSums(select(., phy, che, bio), na.rm = FALSE),
@@ -181,7 +326,34 @@ data <- data %>%
     )
   )
 
-## Anomalous exam scores (wip) ====
+# Continue to process special cases
+
+# 2004_g1f1_sci (no bio)
+data <- data %>% 
+  mutate(
+    sci = case_when(
+      cohort == "2004" & exam == "g1f1" ~ rowSums(select(., phy, che), na.rm = FALSE),
+      TRUE ~ sci
+    )
+  )
+
+# 2005_g1m1_sci (no bio)
+data <- data %>% 
+  mutate(
+    sci = case_when(
+      cohort == "2005" & exam == "g1m1" ~ rowSums(select(., phy, che), na.rm = FALSE),
+      TRUE ~ sci
+    )
+  )
+
+# 2005_g1f1_sci (no bio)
+data <- data %>% 
+  mutate(
+    sci = case_when(
+      cohort == "2005" & exam == "g1f1" ~ rowSums(select(., phy, che), na.rm = FALSE),
+      TRUE ~ sci
+    )
+  )
 
 ## Elite class (wip) ====
 
