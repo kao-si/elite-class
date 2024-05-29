@@ -244,24 +244,22 @@ data$com[data$com == 728] <- 128
 ## Study track ====
 
 # Identify students in science track using their exam scores in Grade 3
-dat_sci <- data %>% 
+id_sci <- data %>% 
   filter(exam %in% c("g3m1", "g3f1", "g3k1", "g3k2", "cee")) %>%
   filter(
     !is.na(sci) | (!is.na(phy) & !is.na(che) & !is.na(bio))
   ) %>% 
-  select(cssid)
-
-id_sci <- unique(dat_sci$cssid)
+  pull(cssid) %>%
+  unique()
 
 # Identify students in liberal arts track using their exam scores in Grade 3
-dat_lib <- data %>% 
+id_lib <- data %>% 
   filter(exam %in% c("g3m1", "g3f1", "g3k1", "g3k2", "cee")) %>%
   filter(
     !is.na(lib) | (!is.na(pol) & !is.na(his) & !is.na(geo))
   ) %>% 
-  select(cssid)
-
-id_lib <- unique(dat_lib$cssid)
+  pull(cssid) %>%
+  unique()
 
 # Assign value to "track" variable
 data <- data %>%
@@ -355,7 +353,88 @@ data <- data %>%
     )
   )
 
-## Elite class (wip) ====
+## Elite class membership ====
+
+# Identify students who stayed in elite classes throughout all three grades
+
+# Cohort 2003
+id_elite03_1 <- data %>%
+  filter(cohort == "2003", cls_set == "1", cls %in% c("11", "12")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite03_2 <- data %>%
+  filter(cohort == "2003", cls_set == "2", cls %in% c("9", "10")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite03 <- intersect(id_elite03_1, id_elite03_2)
+
+# Cohort 2004
+id_elite04_1 <- data %>%
+  filter(cohort == "2004", cls_set == "1", cls %in% c("1", "2")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite04_2 <- data %>%
+  filter(cohort == "2004", cls_set == "2", cls == "23") %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite04 <- union(id_elite04_1, id_elite04_2)
+
+# Cohort 2005
+id_elite05_1 <- data %>%
+  filter(cohort == "2005", cls_set == "1", cls %in% c("9", "10", "11")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite05_2 <- data %>%
+  filter(cohort == "2005", cls_set == "2", cls %in% c("8", "11", "12")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite05 <- intersect(id_elite05_1, id_elite05_2)
+
+# Cohort 2006
+id_elite06_1 <- data %>%
+  filter(cohort == "2006", cls_set == "1", cls %in% c("23", "24", "25")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite06_2 <- data %>%
+  filter(cohort == "2006", cls_set == "3", cls %in% c("23", "24", "25")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite06 <- intersect(id_elite06_1, id_elite06_2)
+
+# Cohort 2007
+id_elite07_1 <- data %>%
+  filter(cohort == "2007", cls_set == "1", cls %in% c("1", "2", "23", "24")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite07_2 <- data %>%
+  filter(cohort == "2007", cls_set == "2", cls %in% c("1", "2", "23", "24")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite07 <- intersect(id_elite07_1, id_elite07_2)
+
+# Create dummy variable indicating elite class membership
+data <- data %>%
+  mutate(
+    cls_elite = case_when(
+      cssid %in%
+      c(id_elite03, id_elite04, id_elite05, id_elite06, id_elite07) ~ "Elite Class",
+      TRUE ~ "Regular Class"
+    )
+  )
+
+## Elites (wip) ====
+
+
 
 ## Standardize exam scores within cohort/exam (wip) ====
 # >>>>>> standardize "tot" around the cutoffs

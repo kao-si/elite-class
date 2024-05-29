@@ -747,7 +747,7 @@
 - c14_md <- md
 - c14_testname <- testname
 
-## Identify Exam Files in Different Sets of Class Number
+## Identify Exams within Different Class Number Sets
 
 ### Cohort 2003
 
@@ -1066,9 +1066,7 @@
 | c14_20170525mn3 |                    | BH                 |
 | c14_gk          |                    | 班级               |
 
-## Variables
-
-### Demographic Variables
+## Demographic Variables
 
 | Variable        | Label                               | Levels                                                       |
 | --------------- | ----------------------------------- | ------------------------------------------------------------ |
@@ -1114,13 +1112,13 @@
 | m_job_add       | Mother Job Address                  |                                                              |
 | **m_nid**       | Mother National ID Number           |                                                              |
 
-#### Notes
+### Notes
 
 - Strings in **name** are not exact correct names for some rows in Cohorts 2008, 2011, & 2014
 - Strings in **f_name** and **m_name** are not exact correct names for some rows in Cohorts 2008, 2011, 2012, 2013, & 2014
 - **board** == 0 could also mean NA (no data input) for Cohorts 2003 & 2005
 
-#### Summary by Cohort
+### Summary by Cohort
 
 | Variable<br />/Cohort | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
 | --------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1161,9 +1159,9 @@
 | m_job_add             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    | 0    |
 | **m_nid**             | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
 
-### Exam-Varying Variables
+## Exam and Score Variables
 
-#### Exam Prefixes
+### Exam Prefixes
 
 Collect information of **14** exams for each student in a cohort
 
@@ -1172,27 +1170,27 @@ Collect information of **14** exams for each student in a cohort
 - Mock Exam 1 & 2: **g3k1, g3k2**
 - CEE: **cee**
 
-#### Subject Suffixes
+### Subject Suffixes
 
-1. 文理科类: \_trk
-2. 班号: \_cls
-3. 学号: \_cid
-4. 总分: \_tot
-5. 语文: \_chn
-6. 数学: \_mat
-7. 英语: \_eng
-8. 物理: \_phy
-9. 化学: \_che
-10. 生物: \_bio
-11. 地理: \_geo
-12. 历史: \_his
-13. 政治: \_pol
-14. 理综: \_sci
-15. 文综: \_lib
-16. 能力: \_gen
-17. 综合: \_com
+1. 文理科类: trk
+2. 班号: cls
+3. 学号: cid
+4. 总分: tot
+5. 语文: chn
+6. 数学: mat
+7. 英语: eng
+8. 物理: phy
+9. 化学: che
+10. 生物: bio
+11. 地理: geo
+12. 历史: his
+13. 政治: pol
+14. 理综: sci
+15. 文综: lib
+16. 能力: gen
+17. 综合: com
 
-#### Cohort 2003
+### Cohort 2003
 
 | Exam | Data File | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1211,7 +1209,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c03_mn2   | NA   | bh   | xh   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c03_gk    | NA   | 班级 | NA   | gkzf   | yw   | sx   | yy   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | zh   |
 
-#### Cohort 2004
+### Cohort 2004
 
 | Exam | Data File      | 1    | 2      | 3      | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | -------------- | ---- | ------ | ------ | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1230,7 +1228,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c04_mn2        | WL   | NA     | NA     | AA     | YY   | SS   | EE   | WW   | HH   | BB   | DD   | LL   | ZZ   | LZ   | WZ   | XX   | NA   |
 | cee  | c04_gk         | KL   | BJ     | NA     | ZF     | YW   | SX   | YY   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NL   | ZH   |
 
-#### Cohort 2005
+### Cohort 2005
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1249,7 +1247,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c05_20080430mn2_wj    | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 | cee  | c05_gk                | NA   | 班级 | NA   | 总分   | 语文 | 数学 | 外语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 能力 | 综合 |
 
-#### Cohort 2006
+### Cohort 2006
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5     | 6     | 7     | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ----- | ----- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1268,7 +1266,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c06_20090429mn2       | NA   | BH   | XH   | 总成绩 | 语文  | 数学  | 英语  | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 | cee  | c06_gk                | NA   | 班号 | NA   | gkzf   | gkkm1 | gkkm2 | gkkm3 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | jbnl | zhkm |
 
-#### Cohort 2007
+### Cohort 2007
 
 | Exam | Data File           | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17     |
 | ---- | ------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ------ |
@@ -1287,7 +1285,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c07_20100430mn2_wj  | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA     |
 | cee  | c07_gk              | NA   | bh   | NA   | zf     | yw   | sx   | yy   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | nl   | zonghe |
 
-#### Cohort 2008
+### Cohort 2008
 
 | Exam | Data File            | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | -------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1306,7 +1304,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c08_20110427mn2_wj   | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 | cee  | c08_20110318mn1_wj   | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | 能力 | NA   |
 
-#### Cohort 2009
+### Cohort 2009
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1325,7 +1323,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c09_20120427mn2_wj    | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | 能力 | NA   |
 | cee  | c09_20120303mn1_wj    | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 
-#### Cohort 2010
+### Cohort 2010
 
 | Exam | Data File          | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ------------------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1344,7 +1342,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c10_20130426mn2_wj | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | 能力 | NA   |
 | cee  | c10_gk             | NA   | 班   | NA   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 能力 | 综合 |
 
-#### Cohort 2011
+### Cohort 2011
 
 | Exam | Data File          | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ------------------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1363,7 +1361,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c11_20140422mn2    | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c11_gk             | kldh | NA   | NA   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-#### Cohort 2012
+### Cohort 2012
 
 | Exam | Data File        | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ---------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1382,7 +1380,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c12_20150506mn2  | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c12_gk           | NA   | bh   | NA   | zf     | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-#### Cohort 2013
+### Cohort 2013
 
 | Exam | Data File       | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1401,7 +1399,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c13_20160504mn2 | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c13_gk          | kl   | bh   | xh   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-#### Cohort 2014
+### Cohort 2014
 
 | Exam | Data File       | 1      | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------- | ------ | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1419,6 +1417,64 @@ Collect information of **14** exams for each student in a cohort
 | g3k1 | c14_20170305mn1 | KL     | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | g3k2 | c14_20170505mn2 | KL     | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c14_gk          | 文理科 | 班级 | NA   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
+
+## Study Track
+
+|             |                    | Grade 1                        | Grade 2                                | Grade 3                                |
+| ----------- | ------------------ | ------------------------------ | -------------------------------------- | -------------------------------------- |
+| Cohort 2003 | Liberal Arts Track | 1-5                            | 1-8, 25-26                             | 1-8, 25-26                             |
+|             | Science Track      | 6-20                           | 9-22                                   | 9-22                                   |
+| Cohort 2004 | Liberal Arts Track | 13-22                          | 13-23, 27, 29                          | 13-23, 27, 29                          |
+|             | Science Track      | 1-12                           | 1-12, 25, 28                           | 1-12, 25, 28                           |
+| Cohort 2005 | Liberal Arts Track | 1st sem: 1-9; 2nd sem: 1-10    | 1-10                                   | 1-10                                   |
+|             | Science Track      | 1st sem: 10-24; 2nd sem: 11-26 | 11-26                                  | 11-26                                  |
+| Cohort 2006 | Liberal Arts Track | 1-10, 25                       | 1-10, 25                               | 1-10, 25                               |
+|             | Science Track      | 11-24                          | 11-24                                  | 11-24                                  |
+| Cohort 2007 | Liberal Arts Track | 17-24                          | 17-24                                  | 17-24                                  |
+|             | Science Track      | 1-16                           | 1-16                                   | 1-16                                   |
+| Cohort 2008 | Liberal Arts Track | NA                             | 1-2, 9-12, 19-22                       | 1-11, 31-32                            |
+|             | Science Track      | NA                             | 3-8, 13-18, 23-25                      | 13-30                                  |
+| Cohort 2009 | Liberal Arts Track | 15-26                          | 1st sem: mixed; 2nd sem: 1-10, 26      | 1-10, 26                               |
+|             | Science Track      | 1-14                           | 1st sem: mixed; 2nd sem: 11-25         | 11-25                                  |
+| Cohort 2010 | Liberal Arts Track | NA                             | 5-6, 10-13, 17-18, 23-24, 29-30, 33-34 | 5-6, 10-13, 17-18, 23-24, 29-30, 33-34 |
+|             | Science Track      | NA                             | 1-4, 7-9, 14-16, 19-22, 25-28, 31-32   | 1-4, 7-9, 14-16, 19-22, 25-28, 31-32   |
+| Cohort 2011 | Liberal Arts Track | NA                             | 17-30 (none in g2m1)                   | 17-30                                  |
+|             | Science Track      | NA                             | 1-16 (all in g2m1)                     | 1-16                                   |
+| Cohort 2012 | Liberal Arts Track | mixed                          | 1-12                                   | 1-12                                   |
+|             | Science Track      | mixed                          | 13-30                                  | 13-30                                  |
+| Cohort 2013 | Liberal Arts Track | NA                             | 1-14                                   | 1-14                                   |
+|             | Science Track      | NA                             | 15-30                                  | 15-30                                  |
+| Cohort 2014 | Liberal Arts Track | NA                             | 1-12                                   | 1-12                                   |
+|             | Science Track      | NA                             | 13-30                                  | 13-30                                  |
+
+## Elite Classes
+
+|             |                    | Grade 1                        | Grade 2 | Grade 3 |
+| ----------- | ------------------ | ------------------------------ | ------- | ------- |
+| Cohort 2003 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | 11-12                          | 9-10    | 9-10    |
+| Cohort 2004 | Liberal Arts Track | NA                             | 23      | 23      |
+|             | Science Track      | 1-2                            | 1-2     | 1-2     |
+| Cohort 2005 | Liberal Arts Track | 1st sem: 9; 2nd sem: 8         | 8       | 8       |
+|             | Science Track      | 1st sem: 10-11; 2nd sem: 11-12 | 11-12   | 11-12   |
+| Cohort 2006 | Liberal Arts Track | 25                             | 25      | 25      |
+|             | Science Track      | 23-24                          | 23-24   | 23-24   |
+| Cohort 2007 | Liberal Arts Track | 23-24                          | 23-24   | 23-24   |
+|             | Science Track      | 1-2                            | 1-2     | 1-2     |
+| Cohort 2008 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
+| Cohort 2009 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
+| Cohort 2010 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
+| Cohort 2011 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
+| Cohort 2012 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
+| Cohort 2013 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
+| Cohort 2014 | Liberal Arts Track | NA                             | NA      | NA      |
+|             | Science Track      | NA                             | NA      | NA      |
 
 ## Miscellaneous Notes
 
