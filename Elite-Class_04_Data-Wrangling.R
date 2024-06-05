@@ -1,7 +1,7 @@
 
 library(tidyverse)
 
-# Data Management ####
+# Data Wrangling ####
 
 ## Load data ====
 
@@ -432,19 +432,269 @@ data <- data %>%
     )
   )
 
-## Elites (wip) ====
+## Elites ====
 
+# Identify students who were "true elites" in Cohorts 2003 - 2007
+# (i.e., those who were in the elite classes and whose hsee scores were
+# higher than the highest score in the regular classes [not including
+# a few top scorers who chose to stay in regular classes])
 
+# Cohort 2003
+id_elitetrue03_sci <- data %>% 
+  filter(cohort == "2003", track == "Science Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 579) %>%
+  pull(cssid) %>% 
+  unique()
 
-## Standardize exam scores within cohort/exam (wip) ====
-# >>>>>> standardize "tot" around the cutoffs
+# Cohort 2004
+# (Cutoff point value for cohort 2004 liberal arts track elite class is 599 
+# using the average of total scores of g1m1, g1f1, g1m2, and g1f2)
+id_elitetrue04_sci <- data %>% 
+  filter(cohort == "2004", track == "Science Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 596) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2005
+id_elitetrue05_sci <- data %>% 
+  filter(cohort == "2005", track == "Science Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 594.5) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue05_lib <- data %>% 
+  filter(cohort == "2005", track == "Liberal Arts Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 573) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2006
+id_elitetrue06_sci <- data %>% 
+  filter(cohort == "2006", track == "Science Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 595) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue06_lib <- data %>% 
+  filter(cohort == "2006", track == "Liberal Arts Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 586.5) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2007
+id_elitetrue07_sci <- data %>% 
+  filter(cohort == "2007", track == "Science Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 606) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue07_lib <- data %>% 
+  filter(cohort == "2007", track == "Liberal Arts Track", 
+         cls_elite == "Elite Class", exam == "hsee", tot >= 556) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Create dummy variable indicating true elites
+data <- data %>%
+  mutate(
+    elite = case_when(
+      cssid %in% c(
+        id_elitetrue03_sci,
+        id_elitetrue04_sci,
+        id_elitetrue05_sci,
+        id_elitetrue06_sci,
+        id_elitetrue07_sci,
+        id_elitetrue05_lib,
+        id_elitetrue06_lib,
+        id_elitetrue07_lib
+      ) ~ "Yes",
+      TRUE ~ "No"
+    )
+  )
+
+# Define students who were "true elites" in Cohorts 2008 - 2014
+# 501 "true elites" in Science Track in Cohorts 2003 - 2007 (average 100/cohort)
+# 212 "true elites" in Liberal Arts Track in Cohorts 2005 - 2007 (average 71/cohort)
+
+# Identify students whose hsee scores were higher or equal to the 100th/71st
+# highest score in the Science Track/Liberal Arts Track
+
+# Cohort 2008
+id_elitetrue08_sci <- data %>% 
+  filter(cohort == "2008", track == "Science Track", 
+         exam == "hsee", tot >= 647) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue08_lib <- data %>% 
+  filter(cohort == "2008", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 625.5) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2009
+id_elitetrue09_sci <- data %>% 
+  filter(cohort == "2009", track == "Science Track", 
+         exam == "hsee", tot >= 692.5) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue09_lib <- data %>% 
+  filter(cohort == "2009", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 667.5) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2010
+id_elitetrue10_sci <- data %>% 
+  filter(cohort == "2010", track == "Science Track", 
+         exam == "hsee", tot >= 686) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue10_lib <- data %>% 
+  filter(cohort == "2010", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 652) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2011
+id_elitetrue11_sci <- data %>% 
+  filter(cohort == "2011", track == "Science Track", 
+         exam == "hsee", tot >= 741) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue11_lib <- data %>% 
+  filter(cohort == "2011", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 721.5) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2012
+id_elitetrue12_sci <- data %>% 
+  filter(cohort == "2012", track == "Science Track", 
+         exam == "hsee", tot >= 726) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue12_lib <- data %>% 
+  filter(cohort == "2012", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 703) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2013
+id_elitetrue13_sci <- data %>% 
+  filter(cohort == "2013", track == "Science Track", 
+         exam == "hsee", tot >= 761) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue13_lib <- data %>% 
+  filter(cohort == "2013", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 739) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Cohort 2014
+id_elitetrue14_sci <- data %>% 
+  filter(cohort == "2014", track == "Science Track", 
+         exam == "hsee", tot >= 749) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_elitetrue14_lib <- data %>% 
+  filter(cohort == "2014", track == "Liberal Arts Track", 
+         exam == "hsee", tot >= 729) %>%
+  pull(cssid) %>% 
+  unique()
+
+# Assign "Yes" to true elites in cohorts 2008 - 2014
+data <- data %>%
+  mutate(
+    elite = case_when(
+      cssid %in% c(
+        id_elitetrue08_sci,
+        id_elitetrue09_sci,
+        id_elitetrue10_sci,
+        id_elitetrue11_sci,
+        id_elitetrue12_sci,
+        id_elitetrue13_sci,
+        id_elitetrue14_sci,
+        id_elitetrue08_lib,
+        id_elitetrue09_lib,
+        id_elitetrue10_lib,
+        id_elitetrue11_lib,
+        id_elitetrue12_lib,
+        id_elitetrue13_lib,
+        id_elitetrue14_lib
+      ) ~ "Yes",
+      TRUE ~ elite
+    )
+  )
+
+## Standardize exam scores within cohort-track-exam ====
 data <- data %>% 
-  group_by(cohort, exam) %>% 
+  group_by(cohort, track, exam) %>% 
   mutate(
     across(
       .cols = tot:com,
       .fns = ~ scale(.)[, 1],
       .names = "z{.col}"
     )
-  ) %>% 
+  ) %>%
+  # standardize hsee_tot around the cutoffs for "true elites"
+  mutate(
+    hsee_ctot = case_when(
+      exam == "hsee" & cohort == "2003" & track == "Science Track"
+      ~ scale(tot, center = 579)[, 1],
+      exam == "hsee" & cohort == "2004" & track == "Science Track"
+      ~ scale(tot, center = 596)[, 1],
+      exam == "hsee" & cohort == "2005" & track == "Science Track"
+      ~ scale(tot, center = 594.5)[, 1],
+      exam == "hsee" & cohort == "2006" & track == "Science Track"
+      ~ scale(tot, center = 595)[, 1],
+      exam == "hsee" & cohort == "2007" & track == "Science Track"
+      ~ scale(tot, center = 606)[, 1],
+      exam == "hsee" & cohort == "2008" & track == "Science Track"
+      ~ scale(tot, center = 647)[, 1],
+      exam == "hsee" & cohort == "2009" & track == "Science Track"
+      ~ scale(tot, center = 692.5)[, 1],
+      exam == "hsee" & cohort == "2010" & track == "Science Track"
+      ~ scale(tot, center = 686)[, 1],
+      exam == "hsee" & cohort == "2011" & track == "Science Track"
+      ~ scale(tot, center = 741)[, 1],
+      exam == "hsee" & cohort == "2012" & track == "Science Track"
+      ~ scale(tot, center = 726)[, 1],
+      exam == "hsee" & cohort == "2013" & track == "Science Track"
+      ~ scale(tot, center = 761)[, 1],
+      exam == "hsee" & cohort == "2014" & track == "Science Track"
+      ~ scale(tot, center = 749)[, 1],
+      exam == "hsee" & cohort == "2005" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 573)[, 1],
+      exam == "hsee" & cohort == "2006" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 586.5)[, 1],
+      exam == "hsee" & cohort == "2007" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 556)[, 1],
+      exam == "hsee" & cohort == "2008" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 625.5)[, 1],
+      exam == "hsee" & cohort == "2009" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 667.5)[, 1],
+      exam == "hsee" & cohort == "2010" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 652)[, 1],
+      exam == "hsee" & cohort == "2011" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 721.5)[, 1],
+      exam == "hsee" & cohort == "2012" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 703)[, 1],
+      exam == "hsee" & cohort == "2013" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 739)[, 1],
+      exam == "hsee" & cohort == "2014" & track == "Liberal Arts Track"
+      ~ scale(tot, center = 729)[, 1],
+      TRUE ~ NA
+    )
+  ) %>%
   ungroup()
+
+# Save Data ####
+write_rds(data, "Data-Tidy.rds")

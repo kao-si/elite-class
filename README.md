@@ -1476,6 +1476,40 @@ Collect information of **14** exams for each student in a cohort
 | Cohort 2014 | Liberal Arts Track | NA                             | NA      | NA      |
 |             | Science Track      | NA                             | NA      | NA      |
 
+## Cutoff Points for "True Elites"
+
+| Cohort | Cutoff hsee Scores | Track        |
+| ------ | ------------------ | ------------ |
+| 2003   | >= 579             | Science      |
+| 2004   | >= 596             | Science      |
+| 2005   | >= 594.5           | Science      |
+|        | >= 573             | Liberal Arts |
+| 2006   | >= 595             | Science      |
+|        | >= 586.5           | Liberal Arts |
+| 2007   | >= 606             | Science      |
+|        | >= 556             | Liberal Arts |
+| 2008   | >= 647             | Science      |
+|        | >= 625.5           | Liberal Arts |
+| 2009   | >= 692.5           | Science      |
+|        | >= 667.5           | Liberal Arts |
+| 2010   | >= 686             | Science      |
+|        | >= 652             | Liberal Arts |
+| 2011   | >= 741             | Science      |
+|        | >= 721.5           | Liberal Arts |
+| 2012   | >= 726             | Science      |
+|        | >= 703             | Liberal Arts |
+| 2013   | >= 761             | Science      |
+|        | >= 739             | Liberal Arts |
+| 2014   | >= 749             | Science      |
+|        | >= 729             | Liberal Arts |
+
+### Notes
+
+- For Cohorts 2003 - 2007 (cohorts with elite class policy), "true elites" refer to students who were in the elite classes and whose hsee scores were higher than the highest score in the regular classes (not including a few top scorers who chose to stay in regular classes)
+- For Cohorts 2008 - 2014 (cohorts without elite class policy), "true elites" refer to students whose hsee scores were higher or equal to the 100th/71st highest score in the Science Track/Liberal Arts Track
+  - 501 "true elites" in Science Track in Cohorts 2003 - 2007 (average 100/cohort)
+  - 212 "true elites" in Liberal Arts Track in Cohorts 2005 - 2007 (average 71/cohort)
+
 ## Miscellaneous Notes
 
 - 6d files：六档线; 总分及每学科成绩分六档，文科理科每学科的六档线不同; 记录每个班级每学科不同档次学生人数以及对应的任课教师
