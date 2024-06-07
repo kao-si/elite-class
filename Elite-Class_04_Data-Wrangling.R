@@ -494,7 +494,7 @@ id_elitetrue07_lib <- data %>%
   pull(cssid) %>% 
   unique()
 
-# Create dummy variable indicating true elites
+# Create dummy variable indicating "true elites"
 data <- data %>%
   mutate(
     elite = case_when(
@@ -610,7 +610,7 @@ id_elitetrue14_lib <- data %>%
   pull(cssid) %>% 
   unique()
 
-# Assign "Yes" to true elites in cohorts 2008 - 2014
+# Assign "Yes" to "true elites" in cohorts 2008 - 2014
 data <- data %>%
   mutate(
     elite = case_when(
@@ -635,6 +635,7 @@ data <- data %>%
   )
 
 ## Standardize exam scores within cohort-track-exam ====
+
 data <- data %>% 
   group_by(cohort, track, exam) %>% 
   mutate(
@@ -644,57 +645,88 @@ data <- data %>%
       .names = "z{.col}"
     )
   ) %>%
-  # standardize hsee_tot around the cutoffs for "true elites"
+  ungroup()
+
+## Center total score of hsee around the cutoffs for "true elites" ====
+
+# Create the centered variables
+ctot <- data %>%
+  select(cohort, ssid, cssid, name, track, cls_elite, elite, exam, tot, ztot) %>% 
+  filter(exam == "hsee") %>% 
+  group_by(cohort, track) %>%
+  # version 1: center tot at cutoffs then divided by standard deviation
+  # (equivalent to centering ztot at cutoffs)
   mutate(
-    hsee_ctot = case_when(
-      exam == "hsee" & cohort == "2003" & track == "Science Track"
+    hsee_ctot1 = case_when(
+      cohort == "2003" & track == "Science Track"
+      ~ (tot - 579)/sd(tot, na.rm = TRUE),
+      cohort == "2004" & track == "Science Track"
+      ~ (tot - 596)/sd(tot, na.rm = TRUE),
+      cohort == "2005" & track == "Science Track"
+      ~ (tot - 594.5)/sd(tot, na.rm = TRUE),
+      cohort == "2006" & track == "Science Track"
+      ~ (tot - 595)/sd(tot, na.rm = TRUE),
+      cohort == "2007" & track == "Science Track"
+      ~ (tot - 606)/sd(tot, na.rm = TRUE),
+      cohort == "2005" & track == "Liberal Arts Track"
+      ~ (tot - 573)/sd(tot, na.rm = TRUE),
+      cohort == "2006" & track == "Liberal Arts Track"
+      ~ (tot - 586.5)/sd(tot, na.rm = TRUE),
+      cohort == "2007" & track == "Liberal Arts Track"
+      ~ (tot - 556)/sd(tot, na.rm = TRUE),
+      TRUE ~ NA
+    )
+  ) %>%
+  # version 2: center tot at cutoffs then divided by root mean square
+  mutate(
+    hsee_ctot2 = case_when(
+      cohort == "2003" & track == "Science Track"
       ~ scale(tot, center = 579)[, 1],
-      exam == "hsee" & cohort == "2004" & track == "Science Track"
+      cohort == "2004" & track == "Science Track"
       ~ scale(tot, center = 596)[, 1],
-      exam == "hsee" & cohort == "2005" & track == "Science Track"
+      cohort == "2005" & track == "Science Track"
       ~ scale(tot, center = 594.5)[, 1],
-      exam == "hsee" & cohort == "2006" & track == "Science Track"
+      cohort == "2006" & track == "Science Track"
       ~ scale(tot, center = 595)[, 1],
-      exam == "hsee" & cohort == "2007" & track == "Science Track"
+      cohort == "2007" & track == "Science Track"
       ~ scale(tot, center = 606)[, 1],
-      exam == "hsee" & cohort == "2008" & track == "Science Track"
-      ~ scale(tot, center = 647)[, 1],
-      exam == "hsee" & cohort == "2009" & track == "Science Track"
-      ~ scale(tot, center = 692.5)[, 1],
-      exam == "hsee" & cohort == "2010" & track == "Science Track"
-      ~ scale(tot, center = 686)[, 1],
-      exam == "hsee" & cohort == "2011" & track == "Science Track"
-      ~ scale(tot, center = 741)[, 1],
-      exam == "hsee" & cohort == "2012" & track == "Science Track"
-      ~ scale(tot, center = 726)[, 1],
-      exam == "hsee" & cohort == "2013" & track == "Science Track"
-      ~ scale(tot, center = 761)[, 1],
-      exam == "hsee" & cohort == "2014" & track == "Science Track"
-      ~ scale(tot, center = 749)[, 1],
-      exam == "hsee" & cohort == "2005" & track == "Liberal Arts Track"
+      cohort == "2005" & track == "Liberal Arts Track"
       ~ scale(tot, center = 573)[, 1],
-      exam == "hsee" & cohort == "2006" & track == "Liberal Arts Track"
+      cohort == "2006" & track == "Liberal Arts Track"
       ~ scale(tot, center = 586.5)[, 1],
-      exam == "hsee" & cohort == "2007" & track == "Liberal Arts Track"
+      cohort == "2007" & track == "Liberal Arts Track"
       ~ scale(tot, center = 556)[, 1],
-      exam == "hsee" & cohort == "2008" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 625.5)[, 1],
-      exam == "hsee" & cohort == "2009" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 667.5)[, 1],
-      exam == "hsee" & cohort == "2010" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 652)[, 1],
-      exam == "hsee" & cohort == "2011" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 721.5)[, 1],
-      exam == "hsee" & cohort == "2012" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 703)[, 1],
-      exam == "hsee" & cohort == "2013" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 739)[, 1],
-      exam == "hsee" & cohort == "2014" & track == "Liberal Arts Track"
-      ~ scale(tot, center = 729)[, 1],
       TRUE ~ NA
     )
   ) %>%
   ungroup()
 
-# Save Data ####
+# Join the centered variables
+data <- data %>%
+  left_join(
+    select(ctot, cssid, hsee_ctot1, hsee_ctot2),
+    by = "cssid",
+    na_matches = "never",
+    relationship = "many-to-one"
+  )
+
+# Filter and Save Data ####
+
+# Filter out students whose track is NA and who did not have hsee score
+id_natrack <- data %>% 
+  filter(is.na(track)) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_nahsee <- data %>% 
+  filter(exam == "hsee", is.na(tot)) %>%
+  pull(cssid) %>% 
+  unique()
+
+id_excl <- union(id_natrack, id_nahsee)
+
+data <- data %>%
+  filter(!cssid %in% id_excl)
+
+# Save data to .rds
 write_rds(data, "Data-Tidy.rds")
