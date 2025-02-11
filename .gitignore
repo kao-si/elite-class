@@ -1,14 +1,35 @@
+# RStudio files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+.Rapp.history
+
+# macOS files
 .DS_Store
-<<<<<<< 1a25a860463434dcd8cda2f7c33c69323ed83d28
-=======
+
+# Data directories
 Raw-Data/**
->>>>>>> Edit .gitignore
+Variable-Coding-Files/**
+Working-Code/**
+
+# R data files
 *.RData
 *.rds
 *.xlsx
 *.sav
-.Rapp.history
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Common R package files
+.Rbuildignore
+.Rproj.user/
+
+# Common IDE files
+.idea/
+.vscode/

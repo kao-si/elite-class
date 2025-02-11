@@ -1,11 +1,13 @@
 
-# Run "Elite-Class_02_Add-SSID(XJH).R" before running this script
+# Step 3: Bind Exam Variables with Demographic Variables for All Cohorts
+# and Combine Data of All Cohorts into One Data Frame
+
+# Run script for Step 2 before running this script
 
 library(readxl)
-library(tidyverse)
 library(lubridate)
 
-# Create and Tidy Demographic Files for Each Cohort ####
+# Create and Tidy Demographic Variable Files for Each Cohort ####
 
 ## Cohort 2003 ====
 
@@ -586,7 +588,7 @@ c09_demo <- c09_demo %>%
       str_detect(m_name, "^无") ~ NA,
       is.na(m_name) ~ NA,
       TRUE ~ gsub("[0-9]", "", m_name)
-    ),  
+    ),
     cohort = "2009"
   )
 
@@ -1197,12 +1199,12 @@ c14_demo <- c14_demo %>%
     cohort = "2014"
   )
 
-# Further Process and Tidy Demographic Files ####
+# Further Process and Tidy Demographic Variable Files ####
 
-# Combine all demographic files into a list
+# Combine all demographic variable files into a list
 demo_list <- mget(ls(pattern = "c\\d{2}_demo"))
 
-# Combine all demographic files in the list into a data frame
+# Combine all demographic variable files in the list into a data frame
 demo <- bind_rows(demo_list) %>%
   select(
     cohort, ssid, btrack, name, male, nid, dob, han, orig, hukou, hukou_loc,
@@ -1327,6 +1329,7 @@ demo$m_polsta <- factor(demo$m_polsta,
 # Load the completed working files and rename variables
 
 # Unique identifier in "varcode1": "ssid"
+
 varcode1 <- read_excel("Variable-Coding-Files/住址工作分类文件_完成_2023Dec.xlsx", col_types = "text", trim_ws = TRUE)
 
 colnames(varcode1) <- c("cohort", "ssid", "name", "jhsch", "address", "city",
@@ -1334,6 +1337,7 @@ colnames(varcode1) <- c("cohort", "ssid", "name", "jhsch", "address", "city",
                        "m_name", "m_job_text", "m_job")
 
 # Unique identifier in "varcode2": "nid"
+
 varcode2 <- read_excel("Variable-Coding-Files/住址工作分类文件_补充_完成_2023Dec.xlsx", col_types = "text", trim_ws = TRUE)
 
 colnames(varcode2) <- c("cohort", "ssid", "name", "nid",
@@ -1491,7 +1495,7 @@ demo$jhsch_rural <- factor(demo$jhsch_rural,
                           levels = c(0, 1),
                           labels = c("No", "Yes"))
 
-## Select variables to finalize the demographic files ====
+## Select variables to finalize the demographic variable files ====
 
 demo <- demo %>%
 select(
@@ -1512,7 +1516,7 @@ for (df_name in names(demo_list2)) {
   assign(dfname, demo_list2[[df_name]])
 }
 
-# Join Exam Variables with Demographic Files ####
+# Join Exam Variables with Demographic Variables ####
 
 # Function that selects and renames variables in an exam file
 
@@ -1520,12 +1524,13 @@ for (df_name in names(demo_list2)) {
 # prefix is the exam prefix; e.g., prefix = "hsee"
 # for first three variables, name argument name if missing; e.g., trk = "trk"
 # for other variables, no action needed if missing
+
 srev <- function(df, prefix, trk, cls, cid,
 tot = "总成绩", chn = "语文", mat = "数学", eng = "英语",
 phy = "物理", che = "化学", bio = "生物",
 geo = "地理", his = "历史", pol = "政治",
 sci = "理综", lib = "文综", gen = "能力", com = "综合") {
-  
+
   # full list of variables to be included
   full_vars <- c(trk, cls, cid, tot, chn, mat, eng, phy, che, bio,
   geo, his, pol, sci, lib, gen, com)
@@ -1554,14 +1559,14 @@ sci = "理综", lib = "文综", gen = "能力", com = "综合") {
   "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib", "gen", "com"))
 
   colnames(df1) <- c("ssid", var_names)
-  
+
   # convert all columns to character
   df1 <- purrr::map_df(df1, as.character)
 
   return(df1)
 }
 
-# Function that joins exam variables with demographic file in a cohort
+# Function that joins exam variables with demographic variable file in a cohort
 
 jev <- function(cohort) {
 
@@ -1657,16 +1662,16 @@ jev <- function(cohort) {
   ) %>%
   dplyr::full_join(
     df_cee, by = "ssid", na_matches = "never", relationship = "one-to-one"
-  ) %>% 
+  ) %>%
   # keep rows with valid values of "ssid"
   dplyr::filter(!is.na(ssid))
-  
+
   # check number of columns in df
   n_col <- ncol(df)
-  
+
   # check number of rows in df
   n_row <- nrow(df)
-  
+
   cat("Number of columns in", paste0("c", cohort, " is ", n_col), "\n",
       "Number of rows in", paste0("c", cohort, " is ", n_row), "\n")
 
@@ -1676,7 +1681,7 @@ jev <- function(cohort) {
 ## Cohort 2003 ====
 
 c2003_hsee <- srev(df = c03_base, prefix = "hsee", trk = "trk", cls = "cls", cid = "cid",
-                 tot = "rxcj")
+                   tot = "rxcj")
 
 c2003_g1m1 <- srev(df = c03_base, prefix = "g1m1", trk = "trk", cls = "bh2m", cid = "xh2m",
                    tot = "cj11z")
@@ -2114,24 +2119,23 @@ c2014_cee <- srev(df = c14_gk, prefix = "cee", trk = "文理科", cls = "班级"
 # Join exam variables with demographic file
 c2014 <- jev("2014")
 
-# Save Data ####
-
-# Combine data of all cohorts into one data frame
-data <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows(.id = "cohortid")
+# Combine Data of All Cohorts into One Data Frame ####
+dat <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows(.id = "cohortid")
 
 # Tidy cohort columns
-data <- data %>%
+dat <- dat %>%
   mutate(
     cohort = substr(cohortid, 2, 5),
     cohortid = NULL
   )
 
 # Combine "cohort" and "ssid" to form another id column
-data$cssid <- paste(data$cohort, data$ssid, sep = "_")
+dat$cssid <- paste(dat$cohort, dat$ssid, sep = "_")
 
 # Reorder columns
-data <- data %>%
+dat <- dat %>%
   select(cohort, ssid, cssid, everything())
 
-# Save data to .rds
-write_rds(data, "Data.rds")
+# Save data to .rds ####
+
+write_rds(dat, "Data.rds")

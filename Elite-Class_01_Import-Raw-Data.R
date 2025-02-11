@@ -1,4 +1,6 @@
 
+# Step 1: Import Raw Data to "Raw-Data.RData"
+
 library(readxl)
 library(tidyverse)
 
@@ -54,7 +56,7 @@ c04_20051104qz <- read_excel("Raw-Data/2004/G2004/2005年11月4日期中.xlsx")
 
 c04_20051216yk <- read_excel("Raw-Data/2004/G2004/2005年12月16日测试.xlsx")
 
-c04_20060115qm <- read_excel("Raw-Data/2004/G2004/2006年1月15日期末.xlsx") 
+c04_20060115qm <- read_excel("Raw-Data/2004/G2004/2006年1月15日期末.xlsx")
 
 c04_20060212yk <- read_excel("Raw-Data/2004/G2004/2006年2月12日竞赛.xlsx")
 
@@ -92,7 +94,7 @@ c04_20051104qz_6d <- read_excel("Raw-Data/2004/G2004/2005年11月4日期中6d.xl
 
 c04_20051216yk_6d <- read_excel("Raw-Data/2004/G2004/2005年12月16日测试6d.xlsx")
 
-c04_20060115qm_6d <- read_excel("Raw-Data/2004/G2004/2006年1月15日期末6d.xlsx") 
+c04_20060115qm_6d <- read_excel("Raw-Data/2004/G2004/2006年1月15日期末6d.xlsx")
 
 c04_20060212yk_6d <- read_excel("Raw-Data/2004/G2004/2006年2月12日竞赛6d.xlsx")
 
@@ -422,7 +424,7 @@ c07_base <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades.XLS", col_typ
 
 c07_base2 <- read_excel("Raw-Data/2007/ZBYZ2007_Demographics&Grades_2.xlsx", col_types = "text", trim_ws = TRUE)
 
-c07_zkg1gk <- read_excel("Raw-Data/2007/2007级中考高一高考成绩.XLS") 
+c07_zkg1gk <- read_excel("Raw-Data/2007/2007级中考高一高考成绩.XLS")
 
 c07_gk <- read_excel("Raw-Data/2007/2007级高考成绩.XLS")
 
@@ -981,7 +983,7 @@ c12_20140320yk <- read_excel("Raw-Data/2012/G2012/2014年3月20日测试.xlsx")
 c12_20140320yk_5d <- read_excel("Raw-Data/2012/G2012/2014年3月20日测试五段.xlsx")
 
 c12_20140422qz <- read_excel("Raw-Data/2012/G2012/2014年4月22日期中.xlsx")
-                             
+
 c12_20140528yk <- read_excel("Raw-Data/2012/G2012/2014年5月28日测试.xlsx")
 
 c12_20140708qm <- read_excel("Raw-Data/2012/G2012/2014年7月8日期末.xlsx")
@@ -1297,74 +1299,6 @@ c14_20170525mn3_6d <- read_excel("Raw-Data/2014/G2014/2017年5月25日三模6d.x
 c14_md <- read_excel("Raw-Data/2014/G2014/md.xlsx")
 
 c14_testname <- read_excel("Raw-Data/2014/G2014/testname.xlsx")
-
-# Processing ####
-
-# (1) Combine c04_20050128qm_a and c04_20050125qm_b (Footnote 1)
-c04_20050128qm <- bind_rows(c04_20050128qm_a, c04_20050128qm_b)
-
-# (2) Add Ability score to c05_20070701qm_hnl (Footnote 7)
-c05_20070701qm_hnl$能力 <- c05_20070701qm_hnl$总成绩 - c05_20070701qm_bhnl$总成绩
-
-# (3) Combine c09_20101112_qz_lk and c09_20101112_qz_wk (Footnote 15)
-
-# Replace NA with "W" in column c09_20101112_qz_wk$KL
-c09_20101112qz_wk$KL <- "W"
-
-c09_20101112qz <- bind_rows(c09_20101112qz_lk, c09_20101112qz_wk)
-
-# (4) Three pairs of students share identical `zcxjh` in c10_gk
-c10_gk %>%
-  filter(
-    duplicated(zcxjh) | duplicated(zcxjh, fromLast = TRUE), !is.na(zcxjh)
-  ) %>%
-  # Extract XJH, name, and father's name
-  select(zcxjh, 姓名, jtcy1_xm)
-
-# zcxjh               姓名   jtcy1_xm
-# <chr>               <chr>  <chr>
-# 1 2010370301000130966 孙康   孙凤林
-# 2 2010370301000130966 常嘉琪 常建交
-# 3 2010370301000130112 王晞   王忠
-# 4 2010370301000130112 苏天宇 苏同伟
-# 5 2010370301000130853 王文烨 王维刚
-# 6 2010370301000130853 刘阳   刘绪枝
-
-# Extract these students' XJH from c10_base
-c10_base %>%
-  filter(
-    str_detect(xm, "孙康|常嘉琪|王晞|苏天宇|王文烨|刘阳"),
-    str_detect(父姓名mzk, "孙凤林|常建交|王忠|苏同伟|王维刚|刘绪枝")
-  ) %>%
-  select(zcxh, xm, 父姓名mzk)
-
-# zcxh                xm        父姓名mzk
-# <chr>               <chr>     <chr>
-# 1 2010370301001030112 苏天宇027 苏同伟200
-# 2 2010370301000130112 王晞65    王忠52
-# 3 2010370301000130583 刘阳56    刘绪枝200
-# 4 2010370301000130853 王文烨527 王维刚200
-# 5 2010370301000130966 孙康38    孙凤林200
-# 6 2010370301000130971 常嘉琪 07 常建交200
-
-# Replace correct XJH value in c10_gk,
-# notice that the `zcxjh` column is `character`
-c10_gk$zcxjh[c10_gk$姓名 == "苏天宇" & c10_gk$jtcy1_xm == "苏同伟"] <- "2010370301001030112"
-c10_gk$zcxjh[c10_gk$姓名 == "刘阳" & c10_gk$jtcy1_xm == "刘绪枝"] <- "2010370301000130583"
-c10_gk$zcxjh[c10_gk$姓名 == "常嘉琪" & c10_gk$jtcy1_xm == "常建交"] <- "2010370301000130971" 
-
-
-# (5) 47 students has two duplicate rows of data in c12_gk
-# Remove the duplicated rows
-c12_gk <- c12_gk %>% filter(!duplicated(ksh))
-
-# (6) 20 students has two duplicate rows of data in c13_gk
-# Remove the duplicated rows
-c13_gk <- c13_gk %>% filter(!duplicated(ksh))
-
-# (7) One student has two rows of (different) data in c14_gk
-# Remove these two rows
-c14_gk <- c14_gk %>% filter(is.na(夏考考试号) | 夏考考试号 != "17370304110227")
 
 # Save to .RData ####
 

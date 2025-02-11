@@ -1,15 +1,17 @@
 
+# Step 4: Data Wrangling for Analysis
+
+# Run this script before analysis
+
 library(tidyverse)
 
-# Data Wrangling ####
+# Load data ####
 
-## Load data ====
+dat <- read_rds("Data.rds")
 
-data <- read_rds("Data.rds")
+# Reshape data ####
 
-## Reshape data ====
-
-data <- data %>%
+dat <- dat %>%
 # define a row by person-exam-subject
 pivot_longer(
   # identify the columns to pivot
@@ -31,10 +33,66 @@ pivot_wider(
   names_repair = "check_unique"
 )
 
-## Class number set ====
+# Create helper functions for data inspection ####
+
+# Extract all observations of n random students from each cohort
+
+sample_dat1 <- function(extra_cols = NULL, n = 2) {
+  sample_cssid <- dat %>%
+    distinct(cohort, cssid) %>%
+    group_by(cohort) %>%
+    slice_sample(n = n) %>%
+    ungroup()
+
+  base_cols <- c("cohort", "cssid", "name", "exam", "cls", "tot", "chn", "mat",
+  "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib", "gen", "com")
+
+  select_cols <- if (!is.null(extra_cols)) {
+    c(base_cols, setdiff(extra_cols, base_cols))
+  } else {
+    base_cols
+  }
+
+  sampled_dat <- dat %>%
+    semi_join(sample_cssid, by = "cssid") %>%
+    select(all_of(select_cols)) %>%
+    arrange(cohort, cssid)
+
+  print(sampled_dat, n = Inf)
+}
+
+# Extract all observations of n random students from each cohort-track
+
+sample_dat2 <- function(extra_cols = NULL, n = 1) {
+  sample_cssid <- dat %>%
+    filter(!is.na(track)) %>%
+    distinct(cohort, track, cssid) %>%
+    group_by(cohort, track) %>%
+    slice_sample(n = n) %>%
+    ungroup()
+
+  base_cols <- c("cohort", "track", "cssid", "name", "exam", "cls", "tot",
+  "chn", "mat", "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib",
+  "gen", "com")
+
+  select_cols <- if (!is.null(extra_cols)) {
+    c(base_cols, setdiff(extra_cols, base_cols))
+  } else {
+    base_cols
+  }
+
+  sampled_dat <- dat %>%
+    semi_join(sample_cssid, by = "cssid") %>%
+    select(all_of(select_cols)) %>%
+    arrange(cohort, track, cssid)
+
+  print(sampled_dat, n = Inf)
+}
+
+# Identify class number set ####
 
 # Create "cls_set" variable for each cohort
-data <- data %>%
+dat <- dat %>%
   mutate(
     cls_set = case_when(
       # cohorts 2003, 2004, 2007, and 2010 - 2014
@@ -61,7 +119,7 @@ data <- data %>%
   )
 
 # Tidy "trk", "cls", and "cid"
-data <- data %>%
+dat <- dat %>%
   mutate(
     trk = case_when(
       str_detect(trk, "L|l|普理|艺理|体育|理") ~ "Science Track",
@@ -83,153 +141,153 @@ data <- data %>%
   )
 
 # Fill missing values of "trk", "cls", and "cid"
-data <- data %>%
+dat <- dat %>%
   group_by(cssid, cls_set) %>%
   fill(trk, cls, cid, .direction = "updown") %>%
   ungroup()
 
-## Zeros in exam scores ====
+# Tidy exam scores ####
 
-# First create a vector containing the variable names
+## Convert score variables to numeric ====
+
+# First create a vector containing the names of the score variables
 score_col <- c("tot", "chn", "mat", "eng", "phy", "che", "bio", "geo",
                "his", "pol", "sci", "lib", "gen", "com")
 
-# Convert the variables to numeric
-data[score_col] <- map_df(data[score_col], as.numeric)
+dat <- dat %>%
+  mutate(across(all_of(score_col), as.numeric))
 
-# Replace negative values and 0s with NA
-data[score_col][data[score_col] <= 0] <- NA
+## Replace negative values and 0s with NA ====
+dat[score_col][dat[score_col] <= 0] <- NA
 
-## Anomalous exam scores ====
-
-# Replicate of comprehensive test scores
+## Comprehensive test score replicates ====
 
 # 2004_g3k1, phy == sci
 # Replace phy values with NA
-data$phy[data$cohort == "2004" & data$exam == "g3k1" & data$phy == data$sci] <- NA
+dat$phy[dat$cohort == "2004" & dat$exam == "g3k1" & dat$phy == dat$sci] <- NA
 
 # 2006_g3k1, che == sci
 # Replace che values with NA
-data$che[data$cohort == "2006" & data$exam == "g3k1" & data$che == data$sci] <- NA
+dat$che[dat$cohort == "2006" & dat$exam == "g3k1" & dat$che == dat$sci] <- NA
 
 # 2005_g3m1, bio == lib
 # Replace bio values with NA
-data$bio[data$cohort == "2005" & data$exam == "g3m1" & data$bio == data$lib] <- NA
+dat$bio[dat$cohort == "2005" & dat$exam == "g3m1" & dat$bio == dat$lib] <- NA
 
 # 2005_g3m1, geo == sci
 # Replace geo values with NA
-data$geo[data$cohort == "2005" & data$exam == "g3m1" & data$geo == data$sci] <- NA
+dat$geo[dat$cohort == "2005" & dat$exam == "g3m1" & dat$geo == dat$sci] <- NA
 
 # 2004_g3k1 & 2006_g3k1, pol == lib
 # Replace pol values with NA
-data$pol[data$cohort %in% c("2004", "2006") & data$exam == "g3k1" & data$pol == data$lib] <- NA
+dat$pol[dat$cohort %in% c("2004", "2006") & dat$exam == "g3k1" & dat$pol == dat$lib] <- NA
 
-# gen scores
+## Ability (gen) scores ====
 
 # 2004_g3m1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
-data$gen[data$cohort == "2004" & data$exam == "g3m1" & 
-data$trk == "Science Track"] <- data$his[data$cohort == "2004" &
-data$exam == "g3m1" & data$trk == "Science Track"]
+dat$gen[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2004" &
+dat$exam == "g3m1" & dat$trk == "Science Track"]
 
-data$gen[data$cohort == "2004" & data$exam == "g3m1" & 
-data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2004" &
-data$exam == "g3m1" & data$trk == "Liberal Arts Track"]
+dat$gen[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2004" &
+dat$exam == "g3m1" & dat$trk == "Liberal Arts Track"]
 
-data$his[data$cohort == "2004" & data$exam == "g3m1" & 
-data$trk == "Science Track"] <- NA
+dat$his[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2004" & data$exam == "g3m1" & 
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Liberal Arts Track"] <- NA
 
 # 2004_g3f1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
-data$gen[data$cohort == "2004" & data$exam == "g3f1" & 
-data$trk == "Science Track"] <- data$his[data$cohort == "2004" &
-data$exam == "g3f1" & data$trk == "Science Track"]
+dat$gen[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2004" &
+dat$exam == "g3f1" & dat$trk == "Science Track"]
 
-data$gen[data$cohort == "2004" & data$exam == "g3f1" & 
-data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2004" &
-data$exam == "g3f1" & data$trk == "Liberal Arts Track"]
+dat$gen[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2004" &
+dat$exam == "g3f1" & dat$trk == "Liberal Arts Track"]
 
-data$his[data$cohort == "2004" & data$exam == "g3f1" & 
-data$trk == "Science Track"] <- NA
+dat$his[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2004" & data$exam == "g3f1" & 
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Liberal Arts Track"] <- NA
 
 # 2004_g3k1, gen score recorded under pol for Science Track and under phy for Liberal Arts Track
-data$gen[data$cohort == "2004" & data$exam == "g3k1" & 
-data$trk == "Science Track"] <- data$pol[data$cohort == "2004" &
-data$exam == "g3k1" & data$trk == "Science Track"]
+dat$gen[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Science Track"] <- dat$pol[dat$cohort == "2004" &
+dat$exam == "g3k1" & dat$trk == "Science Track"]
 
-data$gen[data$cohort == "2004" & data$exam == "g3k1" & 
-data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2004" &
-data$exam == "g3k1" & data$trk == "Liberal Arts Track"]
+dat$gen[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2004" &
+dat$exam == "g3k1" & dat$trk == "Liberal Arts Track"]
 
-data$pol[data$cohort == "2004" & data$exam == "g3k1" & 
-data$trk == "Science Track"] <- NA
+dat$pol[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2004" & data$exam == "g3k1" & 
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Liberal Arts Track"] <- NA
 
 # 2005_g2f2, gen score recorded under pol for Science Track and under phy for Liberal Arts Track
 # gen scores have been created for this exam in the Import Raw Data step
-data$pol[data$cohort == "2005" & data$exam == "g2f2" & 
-data$trk == "Science Track"] <- NA
+dat$pol[dat$cohort == "2005" & dat$exam == "g2f2" &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2005" & data$exam == "g2f2" & 
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2005" & dat$exam == "g2f2" &
+dat$trk == "Liberal Arts Track"] <- NA
 
 # 2005_g3m1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
-data$gen[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
-data$trk == "Science Track"] <- data$his[data$cohort == "2005" &
-data$exam == "g3m1" & !is.na(data$trk) & data$trk == "Science Track"]
+dat$gen[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2005" &
+dat$exam == "g3m1" & !is.na(dat$trk) & dat$trk == "Science Track"]
 
-data$gen[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
-data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2005" &
-data$exam == "g3m1" & !is.na(data$trk) & data$trk == "Liberal Arts Track"]
+dat$gen[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2005" &
+dat$exam == "g3m1" & !is.na(dat$trk) & dat$trk == "Liberal Arts Track"]
 
-data$his[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
-data$trk == "Science Track"] <- NA
+dat$his[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2005" & data$exam == "g3m1" & !is.na(data$trk) &
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- NA
 
 # 2006_g3f1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
-data$gen[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
-data$trk == "Science Track"] <- data$his[data$cohort == "2006" &
-data$exam == "g3f1" & !is.na(data$trk) & data$trk == "Science Track"]
+dat$gen[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2006" &
+dat$exam == "g3f1" & !is.na(dat$trk) & dat$trk == "Science Track"]
 
-data$gen[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
-data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2006" &
-data$exam == "g3f1" & !is.na(data$trk) & data$trk == "Liberal Arts Track"]
+dat$gen[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2006" &
+dat$exam == "g3f1" & !is.na(dat$trk) & dat$trk == "Liberal Arts Track"]
 
-data$his[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
-data$trk == "Science Track"] <- NA
+dat$his[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2006" & data$exam == "g3f1" & !is.na(data$trk) &
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- NA
 
 # 2006_g3k1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
-data$gen[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
-data$trk == "Science Track"] <- data$his[data$cohort == "2006" &
-data$exam == "g3k1" & !is.na(data$trk) & data$trk == "Science Track"]
+dat$gen[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2006" &
+dat$exam == "g3k1" & !is.na(dat$trk) & dat$trk == "Science Track"]
 
-data$gen[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
-data$trk == "Liberal Arts Track"] <- data$phy[data$cohort == "2006" &
-data$exam == "g3k1" & !is.na(data$trk) & data$trk == "Liberal Arts Track"]
+dat$gen[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2006" &
+dat$exam == "g3k1" & !is.na(dat$trk) & dat$trk == "Liberal Arts Track"]
 
-data$his[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
-data$trk == "Science Track"] <- NA
+dat$his[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- NA
 
-data$phy[data$cohort == "2006" & data$exam == "g3k1" & !is.na(data$trk) &
-data$trk == "Liberal Arts Track"] <- NA
+dat$phy[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- NA
 
-# Plausibly pure errors
+## Plausibly pure errors ====
 
-# A "com" score of 128 was erroneously typed as 728
-data$com[data$com == 728] <- 128
+# A com score of 128 was erroneously typed as 728
+dat$com[dat$com == 728] <- 128
 
-# Other Notes
+## Other Notes ====
 
 # 1) Extra scores in his in Science Track in 2008_g2m2; they are NOT part of tot
 
@@ -241,28 +299,28 @@ data$com[data$com == 728] <- 128
 # 4) Different combinations of subjects are present for 2008_g2m1/g2f1,
 # 2009_g1m1/g1f1, and 2011_g2m1; they all sum up to tot
 
-## Study track ====
+# Identify study track ####
 
 # Identify students in science track using their exam scores in Grade 3
-id_sci <- data %>% 
+id_sci <- dat %>%
   filter(exam %in% c("g3m1", "g3f1", "g3k1", "g3k2", "cee")) %>%
   filter(
     !is.na(sci) | (!is.na(phy) & !is.na(che) & !is.na(bio))
-  ) %>% 
+  ) %>%
   pull(cssid) %>%
   unique()
 
 # Identify students in liberal arts track using their exam scores in Grade 3
-id_lib <- data %>% 
+id_lib <- dat %>%
   filter(exam %in% c("g3m1", "g3f1", "g3k1", "g3k2", "cee")) %>%
   filter(
     !is.na(lib) | (!is.na(pol) & !is.na(his) & !is.na(geo))
-  ) %>% 
+  ) %>%
   pull(cssid) %>%
   unique()
 
 # Assign value to "track" variable
-data <- data %>%
+dat <- dat %>%
   mutate(
     track = case_when(
       cssid %in% id_sci ~ "Science Track",
@@ -271,11 +329,11 @@ data <- data %>%
     )
   )
 
-# Continue with "trk" variable for students who remain unidentified
-# in the above step; 
-# For students who have non-NA values in "trk", we use the last
+# Continue with students who remain unidentified in the above step
+
+# For students who have non-NA values in "trk", use the last
 # non-NA value in "trk"
-data <- data %>% 
+dat <- dat %>%
   group_by(cssid) %>%
   mutate(
     track = case_when(
@@ -285,8 +343,8 @@ data <- data %>%
   ) %>%
   ungroup()
 
-# Finally, we use "btrack" variable
-data <- data %>%
+# Finally, use "btrack" variable
+dat <- dat %>%
   mutate(
     track = case_when(
       is.na(track) ~ btrack,
@@ -294,12 +352,12 @@ data <- data %>%
     )
   )
 
-## Comprehensive test scores ====
+# Tidy comprehensive test scores ####
 
 # For later analyses, use comprehensive test scores(sci/lib), do not use scores
-# of composing subjects (phy, che, bio/pol, his, geo) or "com" score
+# of composing subjects (phy, che, bio/pol, his, geo) or com score
 
-data <- data %>%
+dat <- dat %>%
   # when "sci" or "lib" is NA, first replace with "com"
   mutate(
     sci = case_when(
@@ -310,7 +368,7 @@ data <- data %>%
       is.na(lib) & track == "Liberal Arts Track" ~ com,
       TRUE ~ lib
     )
-  ) %>% 
+  ) %>%
   # continue to replace NAs of "sci" and "lib" with the sum of scores of
   # the three composing subjects (when all three subjects have scores)
   mutate(
@@ -327,7 +385,7 @@ data <- data %>%
 # Continue to process special cases
 
 # 2004_g1f1_sci (no bio)
-data <- data %>% 
+dat <- dat %>%
   mutate(
     sci = case_when(
       cohort == "2004" & exam == "g1f1" ~ rowSums(select(., phy, che), na.rm = FALSE),
@@ -336,7 +394,7 @@ data <- data %>%
   )
 
 # 2005_g1m1_sci (no bio)
-data <- data %>% 
+dat <- dat %>%
   mutate(
     sci = case_when(
       cohort == "2005" & exam == "g1m1" ~ rowSums(select(., phy, che), na.rm = FALSE),
@@ -345,7 +403,7 @@ data <- data %>%
   )
 
 # 2005_g1f1_sci (no bio)
-data <- data %>% 
+dat <- dat %>%
   mutate(
     sci = case_when(
       cohort == "2005" & exam == "g1f1" ~ rowSums(select(., phy, che), na.rm = FALSE),
@@ -353,17 +411,15 @@ data <- data %>%
     )
   )
 
-## Elite class membership ====
-
-# Identify students who stayed in elite classes throughout all three grades
+# Identify elite class membership ####
 
 # Cohort 2003
-id_elite03_1 <- data %>%
+id_elite03_1 <- dat %>%
   filter(cohort == "2003", cls_set == "1", cls %in% c("11", "12")) %>%
   pull(cssid) %>%
   unique()
 
-id_elite03_2 <- data %>%
+id_elite03_2 <- dat %>%
   filter(cohort == "2003", cls_set == "2", cls %in% c("9", "10")) %>%
   pull(cssid) %>%
   unique()
@@ -371,25 +427,32 @@ id_elite03_2 <- data %>%
 id_elite03 <- intersect(id_elite03_1, id_elite03_2)
 
 # Cohort 2004
-id_elite04_1 <- data %>%
+id_elite04_s1 <- dat %>%
   filter(cohort == "2004", cls_set == "1", cls %in% c("1", "2")) %>%
   pull(cssid) %>%
   unique()
 
-id_elite04_2 <- data %>%
+id_elite04_s2 <- dat %>%
+  filter(cohort == "2004", cls_set == "2", cls %in% c("1", "2")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite04_s <- intersect(id_elite04_s1, id_elite04_s2)
+
+id_elite04_l <- dat %>%
   filter(cohort == "2004", cls_set == "2", cls == "23") %>%
   pull(cssid) %>%
   unique()
 
-id_elite04 <- union(id_elite04_1, id_elite04_2)
+id_elite04 <- union(id_elite04_s, id_elite04_l)
 
 # Cohort 2005
-id_elite05_1 <- data %>%
+id_elite05_1 <- dat %>%
   filter(cohort == "2005", cls_set == "1", cls %in% c("9", "10", "11")) %>%
   pull(cssid) %>%
   unique()
 
-id_elite05_2 <- data %>%
+id_elite05_2 <- dat %>%
   filter(cohort == "2005", cls_set == "2", cls %in% c("8", "11", "12")) %>%
   pull(cssid) %>%
   unique()
@@ -397,25 +460,30 @@ id_elite05_2 <- data %>%
 id_elite05 <- intersect(id_elite05_1, id_elite05_2)
 
 # Cohort 2006
-id_elite06_1 <- data %>%
+id_elite06_1 <- dat %>%
   filter(cohort == "2006", cls_set == "1", cls %in% c("23", "24", "25")) %>%
   pull(cssid) %>%
   unique()
 
-id_elite06_2 <- data %>%
+id_elite06_2 <- dat %>%
+  filter(cohort == "2006", cls_set == "2", cls %in% c("23", "24", "25")) %>%
+  pull(cssid) %>%
+  unique()
+
+id_elite06_3 <- dat %>%
   filter(cohort == "2006", cls_set == "3", cls %in% c("23", "24", "25")) %>%
   pull(cssid) %>%
   unique()
 
-id_elite06 <- intersect(id_elite06_1, id_elite06_2)
+id_elite06 <- Reduce(intersect, list(id_elite06_1, id_elite06_2, id_elite06_3))
 
 # Cohort 2007
-id_elite07_1 <- data %>%
+id_elite07_1 <- dat %>%
   filter(cohort == "2007", cls_set == "1", cls %in% c("1", "2", "23", "24")) %>%
   pull(cssid) %>%
   unique()
 
-id_elite07_2 <- data %>%
+id_elite07_2 <- dat %>%
   filter(cohort == "2007", cls_set == "2", cls %in% c("1", "2", "23", "24")) %>%
   pull(cssid) %>%
   unique()
@@ -423,7 +491,7 @@ id_elite07_2 <- data %>%
 id_elite07 <- intersect(id_elite07_1, id_elite07_2)
 
 # Create dummy variable indicating elite class membership
-data <- data %>%
+dat <- dat %>%
   mutate(
     cls_elite = case_when(
       cssid %in%
@@ -432,7 +500,9 @@ data <- data %>%
     )
   )
 
-## Elites ====
+# Identify true elites ####
+
+## Cohorts 2003 - 2007 ====
 
 # Identify students who were "true elites" in Cohorts 2003 - 2007
 # (i.e., those who were in the elite classes and whose hsee scores were
@@ -440,62 +510,67 @@ data <- data %>%
 # a few top scorers who chose to stay in regular classes])
 
 # Cohort 2003
-id_elitetrue03_sci <- data %>% 
-  filter(cohort == "2003", track == "Science Track", 
+
+id_elitetrue03_sci <- dat %>%
+  filter(cohort == "2003", track == "Science Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 579) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2004
-# (Cutoff point value for cohort 2004 liberal arts track elite class is 599 
+# (Cutoff point value for cohort 2004 liberal arts track elite class is 599
 # using the average of total scores of g1m1, g1f1, g1m2, and g1f2)
-id_elitetrue04_sci <- data %>% 
-  filter(cohort == "2004", track == "Science Track", 
+
+id_elitetrue04_sci <- dat %>%
+  filter(cohort == "2004", track == "Science Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 596) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2005
-id_elitetrue05_sci <- data %>% 
-  filter(cohort == "2005", track == "Science Track", 
+
+id_elitetrue05_sci <- dat %>%
+  filter(cohort == "2005", track == "Science Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 594.5) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue05_lib <- data %>% 
-  filter(cohort == "2005", track == "Liberal Arts Track", 
+id_elitetrue05_lib <- dat %>%
+  filter(cohort == "2005", track == "Liberal Arts Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 573) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2006
-id_elitetrue06_sci <- data %>% 
-  filter(cohort == "2006", track == "Science Track", 
+
+id_elitetrue06_sci <- dat %>%
+  filter(cohort == "2006", track == "Science Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 595) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue06_lib <- data %>% 
-  filter(cohort == "2006", track == "Liberal Arts Track", 
+id_elitetrue06_lib <- dat %>%
+  filter(cohort == "2006", track == "Liberal Arts Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 586.5) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2007
-id_elitetrue07_sci <- data %>% 
-  filter(cohort == "2007", track == "Science Track", 
+
+id_elitetrue07_sci <- dat %>%
+  filter(cohort == "2007", track == "Science Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 606) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue07_lib <- data %>% 
-  filter(cohort == "2007", track == "Liberal Arts Track", 
+id_elitetrue07_lib <- dat %>%
+  filter(cohort == "2007", track == "Liberal Arts Track",
          cls_elite == "Elite Class", exam == "hsee", tot >= 556) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Create dummy variable indicating "true elites"
-data <- data %>%
+dat <- dat %>%
   mutate(
     elite = case_when(
       cssid %in% c(
@@ -512,6 +587,8 @@ data <- data %>%
     )
   )
 
+## Cohorts 2008 - 2014 ====
+
 # Define students who were "true elites" in Cohorts 2008 - 2014
 # 501 "true elites" in Science Track in Cohorts 2003 - 2007 (average 100/cohort)
 # 212 "true elites" in Liberal Arts Track in Cohorts 2005 - 2007 (average 71/cohort)
@@ -520,98 +597,105 @@ data <- data %>%
 # highest score in the Science Track/Liberal Arts Track
 
 # Cohort 2008
-id_elitetrue08_sci <- data %>% 
-  filter(cohort == "2008", track == "Science Track", 
+
+id_elitetrue08_sci <- dat %>%
+  filter(cohort == "2008", track == "Science Track",
          exam == "hsee", tot >= 647) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue08_lib <- data %>% 
-  filter(cohort == "2008", track == "Liberal Arts Track", 
+id_elitetrue08_lib <- dat %>%
+  filter(cohort == "2008", track == "Liberal Arts Track",
          exam == "hsee", tot >= 625.5) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2009
-id_elitetrue09_sci <- data %>% 
-  filter(cohort == "2009", track == "Science Track", 
+
+id_elitetrue09_sci <- dat %>%
+  filter(cohort == "2009", track == "Science Track",
          exam == "hsee", tot >= 692.5) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue09_lib <- data %>% 
-  filter(cohort == "2009", track == "Liberal Arts Track", 
+id_elitetrue09_lib <- dat %>%
+  filter(cohort == "2009", track == "Liberal Arts Track",
          exam == "hsee", tot >= 667.5) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2010
-id_elitetrue10_sci <- data %>% 
-  filter(cohort == "2010", track == "Science Track", 
+
+id_elitetrue10_sci <- dat %>%
+  filter(cohort == "2010", track == "Science Track",
          exam == "hsee", tot >= 686) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue10_lib <- data %>% 
-  filter(cohort == "2010", track == "Liberal Arts Track", 
+id_elitetrue10_lib <- dat %>%
+  filter(cohort == "2010", track == "Liberal Arts Track",
          exam == "hsee", tot >= 652) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2011
-id_elitetrue11_sci <- data %>% 
-  filter(cohort == "2011", track == "Science Track", 
+
+id_elitetrue11_sci <- dat %>%
+  filter(cohort == "2011", track == "Science Track",
          exam == "hsee", tot >= 741) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue11_lib <- data %>% 
-  filter(cohort == "2011", track == "Liberal Arts Track", 
+id_elitetrue11_lib <- dat %>%
+  filter(cohort == "2011", track == "Liberal Arts Track",
          exam == "hsee", tot >= 721.5) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2012
-id_elitetrue12_sci <- data %>% 
-  filter(cohort == "2012", track == "Science Track", 
+
+id_elitetrue12_sci <- dat %>%
+  filter(cohort == "2012", track == "Science Track",
          exam == "hsee", tot >= 726) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue12_lib <- data %>% 
-  filter(cohort == "2012", track == "Liberal Arts Track", 
+id_elitetrue12_lib <- dat %>%
+  filter(cohort == "2012", track == "Liberal Arts Track",
          exam == "hsee", tot >= 703) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2013
-id_elitetrue13_sci <- data %>% 
-  filter(cohort == "2013", track == "Science Track", 
+
+id_elitetrue13_sci <- dat %>%
+  filter(cohort == "2013", track == "Science Track",
          exam == "hsee", tot >= 761) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue13_lib <- data %>% 
-  filter(cohort == "2013", track == "Liberal Arts Track", 
+id_elitetrue13_lib <- dat %>%
+  filter(cohort == "2013", track == "Liberal Arts Track",
          exam == "hsee", tot >= 739) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Cohort 2014
-id_elitetrue14_sci <- data %>% 
-  filter(cohort == "2014", track == "Science Track", 
+
+id_elitetrue14_sci <- dat %>%
+  filter(cohort == "2014", track == "Science Track",
          exam == "hsee", tot >= 749) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_elitetrue14_lib <- data %>% 
-  filter(cohort == "2014", track == "Liberal Arts Track", 
+id_elitetrue14_lib <- dat %>%
+  filter(cohort == "2014", track == "Liberal Arts Track",
          exam == "hsee", tot >= 729) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 # Assign "Yes" to "true elites" in cohorts 2008 - 2014
-data <- data %>%
+dat <- dat %>%
   mutate(
     elite = case_when(
       cssid %in% c(
@@ -634,10 +718,10 @@ data <- data %>%
     )
   )
 
-## Standardize exam scores within cohort-track-exam ====
+# Standardize exam scores within cohort-track-exam ####
 
-data <- data %>% 
-  group_by(cohort, track, exam) %>% 
+dat <- dat %>%
+  group_by(cohort, track, exam) %>%
   mutate(
     across(
       .cols = tot:com,
@@ -647,37 +731,40 @@ data <- data %>%
   ) %>%
   ungroup()
 
-## Center total score of hsee around the cutoffs for "true elites" ====
+# Center total score of hsee around the cutoffs for true elites ####
 
-# Create the centered variables
-ctot <- data %>%
-  select(cohort, ssid, cssid, name, track, cls_elite, elite, exam, tot, ztot) %>% 
-  filter(exam == "hsee") %>% 
+# Note that the centered hsee scores only apply to
+# (1) Science Track of Cohorts 2003 - 2007
+# (2) Liberal Arts Track of Cohorts 2005 - 2007
+
+ctot <- dat %>%
+  select(cohort, cssid, track, exam, tot) %>%
+  filter(exam == "hsee") %>%
   group_by(cohort, track) %>%
-  # version 1: center tot at cutoffs then divided by standard deviation
+  # method 1: center tot at cutoffs then divided by standard deviation
   # (equivalent to centering ztot at cutoffs)
   mutate(
     hsee_ctot1 = case_when(
       cohort == "2003" & track == "Science Track"
-      ~ (tot - 579)/sd(tot, na.rm = TRUE),
+      ~ (tot - 579) / sd(tot, na.rm = TRUE),
       cohort == "2004" & track == "Science Track"
-      ~ (tot - 596)/sd(tot, na.rm = TRUE),
+      ~ (tot - 596) / sd(tot, na.rm = TRUE),
       cohort == "2005" & track == "Science Track"
-      ~ (tot - 594.5)/sd(tot, na.rm = TRUE),
+      ~ (tot - 594.5) / sd(tot, na.rm = TRUE),
       cohort == "2006" & track == "Science Track"
-      ~ (tot - 595)/sd(tot, na.rm = TRUE),
+      ~ (tot - 595) / sd(tot, na.rm = TRUE),
       cohort == "2007" & track == "Science Track"
-      ~ (tot - 606)/sd(tot, na.rm = TRUE),
+      ~ (tot - 606) / sd(tot, na.rm = TRUE),
       cohort == "2005" & track == "Liberal Arts Track"
-      ~ (tot - 573)/sd(tot, na.rm = TRUE),
+      ~ (tot - 573) / sd(tot, na.rm = TRUE),
       cohort == "2006" & track == "Liberal Arts Track"
-      ~ (tot - 586.5)/sd(tot, na.rm = TRUE),
+      ~ (tot - 586.5) / sd(tot, na.rm = TRUE),
       cohort == "2007" & track == "Liberal Arts Track"
-      ~ (tot - 556)/sd(tot, na.rm = TRUE),
+      ~ (tot - 556) / sd(tot, na.rm = TRUE),
       TRUE ~ NA
     )
   ) %>%
-  # version 2: center tot at cutoffs then divided by root mean square
+  # method 2: center tot at cutoffs then divided by root mean square
   mutate(
     hsee_ctot2 = case_when(
       cohort == "2003" & track == "Science Track"
@@ -702,7 +789,7 @@ ctot <- data %>%
   ungroup()
 
 # Join the centered variables
-data <- data %>%
+dat <- dat %>%
   left_join(
     select(ctot, cssid, hsee_ctot1, hsee_ctot2),
     by = "cssid",
@@ -710,23 +797,20 @@ data <- data %>%
     relationship = "many-to-one"
   )
 
-# Filter and Save Data ####
+# Filter Data ####
 
 # Filter out students whose track is NA and who did not have hsee score
-id_natrack <- data %>% 
+id_natrack <- dat %>%
   filter(is.na(track)) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
-id_nahsee <- data %>% 
+id_nahsee <- dat %>%
   filter(exam == "hsee", is.na(tot)) %>%
-  pull(cssid) %>% 
+  pull(cssid) %>%
   unique()
 
 id_excl <- union(id_natrack, id_nahsee)
 
-data <- data %>%
+dat <- dat %>%
   filter(!cssid %in% id_excl)
-
-# Save data to .rds
-write_rds(data, "Data-Tidy.rds")
