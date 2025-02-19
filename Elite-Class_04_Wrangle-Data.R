@@ -35,17 +35,23 @@ pivot_wider(
 
 # Create helper functions for data inspection ####
 
+# First create vectors containing the names of the score variables
+
+score_col <- c("tot", "chn", "mat", "eng", "phy", "che", "bio", "geo",
+               "his", "pol", "sci", "lib", "gen", "com")
+
+zscore_col <- paste0("z", score_col)
+
 # Extract all observations of n random students from each cohort
 
-sample_dat1 <- function(extra_cols = NULL, n = 2) {
+sample_dat0 <- function(extra_cols = NULL, n = 2) {
   sample_cssid <- dat %>%
     distinct(cohort, cssid) %>%
     group_by(cohort) %>%
     slice_sample(n = n) %>%
     ungroup()
 
-  base_cols <- c("cohort", "cssid", "name", "exam", "cls", "tot", "chn", "mat",
-  "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib", "gen", "com")
+  base_cols <- c("cohort", "cssid", "name", "exam", "cls", score_col)
 
   select_cols <- if (!is.null(extra_cols)) {
     c(base_cols, setdiff(extra_cols, base_cols))
@@ -63,7 +69,7 @@ sample_dat1 <- function(extra_cols = NULL, n = 2) {
 
 # Extract all observations of n random students from each cohort-track
 
-sample_dat2 <- function(extra_cols = NULL, n = 1) {
+sample_dat <- function(extra_cols = NULL, n = 1) {
   sample_cssid <- dat %>%
     filter(!is.na(track)) %>%
     distinct(cohort, track, cssid) %>%
@@ -71,9 +77,7 @@ sample_dat2 <- function(extra_cols = NULL, n = 1) {
     slice_sample(n = n) %>%
     ungroup()
 
-  base_cols <- c("cohort", "track", "cssid", "name", "exam", "cls", "tot",
-  "chn", "mat", "eng", "phy", "che", "bio", "geo", "his", "pol", "sci", "lib",
-  "gen", "com")
+  base_cols <- c("cohort", "track", "cssid", "name", "exam", "cls", zscore_col)
 
   select_cols <- if (!is.null(extra_cols)) {
     c(base_cols, setdiff(extra_cols, base_cols))
@@ -149,11 +153,6 @@ dat <- dat %>%
 # Tidy exam scores ####
 
 ## Convert score variables to numeric ====
-
-# First create a vector containing the names of the score variables
-score_col <- c("tot", "chn", "mat", "eng", "phy", "che", "bio", "geo",
-               "his", "pol", "sci", "lib", "gen", "com")
-
 dat <- dat %>%
   mutate(across(all_of(score_col), as.numeric))
 
@@ -572,7 +571,7 @@ id_elitetrue07_lib <- dat %>%
 # Create dummy variable indicating "true elites"
 dat <- dat %>%
   mutate(
-    elite = case_when(
+    true_elite = case_when(
       cssid %in% c(
         id_elitetrue03_sci,
         id_elitetrue04_sci,
@@ -697,7 +696,7 @@ id_elitetrue14_lib <- dat %>%
 # Assign "Yes" to "true elites" in cohorts 2008 - 2014
 dat <- dat %>%
   mutate(
-    elite = case_when(
+    true_elite = case_when(
       cssid %in% c(
         id_elitetrue08_sci,
         id_elitetrue09_sci,
@@ -714,7 +713,27 @@ dat <- dat %>%
         id_elitetrue13_lib,
         id_elitetrue14_lib
       ) ~ "Yes",
-      TRUE ~ elite
+      TRUE ~ true_elite
+    )
+  )
+
+# Create another variable to indicate different types of students
+dat <- dat %>%
+  mutate(
+    elite = case_when(
+      true_elite == "Yes" ~ "Elite Students",
+      cls_elite == "Elite Class" & true_elite == "No"
+      ~ "Elite Class Non-Elites",
+      TRUE ~ "Regular Students"
+    )
+  )
+
+# Create a dummy variable indicating elite class policy treatment
+dat <- dat %>%
+  mutate(
+    policy = case_when(
+      cohort %in% c("2003", "2004", "2005", "2006", "2007") ~ "Treated",
+      TRUE ~ "Untreated"
     )
   )
 
@@ -797,7 +816,14 @@ dat <- dat %>%
     relationship = "many-to-one"
   )
 
-# Filter Data ####
+# Filter Data & Others ####
+
+# Reorder the exam variable
+dat <- dat %>%
+  mutate(
+    exam = factor(exam,
+    levels = c("hsee", setdiff(unique(exam), c("hsee", "cee")), "cee"))
+  )
 
 # Filter out students whose track is NA and who did not have hsee score
 id_natrack <- dat %>%
