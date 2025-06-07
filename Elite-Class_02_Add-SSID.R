@@ -1,11 +1,14 @@
 
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Elite Class Project
 # Step 2: Add Student Status ID (XJH) to Exam Files
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+# Load packages
 library(tidyverse)
 library(rlang)
 
-# Load Raw Data ####
-
+# Load raw data
 load("Raw-Data.RData")
 
 # Some Pre-Processing ####

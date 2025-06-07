@@ -1,16 +1,22 @@
 
-# Step 3: Bind Exam Variables with Demographic Variables for All Cohorts
-# and Combine Data of All Cohorts into One Data Frame
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Elite Class Project
+# Step 3: Compose the Data Set
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# Run script for Step 2 before running this script
-
+# Load packages
+library(tidyverse)
 library(readxl)
 library(lubridate)
 
-# Create and Tidy Demographic Variable Files for Each Cohort ####
+# Run script for Step 2 before running this script
+source("Elite-Class_02_Add-SSID.R")
+
+# Demographic Variables ####
 
 ## Cohort 2003 ====
 
+# Extract variables
 c03_demo <- c03_base %>%
   select(
     ssid, 姓名, 性别, zx, 民族, 政治面貌, zy, zymc, school, 联系电话, 籍贯,
@@ -37,8 +43,7 @@ c03_demo <- c03_base %>%
     btrack = 科类
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c03_demo <- c03_demo %>%
   mutate(
     male = case_when(
@@ -84,6 +89,7 @@ c03_demo <- c03_demo %>%
 
 ## Cohort 2004 ====
 
+# Extract variables
 c04_demo <- c04_base %>%
   select(
     ssid, 姓名, 性别, tc, zymc, 毕业学校1, 父姓名, 父单位, 母姓名, 母单位,
@@ -123,8 +129,7 @@ c04_demo <- c04_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c04_demo <- c04_demo %>%
   mutate(
     male = case_when(
@@ -147,6 +152,7 @@ c04_demo <- c04_demo %>%
 
 ## Cohort 2005 ====
 
+# Extract variables
 c05_demo <- c05_base %>%
   select(
     ssid, xm, xb, sfzh, tc, zx, race, appe, jtzz, 父姓名, 父单位, 母姓名,
@@ -175,8 +181,7 @@ c05_demo <- c05_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c05_demo <- c05_demo %>%
   mutate(
     ssid = case_when(
@@ -213,6 +218,7 @@ c05_demo <- c05_demo %>%
 
 ## Cohort 2006 ====
 
+# Extract variables
 c06_demo <- c06_base %>%
   select(
     ssid, xm, jtzz, lxdh, 父姓名, 父工作, 父职务, 父电话, 母姓名, 母工作,
@@ -263,8 +269,7 @@ c06_demo <- c06_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c06_demo <- c06_demo %>%
   mutate(
     male = case_when(
@@ -297,6 +302,7 @@ c06_demo <- c06_demo %>%
 
 ## Cohort 2007 ====
 
+# Extract variables
 c07_demo <- c07_base %>%
   select(
     ssid, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, zx, mark, 籍贯, 父姓名,
@@ -339,8 +345,7 @@ c07_demo <- c07_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c07_demo <- c07_demo %>%
   mutate(
     male = case_when(
@@ -397,6 +402,7 @@ c07_demo <- c07_demo %>%
 
 ## Cohort 2008 ====
 
+# Extract variables
 c08_demo <- c08_base %>%
   select(
     ssid, xm, xb, mz, sfzh, zzmm, jtzz, lxdh, byxx, tc, 籍贯31, 父姓名1zc,
@@ -431,8 +437,7 @@ c08_demo <- c08_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c08_demo <- c08_demo %>%
   mutate(
     # Remove numeric string and then extract the first 3 characters in `name`
@@ -510,6 +515,7 @@ c08_demo <- c08_demo %>%
 
 ## Cohort 2009 ====
 
+# Extract variables
 c09_demo <- c09_base %>%
   select(
     ssid, xm, xb, byxx, byxxdh, sfzh, csrq, dszn, 籍贯zn, mz, zzmm, jtzz, hkszd,
@@ -545,8 +551,7 @@ c09_demo <- c09_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c09_demo <- c09_demo %>%
   mutate(
     # Remove numeric string, English alphabets, ".", and "-" in `name`
@@ -594,6 +599,7 @@ c09_demo <- c09_demo %>%
 
 ## Cohort 2010 ====
 
+# Extract variables
 c10_demo <- c10_base %>%
   select(
     ssid, sfzh, xb, csrq, dszn, jg, mz, zzmm, hkszd, kl
@@ -641,8 +647,7 @@ c10_demo <- c10_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c10_demo <- c10_demo %>%
   mutate(
     male = case_when(
@@ -670,6 +675,7 @@ c10_demo <- c10_demo %>%
 
 ## Cohort 2011 ====
 
+# Extract variables
 c11_demo <- c11_base %>%
   select(
     ssid, xm, xb, sfzh, mz, zzmm, jg, byxx, tc, lxdh, jtzz,
@@ -704,8 +710,7 @@ c11_demo <- c11_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c11_demo <- c11_demo %>%
   mutate(
     # Remove numeric string in `name`
@@ -785,6 +790,7 @@ c11_demo <- c11_demo %>%
 
 ## Cohort 2012 ====
 
+# Extract variables
 c12_demo <- c12_base %>%
   select(
     ssid, xm1, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
@@ -824,8 +830,7 @@ c12_demo <- c12_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c12_demo <- c12_demo %>%
   mutate(
     # Remove numeric string in `name`
@@ -924,6 +929,7 @@ c12_demo <- c12_demo %>%
 
 ## Cohort 2013 ====
 
+# Extract variables
 c13_demo <- c13_base %>%
   select(
     ssid, xm, sfzh, xb, mz, csrq, lxdh, jg, hjszd, zz, jtcy2xm, jtcy2zzmm,
@@ -964,8 +970,7 @@ c13_demo <- c13_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c13_demo <- c13_demo %>%
   mutate(
     # Remove numeric string in `name`
@@ -1060,6 +1065,7 @@ c13_demo <- c13_demo %>%
 
 ## Cohort 2014 ====
 
+# Extract variables
 c14_demo <- c14_base %>%
   select(
     ssid, xm, xb, 特长c2, mz, sfzh, csrq, lxdh, jg, hjszd, zz, jtcy2xm,
@@ -1099,8 +1105,7 @@ c14_demo <- c14_base %>%
     dob = substr(nid, 7, 14)
   )
 
-### Tidy variables ----
-
+# Tidy variables
 c14_demo <- c14_demo %>%
   mutate(
     # Remove numeric string and then extract the first 3 characters in `name`
@@ -1199,7 +1204,7 @@ c14_demo <- c14_demo %>%
     cohort = "2014"
   )
 
-# Further Process and Tidy Demographic Variable Files ####
+## Bind All Cohorts ====
 
 # Combine all demographic variable files into a list
 demo_list <- mget(ls(pattern = "c\\d{2}_demo"))
@@ -1214,7 +1219,7 @@ demo <- bind_rows(demo_list) %>%
     m_name, m_job_text, m_pos_text, m_tel, m_edu, m_polsta, m_job_add, m_nid
   )
 
-## Tidy and factor variables ====
+### Tidy and Factor Variables ----
 
 demo$btrack <- factor(demo$btrack,
                  levels = c(1, 2),
@@ -1222,7 +1227,7 @@ demo$btrack <- factor(demo$btrack,
 
 demo$male <- factor(demo$male,
                     levels = c(0, 1),
-                    labels = c("Female", "Male"))
+                    labels = c("No", "Yes"))
 
 # Fix rows with incorrect `nid` and thus incorrect `dob`
 # Convert `dob` to Date
@@ -1315,9 +1320,8 @@ demo$m_polsta <- factor(demo$m_polsta,
                                    "CCP Member",
                                    "Member of Other Parties"))
 
-## Prepare coding files (Part III in WC02) ====
+### Extract Variables from Coding Files ----  
 
-# Five variables to be added to the data set:
 # (1) rural
 # (2) f_job
 # (3) m_job
@@ -1416,7 +1420,7 @@ mutate(
   )
 )
 
-## Extract demographic variables from coding files ====
+# Extract the five variables
 
 # Extract "rural", "f_job", and "m_job"
 demo <- demo %>%
@@ -1495,7 +1499,7 @@ demo$jhsch_rural <- factor(demo$jhsch_rural,
                           levels = c(0, 1),
                           labels = c("No", "Yes"))
 
-## Select variables to finalize the demographic variable files ====
+## Split Tidied Data by Cohort ====
 
 demo <- demo %>%
 select(
@@ -1517,6 +1521,8 @@ for (df_name in names(demo_list2)) {
 }
 
 # Join Exam Variables with Demographic Variables ####
+
+## Create Functions ====
 
 # Function that selects and renames variables in an exam file
 
@@ -2119,7 +2125,8 @@ c2014_cee <- srev(df = c14_gk, prefix = "cee", trk = "文理科", cls = "班级"
 # Join exam variables with demographic file
 c2014 <- jev("2014")
 
-# Combine Data of All Cohorts into One Data Frame ####
+## Bind All Cohorts ====
+
 dat <- mget(ls(pattern = "^c(20[0-9][0-9])$")) %>% bind_rows(.id = "cohortid")
 
 # Tidy cohort columns
@@ -2136,6 +2143,856 @@ dat$cssid <- paste(dat$cohort, dat$ssid, sep = "_")
 dat <- dat %>%
   select(cohort, ssid, cssid, everything())
 
-# Save data to .rds ####
+# Some Fundamental Data Processing ####
 
-write_rds(dat, "Data.rds")
+## Reshape Data ====
+
+dat <- dat %>%
+# define a row by person-exam-subject
+pivot_longer(
+  # identify the columns to pivot
+  col = hsee_trk:cee_com,
+  # name the column that will store the values from the column names
+  names_to = c("exam", "subject"),
+  # define the character that partitions the column names into two parts
+  names_sep = "_",
+  # name the column that will store the column values
+  values_to = "value"
+) %>%
+# define a row by person-exam
+pivot_wider(
+  # identify the column whose values will supply the column names
+  names_from = subject,
+  # identify the column whose values will supply the column values
+  values_from = value,
+  # to error if the column names are duplicated
+  names_repair = "check_unique"
+)
+
+## Class Number Set ====
+
+# Create "cls_set" variable for each cohort
+dat <- dat %>%
+  mutate(
+    cls_set = case_when(
+      # cohorts 2003, 2004, 2007, and 2010 - 2014
+      cohort %in% c("2003", "2004", "2007", "2010", "2011", "2012", "2013", "2014") &
+        str_detect(exam, "hsee|^g1") ~ "1",
+      cohort %in% c("2003", "2004", "2007", "2010", "2011", "2012", "2013", "2014") &
+        !str_detect(exam, "hsee|^g1") ~ "2",
+      # cohort 2005
+      cohort == "2005" & exam %in% c("hsee", "g1m1", "g1f1") ~ "1",
+      cohort == "2005" & !exam %in% c("hsee", "g1m1", "g1f1") ~ "2",
+      # cohort 2006
+      cohort == "2006" & exam %in% c("hsee", "g1m1", "g1f1") ~ "1",
+      cohort == "2006" & exam %in% c("g1m2", "g1f2") ~ "2",
+      cohort == "2006" & !str_detect(exam, "hsee|^g1") ~ "3",
+      # cohort 2008
+      cohort == "2008" & str_detect(exam, "hsee|^g1") ~ "1",
+      cohort == "2008" & str_detect(exam, "^g2") ~ "2",
+      cohort == "2008" & str_detect(exam, "^g3|cee") ~ "3",
+      # cohort 2009
+      cohort == "2009" & str_detect(exam, "hsee|^g1") ~ "1",
+      cohort == "2009" & exam %in% c("g2m1", "g2f1") ~ "2",
+      cohort == "2009" & str_detect(exam, "g2m2|g2f2|^g3|cee") ~ "3"
+    )
+  )
+
+# Tidy "trk", "cls", and "cid"
+dat <- dat %>%
+  mutate(
+    trk = case_when(
+      str_detect(trk, "L|l|普理|艺理|体育|理") ~ "Science Track",
+      str_detect(trk, "W|w|普文|艺文|文") ~ "Liberal Arts Track",
+      TRUE ~ NA
+    ),
+    cls = case_when(
+      cls == "0" ~ NA,
+      str_detect(cls, "^0") ~ substr(cls, 2, 2),
+      str_detect(cls, "\\D") ~ NA,
+      TRUE ~ cls
+    ),
+    cid = case_when(
+      cid == "0" ~ NA,
+      cid == "99" ~ NA,
+      str_detect(cid, "^0") ~ substr(cid, 2, 2),
+      TRUE ~ cid
+    )
+  )
+
+# Fill missing values of "trk", "cls", and "cid"
+dat <- dat %>%
+  group_by(cssid, cls_set) %>%
+  fill(trk, cls, cid, .direction = "updown") %>%
+  ungroup()
+
+## Tidy Exam Scores ====
+
+# Define score columns
+score_col <- c("tot", "chn", "mat", "eng", "phy", "che", "bio", "geo",
+               "his", "pol", "sci", "lib", "gen", "com")
+
+# Convert score variables to numeric
+dat <- dat %>%
+  mutate(across(all_of(score_col), as.numeric))
+
+# Replace negative values and 0s with NA
+dat[score_col][dat[score_col] <= 0] <- NA
+
+# Comprehensive test score replicates
+
+# 2004_g3k1, phy == sci
+# Replace phy values with NA
+dat$phy[dat$cohort == "2004" & dat$exam == "g3k1" & dat$phy == dat$sci] <- NA
+
+# 2006_g3k1, che == sci
+# Replace che values with NA
+dat$che[dat$cohort == "2006" & dat$exam == "g3k1" & dat$che == dat$sci] <- NA
+
+# 2005_g3m1, bio == lib
+# Replace bio values with NA
+dat$bio[dat$cohort == "2005" & dat$exam == "g3m1" & dat$bio == dat$lib] <- NA
+
+# 2005_g3m1, geo == sci
+# Replace geo values with NA
+dat$geo[dat$cohort == "2005" & dat$exam == "g3m1" & dat$geo == dat$sci] <- NA
+
+# 2004_g3k1 & 2006_g3k1, pol == lib
+# Replace pol values with NA
+dat$pol[dat$cohort %in% c("2004", "2006") & dat$exam == "g3k1" & dat$pol == dat$lib] <- NA
+
+# Ability (gen) scores
+
+# 2004_g3m1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+dat$gen[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2004" &
+dat$exam == "g3m1" & dat$trk == "Science Track"]
+
+dat$gen[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2004" &
+dat$exam == "g3m1" & dat$trk == "Liberal Arts Track"]
+
+dat$his[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2004" & dat$exam == "g3m1" &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# 2004_g3f1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+dat$gen[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2004" &
+dat$exam == "g3f1" & dat$trk == "Science Track"]
+
+dat$gen[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2004" &
+dat$exam == "g3f1" & dat$trk == "Liberal Arts Track"]
+
+dat$his[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2004" & dat$exam == "g3f1" &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# 2004_g3k1, gen score recorded under pol for Science Track and under phy for Liberal Arts Track
+dat$gen[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Science Track"] <- dat$pol[dat$cohort == "2004" &
+dat$exam == "g3k1" & dat$trk == "Science Track"]
+
+dat$gen[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2004" &
+dat$exam == "g3k1" & dat$trk == "Liberal Arts Track"]
+
+dat$pol[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2004" & dat$exam == "g3k1" &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# 2005_g2f2, gen score recorded under pol for Science Track and under phy for Liberal Arts Track
+# gen scores have been created for this exam in the Import Raw Data step
+dat$pol[dat$cohort == "2005" & dat$exam == "g2f2" &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2005" & dat$exam == "g2f2" &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# 2005_g3m1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+dat$gen[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2005" &
+dat$exam == "g3m1" & !is.na(dat$trk) & dat$trk == "Science Track"]
+
+dat$gen[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2005" &
+dat$exam == "g3m1" & !is.na(dat$trk) & dat$trk == "Liberal Arts Track"]
+
+dat$his[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2005" & dat$exam == "g3m1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# 2006_g3f1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+dat$gen[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2006" &
+dat$exam == "g3f1" & !is.na(dat$trk) & dat$trk == "Science Track"]
+
+dat$gen[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2006" &
+dat$exam == "g3f1" & !is.na(dat$trk) & dat$trk == "Liberal Arts Track"]
+
+dat$his[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2006" & dat$exam == "g3f1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# 2006_g3k1, gen score recorded under his for Science Track and under phy for Liberal Arts Track
+dat$gen[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- dat$his[dat$cohort == "2006" &
+dat$exam == "g3k1" & !is.na(dat$trk) & dat$trk == "Science Track"]
+
+dat$gen[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- dat$phy[dat$cohort == "2006" &
+dat$exam == "g3k1" & !is.na(dat$trk) & dat$trk == "Liberal Arts Track"]
+
+dat$his[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Science Track"] <- NA
+
+dat$phy[dat$cohort == "2006" & dat$exam == "g3k1" & !is.na(dat$trk) &
+dat$trk == "Liberal Arts Track"] <- NA
+
+# Plausibly pure errors
+
+# A com score of 128 was erroneously typed as 728
+dat$com[dat$com == 728] <- 128
+
+# Other Notes
+
+# 1) Extra scores in his in Science Track in 2008_g2m2; they are NOT part of tot
+
+# 2) Scores in pol in Science Track in 2009_g2f1/g2m2, but they are part of tot
+
+# 3) Extra scores in pol in Science Track and extra scores in phy in Liberal
+# Arts Track in 2011_g2f1; they are NOT part of tot
+
+# 4) Different combinations of subjects are present for 2008_g2m1/g2f1,
+# 2009_g1m1/g1f1, and 2011_g2m1; they all sum up to tot
+
+# Teacher Variables ####
+
+## Create Functions ====
+
+# Function to extract teacher names data frame from 6d files
+tch <- function(
+    df,
+    cohort,
+    exam,
+    cls = "班级",
+    head = "班主任",
+    chn = "任课教师1",
+    mat = "任课教师2",
+    eng = "任课教师3",
+    phy = "任课教师4",
+    che = "任课教师5",
+    his = "任课教师6",
+    pol = "任课教师7",
+    geo = "任课教师8",
+    bio = "任课教师9",
+    trk6d = "科类"
+) {
+  # list of variables to be extracted
+  select_vars <- c(cls, head, chn, mat, eng,
+  phy, che, his, pol, geo, bio, trk6d)
+  
+  # subset rows where df$cls contains any integer string
+  df_cls <- df[grepl("[0-9]+", as.character(df[[cls]])), ]
+  
+  # extract variables
+  df_cls <- df_cls %>% select(all_of(select_vars))
+  
+  # rename variables
+  names(df_cls) <- c("cls", "head_tname", "chn_tname", "mat_tname",
+  "eng_tname", "phy_tname", "che_tname", "his_tname", "pol_tname",
+  "geo_tname", "bio_tname", "trk6d")
+  
+  # add cohort and exam
+  df_cls <- df_cls %>%
+    mutate(
+      cohort = as.character(cohort),
+      exam = exam
+    ) %>%
+    relocate(cohort, exam)
+  
+  return(df_cls)
+}
+
+# Function to perform check on argument values
+targ <- function(df) {
+  # names of columns before teacher name columns
+  subj_col <- c("语文6", "数学6", "英语6", "物理6", "化学6", "历史6",
+  "政治6", "地理6", "生物6")
+  
+  # extract teacher name column names
+  tnames <- names(df)[match(subj_col, names(df)) + 1]
+  
+  # argument values
+  arg_value <- c(
+    names(df)[1],
+    names(df)[names(df) == "班主任"],
+    tnames,
+    names(df)[length(names(df))]
+  )
+  
+  # argument names
+  arg_name <- c("cls", "head", "chn", "mat", "eng",
+  "phy", "che", "his", "pol", "geo", "bio", "trk6d")
+  
+  # create table for argument values
+  arg_value_df <- data.frame(
+    arg_name = arg_name,
+    arg_value = arg_value
+  )
+  
+  print(arg_value_df)
+}
+
+## Cohort 2003 ====
+
+# No 6d files
+
+## Cohort 2004 ====
+
+# g1m1 - g1f2: no 6d file
+
+# g2m1
+teacher_2004_g2m1 <- tch(c04_20051104qz_6d, 2004, "g2m1")
+
+# g2f1
+teacher_2004_g2f1 <- tch(c04_20060115qm_6d, 2004, "g2f1")
+
+# g2m2
+teacher_2004_g2m2 <- tch(c04_20060426qz_6d, 2004, "g2m2")
+
+# g2f2
+teacher_2004_g2f2 <- tch(c04_20060712qm_6d, 2004, "g2f2")
+
+# g3m1
+teacher_2004_g3m1 <- tch(c04_20060712qm_6d, 2004, "g3m1") # sub
+
+# g3f1
+teacher_2004_g3f1 <- tch(c04_20060712qm_6d, 2004, "g3f1") # sub
+
+# g3k1
+teacher_2004_g3k1 <- tch(c04_20060712qm_6d, 2004, "g3k1") # sub
+
+# g3k2
+teacher_2004_g3k2 <- tch(c04_20060712qm_6d, 2004, "g3k2") # sub
+
+# cee
+teacher_2004_cee <- tch(c04_20060712qm_6d, 2004, "cee") # sub
+
+
+## Cohort 2005 ====
+
+# g1m1
+teacher_2005_g1m1 <- tch(c05_20051106qz_6d, 2005, "g1m1")
+
+# g1f1
+teacher_2005_g1f1 <- tch(c05_20060115qm_6d, 2005, "g1f1")
+
+# g1m2
+teacher_2005_g1m2 <- tch(c05_20060712qm_6d, 2005, "g1m2") # sub
+
+# g1f2
+teacher_2005_g1f2 <- tch(c05_20060712qm_6d, 2005, "g1f2")
+
+# g2m1
+teacher_2005_g2m1 <- tch(c05_20061106qz_6d, 2005, "g2m1")
+
+# g2f1
+teacher_2005_g2f1 <- tch(c05_20070206qm_6d, 2005, "g2f1")
+
+# g2m2
+teacher_2005_g2m2 <- tch(c05_20070429qz_6d, 2005, "g2m2")
+
+# g2f2
+teacher_2005_g2f2 <- tch(c05_20070701qm_hnl_6d, 2005, "g2f2")
+
+# g3m1
+teacher_2005_g3m1 <- tch(c05_20071110qz_wj_6d, 2005, "g3m1")
+
+# g3f1
+teacher_2005_g3f1 <- tch(c05_20080201qm_wj_6d, 2005, "g3f1")
+
+# g3k1
+teacher_2005_g3k1 <- tch(c05_20080229mn1_wj_zh_6d, 2005, "g3k1")
+
+# g3k2
+teacher_2005_g3k2 <- tch(c05_20080430mn2_wj_6d, 2005, "g3k2")
+
+# cee
+teacher_2005_cee <- tch(c05_20080430mn2_wj_6d, 2005, "cee") # sub
+
+
+## Cohort 2006 ====
+
+# g1m1
+teacher_2006_g1m1 <- tch(c06_20061106qz_qb_6d, 2006, "g1m1")
+
+# g1f1
+teacher_2006_g1f1 <- tch(c06_20070206qm_qb_6d, 2006, "g1f1")
+
+# g1m2
+teacher_2006_g1m2 <- tch(c06_20070429qz_qb_6d, 2006, "g1m2")
+
+# g1f2
+teacher_2006_g1f2 <- tch(c06_20070701qm_qb_6d, 2006, "g1f2")
+
+# g2m1
+teacher_2006_g2m1 <- tch(c06_20071115qz_qb_6d, 2006, "g2m1")
+
+# g2f1
+teacher_2006_g2f1 <- tch(c06_20080126qm_qb_6d, 2006, "g2f1")
+
+# g2m2
+teacher_2006_g2m2 <- tch(c06_20080505qz_qbkm_6d, 2006, "g2m2")
+
+# g2f2
+teacher_2006_g2f2 <- tch(c06_20080707qm_qb_6d, 2006, "g2f2")
+
+# g3m1
+teacher_2006_g3m1 <- tch(c06_20080707qm_qb_6d, 2006, "g3m1") # sub
+
+# g3f1
+teacher_2006_g3f1 <- tch(c06_20090315mn1_6d, 2006, "g3f1") # sub
+
+# g3k1
+teacher_2006_g3k1 <- tch(c06_20090315mn1_6d, 2006, "g3k1")
+
+# g3k2
+teacher_2006_g3k2 <- tch(c06_20090429mn2_6d, 2006, "g3k2")
+
+# cee
+teacher_2006_cee <- tch(c06_20090429mn2_6d, 2006, "cee") # sub
+
+
+## Cohort 2007 ====
+
+# g1m1
+teacher_2007_g1m1 <- tch(c07_20071118qz_6d, 2007, "g1m1")
+
+# g1f1
+teacher_2007_g1f1 <- tch(c07_20080125qm_qbkm_6d, 2007, "g1f1")
+
+# g1m2
+teacher_2007_g1m2 <- tch(c07_20080506qz_6d, 2007, "g1m2")
+
+# g1f2
+teacher_2007_g1f2 <- tch(c07_20080706qm_6d, 2007, "g1f2")
+
+# g2m1
+teacher_2007_g2m1 <- tch(c07_20081103qz_6d, 2007, "g2m1")
+
+# g2f1
+teacher_2007_g2f1 <- tch(c07_20090118qm_6d, 2007, "g2f1")
+
+# g2m2
+teacher_2007_g2m2 <- tch(c07_20090415qz_6d, 2007, "g2m2")
+
+# g2f2
+teacher_2007_g2f2 <- tch(c07_20090708qm_6d, 2007, "g2f2")
+
+# g3m1
+teacher_2007_g3m1 <- tch(c07_20091111qz_6d, 2007, "g3m1")
+
+# g3f1
+teacher_2007_g3f1 <- tch(c07_20100203qm_yj_6d, 2007, "g3f1")
+
+# g3k1
+teacher_2007_g3k1 <- tch(c07_20100430mn2_yj_6d, 2007, "g3k1") # sub
+
+# g3k2
+teacher_2007_g3k2 <- tch(c07_20100430mn2_yj_6d, 2007, "g3k2")
+
+# cee
+teacher_2007_cee <- tch(c07_20100430mn2_yj_6d, 2007, "cee") # sub
+
+
+## Cohort 2008 ====
+
+# g1m1
+teacher_2008_g1m1 <- tch(c08_20081106qz_6d, 2008, "g1m1")
+
+# g1f1
+teacher_2008_g1f1 <- tch(c08_20090116qm_6d, 2008, "g1f1")
+
+# g1m2
+teacher_2008_g1m2 <- tch(c08_20090416qz_6d, 2008, "g1m2")
+
+# g1f2
+teacher_2008_g1f2 <- tch(c08_20090709qm_6d, 2008, "g1f2")
+
+# g2m1
+teacher_2008_g2m1 <- tch(c08_20100201qm_dy_6d, 2008, "g2m1") # sub
+
+# g2f1
+teacher_2008_g2f1 <- tch(c08_20100201qm_dy_6d, 2008, "g2f1")
+
+# g2m2
+teacher_2008_g2m2 <- tch(c08_20100429qz_6d, 2008, "g2m2")
+
+# g2f2
+teacher_2008_g2f2 <- tch(c08_20100715qm_6d, 2008, "g2f2")
+
+# g3m1
+teacher_2008_g3m1 <- tch(c08_20101112qz_yj_6d, 2008, "g3m1")
+
+# g3f1
+teacher_2008_g3f1 <- tch(c08_20110122jc_yj_6d, 2008, "g3f1")
+
+# g3k1
+teacher_2008_g3k1 <- tch(c08_20110318mn1_yj_6d, 2008, "g3k1")
+
+# g3k2
+teacher_2008_g3k2 <- tch(c08_20110427mn2_yj_6d, 2008, "g3k2")
+
+# cee
+teacher_2008_cee <- tch(c08_20110318mn1_yj_6d, 2008, "cee") # sub
+
+
+## Cohort 2009 ====
+
+# g1m1
+teacher_2009_g1m1 <- tch(c09_20091111qz_2p_6d, 2009, "g1m1")
+
+# g1f1
+teacher_2009_g1f1 <- tch(c09_20100201qm_2p_6d, 2009, "g1f1")
+
+# g1m2
+teacher_2009_g1m2 <- tch(c09_20100430qz_6d, 2009, "g1m2")
+
+# g1f2
+teacher_2009_g1f2 <- tch(c09_20100715qm_6d, 2009, "g1f2")
+
+# g2m1
+teacher_2009_g2m1 <- tch(c09_20101112qz_lk_6d, 2009, "g2m1")
+
+# g2f1
+teacher_2009_g2f1 <- tch(c09_20101112qz_lk_6d, 2009, "g2f1") # sub
+
+# g2m2
+teacher_2009_g2m2 <- tch(c09_20110428qz_6d, 2009, "g2m2")
+
+# g2f2
+teacher_2009_g2f2 <- tch(c09_20110708qm_6d, 2009, "g2f2")
+
+# g3m1
+teacher_2009_g3m1 <- tch(c09_20111106qz_yj_6d, 2009, "g3m1")
+
+# g3f1
+teacher_2009_g3f1 <- tch(c09_20120113qm_yj_bzh_6d, 2009, "g3f1")
+
+# g3k1
+teacher_2009_g3k1 <- tch(c09_20120303mn1_yj_6d, 2009, "g3k1")
+
+# g3k2
+teacher_2009_g3k2 <- tch(c09_20120427mn2_yj_6d, 2009, "g3k2")
+
+# cee
+teacher_2009_cee <- tch(c09_20120303mn1_yj_6d, 2009, "cee") # sub
+
+
+## Cohort 2010 ====
+
+# g1m1
+teacher_2010_g1m1 <- tch(c10_20101110yk_6d, 2010, "g1m1")
+
+# g1f1
+teacher_2010_g1f1 <- tch(c10_20110122qm_6d, 2010, "g1f1")
+
+# g1m2
+teacher_2010_g1m2 <- tch(c10_20110428qz_6d, 2010, "g1m2")
+
+# g1f2
+teacher_2010_g1f2 <- tch(c10_20110708qm_6d, 2010, "g1f2")
+
+# g2m1
+teacher_2010_g2m1 <- tch(c10_20111104qz_6d, 2010, "g2m1")
+
+# g2f1
+teacher_2010_g2f1 <- tch(c10_20120113qm_6d, 2010, "g2f1")
+
+# g2m2
+teacher_2010_g2m2 <- tch(c10_20120419qz_6d, 2010, "g2m2")
+
+# g2f2
+teacher_2010_g2f2 <- tch(c10_20120706qm_6d, 2010, "g2f2")
+
+# g3m1
+teacher_2010_g3m1 <- tch(c10_20121108jc_yj_6d, 2010, "g3m1")
+
+# g3f1
+teacher_2010_g3f1 <- tch(c10_20130125qm_yj_6d, 2010, "g3f1")
+
+# g3k1
+teacher_2010_g3k1 <- tch(c10_20130307mn1_6d, 2010, "g3k1")
+
+# g3k2
+teacher_2010_g3k2 <- tch(c10_20130426mn2_yj_6d, 2010, "g3k2")
+
+# cee
+teacher_2010_cee <- tch(c10_20130426mn2_yj_6d, 2010, "cee") # sub
+
+
+## Cohort 2011 ====
+
+# g1m1
+teacher_2011_g1m1 <- tch(c11_20111110qz_6d, 2011, "g1m1")
+
+# g1f1
+teacher_2011_g1f1 <- tch(c11_20120113qm_6d, 2011, "g1f1")
+
+# g1m2
+teacher_2011_g1m2 <- tch(c11_20120420qz_6d, 2011, "g1m2")
+
+# g1f2
+teacher_2011_g1f2 <- tch(c11_20120701qm_6d, 2011, "g1f2")
+
+# g2m1
+teacher_2011_g2m1 <- tch(c11_20121114qz_xzb_6d, 2011, "g2m1")
+
+# g2f1
+teacher_2011_g2f1 <- tch(c11_20130130qm_6d, 2011, "g2f1")
+
+# g2m2
+teacher_2011_g2m2 <- tch(c11_20130507qz_6d, 2011, "g2m2")
+
+# g2f2
+teacher_2011_g2f2 <- tch(c11_20130707qm_6d, 2011, "g2f2")
+
+# g3m1
+teacher_2011_g3m1 <- tch(c11_20131107qz_6d, 2011, "g3m1")
+
+# g3f1
+teacher_2011_g3f1 <- tch(c11_20140120qm_6d, 2011, "g3f1")
+
+# g3k1
+teacher_2011_g3k1 <- tch(c11_20140120qm_6d, 2011, "g3k1") # sub
+
+# g3k2
+teacher_2011_g3k2 <- tch(c11_20140120qm_6d, 2011, "g3k2") # sub
+
+# cee
+teacher_2011_cee <- tch(c11_20140120qm_6d, 2011, "cee") # sub
+
+
+## Cohort 2012 ====
+
+# g1m1
+teacher_2012_g1m1 <- tch(c12_20121115qz_6d, 2012, "g1m1")
+
+# g1f1
+teacher_2012_g1f1 <- tch(c12_20130130qm_6d, 2012, "g1f1")
+
+# g1m2
+teacher_2012_g1m2 <- tch(c12_20130504qz_6d, 2012, "g1m2")
+
+# g1f2
+teacher_2012_g1f2 <- tch(c12_20130707qm_3k_6d, 2012, "g1f2")
+
+# g2m1
+teacher_2012_g2m1 <- tch(c12_20131112qz_6d, 2012, "g2m1")
+
+# g2f1
+teacher_2012_g2f1 <- tch(c12_20140115qm_6d, 2012, "g2f1")
+
+# g2m2
+teacher_2012_g2m2 <- tch(c12_20140422qz_6d, 2012, "g2m2")
+
+# g2f2
+teacher_2012_g2f2 <- tch(c12_20140708qm_6d, 2012, "g2f2")
+
+# g3m1
+teacher_2012_g3m1 <- tch(c12_20141112qz_6d, 2012, "g3m1")
+
+# g3f1
+teacher_2012_g3f1 <- tch(c12_20150315mn1_6d, 2012, "g3f1") # sub
+
+# g3k1
+teacher_2012_g3k1 <- tch(c12_20150315mn1_6d, 2012, "g3k1")
+
+# g3k2
+teacher_2012_g3k2 <- tch(c12_20150506mn2_6d, 2012, "g3k2")
+
+# cee
+teacher_2012_cee <- tch(c12_20150506mn2_6d, 2012, "cee") # sub
+
+
+## Cohort 2013 ====
+
+# g1m1
+teacher_2013_g1m1 <- tch(c13_20131105qz_6d, 2013, "g1m1")
+
+# g1f1
+teacher_2013_g1f1 <- tch(c13_20140120qm_6d, 2013, "g1f1")
+
+# g1m2
+teacher_2013_g1m2 <- tch(c13_20140420qz_6d, 2013, "g1m2")
+
+# g1f2
+teacher_2013_g1f2 <- tch(c13_20140703qm_6d, 2013, "g1f2")
+
+# g2m1
+teacher_2013_g2m1 <- tch(c13_20141117qz_6d, 2013, "g2m1")
+
+# g2f1
+teacher_2013_g2f1 <- tch(c13_20150201qm_6d, 2013, "g2f1")
+
+# g2m2
+teacher_2013_g2m2 <- tch(c13_20150508qz_6d, 2013, "g2m2")
+
+# g2f2
+teacher_2013_g2f2 <- tch(c13_20150707qm_6d, 2013, "g2f2")
+
+# g3m1
+teacher_2013_g3m1 <- tch(c13_20151102qz_6d, 2013, "g3m1")
+
+# g3f1
+teacher_2013_g3f1 <- tch(c13_20160128qm_6d, 2013, "g3f1")
+
+# g3k1
+teacher_2013_g3k1 <- tch(c13_20160128qm_6d, 2013, "g3k1") # sub
+
+# g3k2
+teacher_2013_g3k2 <- tch(c13_20160128qm_6d, 2013, "g3k2") # sub
+
+# cee
+teacher_2013_cee <- tch(c13_20160128qm_6d, 2013, "cee") # sub
+
+
+## Cohort 2014 ====
+
+# g1m1
+teacher_2014_g1m1 <- tch(c14_20141121qz_6d, 2014, "g1m1")
+
+# g1f1
+teacher_2014_g1f1 <- tch(c14_20150205qm_6d, 2014, "g1f1")
+
+# g1m2
+teacher_2014_g1m2 <- tch(c14_20150427qz_6d, 2014, "g1m2")
+
+# g1f2
+teacher_2014_g1f2 <- tch(c14_20150705qm_6d, 2014, "g1f2")
+
+# g2m1
+teacher_2014_g2m1 <- tch(c14_20151112qz_6d, 2014, "g2m1")
+
+# g2f1
+teacher_2014_g2f1 <- tch(c14_20160127qm_6d, 2014, "g2f1")
+
+# g2m2
+teacher_2014_g2m2 <- tch(c14_20160510qz_6d, 2014, "g2m2")
+
+# g2f2
+teacher_2014_g2f2 <- tch(c14_20160607qm_6d, 2014, "g2f2")
+
+# g3m1
+teacher_2014_g3m1 <- tch(c14_20161116qz_6d, 2014, "g3m1")
+
+# g3f1
+teacher_2014_g3f1 <- tch(c14_20170114qm_6d, 2014, "g3f1")
+
+# g3k1
+teacher_2014_g3k1 <- tch(c14_20170305mn1_6d, 2014, "g3k1")
+
+# g3k2
+teacher_2014_g3k2 <- tch(c14_20170505mn2_6d, 2014, "g3k2")
+
+# cee
+teacher_2014_cee <- tch(c14_20170505mn2_6d, 2014, "cee") # sub
+
+## Bind All Cohorts ====
+
+dat_teacher <- mget(ls(pattern = "^teacher")) %>% bind_rows()
+
+# Tidy `cls` column
+dat_teacher <- dat_teacher %>%
+  mutate(
+    cls = case_when(
+      str_detect(cls, "班") ~ gsub("班", "", cls),
+      grepl("^g0[56]0[1-9]$", cls) ~ substr(cls, 5, 5),
+      grepl("^g0[56][1-9][0-9]$", cls) ~ substr(cls, 4, 5),
+      TRUE ~ cls
+    )
+  )
+
+# Tidy `trk6d` column
+dat_teacher <- dat_teacher %>%
+  mutate(
+    trk6d = case_when(
+      str_detect(trk6d, "文") ~ "Liberal Arts Track",
+      str_detect(trk6d, "理") ~ "Science Track"
+    )
+  )
+
+### Extract Variables from Coding Files ----  
+
+# (1) _tmale
+# (2) _tname (cleaned)
+
+# Load the completed working file
+info_teacher <- readxl::read_excel("Variable-Coding-Files/教师辨认文件_完成_2025Jun.xlsx", trim_ws = TRUE)
+
+# Create the named lookup vectors
+
+male_map <- setNames(info_teacher$male, info_teacher$name)
+
+name_map <- setNames(info_teacher$name_correct, info_teacher$name)
+
+# Extract teacher gender and tidied teacher names
+dat_teacher <- dat_teacher %>%
+  mutate(
+    # gender columns
+    across(
+      .cols = ends_with("_tname"),
+      .fns = ~ male_map[.],
+      .names = "{sub('_tname$', '_tmale', .col)}"
+    ),
+    # tidied names
+    across(
+      .cols = ends_with("_tname"),
+      .fns = ~ name_map[.],
+      .names = "{.col}"
+    )
+  )
+
+## Join Teacher Variables with the Main Data Set ====
+
+dat <- dat %>%
+  left_join(
+    dat_teacher,
+    by = c("cohort", "exam", "cls"),
+    na_matches = "never",
+    relationship = "many-to-one"
+  )
+
+# Check for rows that failed to join
+dat %>%
+    anti_join(
+    dat_teacher,
+    by = c("cohort", "exam", "cls"),
+    na_matches = "never"
+  ) %>%
+  filter(
+    cohort != "2003",
+    !(cohort == "2004" & exam %in% c("g1m1", "g1f1", "g1m2", "g1f2")),
+    exam != "hsee",
+    !is.na(cls)
+  ) %>%
+  distinct(cohort, exam, cls) %>%
+  arrange(cohort, exam, cls) %>%
+  print(n = Inf)
+
+# Save to "Data.rds" ####
+
+write_rds(dat, "Data.rds") # version: 2025-06-09 10:42

@@ -1,6 +1,10 @@
 
-# Step 1: Import Raw Data to "Raw-Data.RData"
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Elite Class Project
+# Step 1: Import Raw Data
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+# Load packages
 library(readxl)
 library(tidyverse)
 
@@ -1300,6 +1304,6 @@ c14_md <- read_excel("Raw-Data/2014/G2014/md.xlsx")
 
 c14_testname <- read_excel("Raw-Data/2014/G2014/testname.xlsx")
 
-# Save to .RData ####
+# Save to "Raw-Data.RData" ####
 
-save.image("Raw-Data.RData")
+save.image("Raw-Data.RData") # version: 2025-02-12 14:29
