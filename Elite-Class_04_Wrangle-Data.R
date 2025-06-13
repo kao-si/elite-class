@@ -518,6 +518,8 @@ dat <- dat %>%
     )
   )
 
+## Variable "elite" ====
+
 # Create variable "elite" to indicate four types of students
 dat <- dat %>%
   mutate(
@@ -534,9 +536,27 @@ dat <- dat %>%
     )
   )
 
-# Exam Score Standardization and Centering ####
+# Exam Score Trimming, Standardization, and Centering ####
+
+## Score Trimming ====
+
+# Trim the lowest 5% of scores in each subject within cohort-track-exam
+dat <- dat %>%
+  group_by(cohort, track, exam) %>%
+  mutate(
+    across(
+      .cols = tot:com,
+      .fns = ~ ifelse(. < quantile(., 0.05, na.rm = TRUE), NA, .),
+      .names = "{.col}_trim"
+    )
+  ) %>%
+  ungroup()
+
+## Score Standardization ====
 
 # Standardize exam scores within cohort-track-exam
+
+# Untrimmed scores
 dat <- dat %>%
   group_by(cohort, track, exam) %>%
   mutate(
@@ -548,7 +568,21 @@ dat <- dat %>%
   ) %>%
   ungroup()
 
-# Center total score of hsee around the cutoffs for top scorers
+# Trimmed scores
+dat <- dat %>%
+  group_by(cohort, track, exam) %>%
+  mutate(
+    across(
+      .cols = tot_trim:com_trim,
+      .fns = ~ scale(.)[, 1],
+      .names = "z{.col}"
+    )
+  ) %>%
+  ungroup()
+
+## Centering Total Score of HSEE ====
+
+# Center total score of hsee (untrimmed) around the cutoffs for top scorers
 
 # Note that the centered hsee scores only apply to
 # (1) Science Track of Cohorts 2003 - 2007
@@ -614,16 +648,9 @@ dat <- dat %>%
     relationship = "many-to-one"
   )
 
-# Filter Data & Misc ####
+# Filter Data ####
 
-# Reorder the exam variable
-dat <- dat %>%
-  mutate(
-    exam = factor(exam,
-    levels = c("hsee", setdiff(unique(exam), c("hsee", "cee")), "cee"))
-  )
-
-# Filter out students whose track is NA and who did not have hsee score
+# Filter out students whose track is NA and who did not have hsee total score
 
 id_natrack <- dat %>%
   filter(is.na(track)) %>%
@@ -639,3 +666,75 @@ id_excl <- union(id_natrack, id_nahsee)
 
 dat <- dat %>%
   filter(!cssid %in% id_excl)
+
+# Pivot Wider ####
+
+wdat <- dat %>%
+  pivot_wider(
+    names_from = exam,
+    values_from = c(trk:bio_tmale, tot_trim:zcom_trim),
+    names_glue = "{exam}_{.value}",
+    names_repair = "check_unique"
+  )
+
+# Ad hoc Wrangling ####
+
+# Factor and relevel "exam" variable
+dat <- dat %>%
+  mutate(
+    exam = factor(exam,
+    levels = c("hsee", setdiff(unique(exam), c("hsee", "cee")), "cee"))
+  )
+
+# Create data frames that exclude "Regular Class Top Scorers"
+# and "Elite Class Non-Top Scorers" for the majority of analyses
+dat1 <- dat %>%
+  filter(elite %in% c("Elite Students", "Regular Students"))
+
+wdat1 <- wdat %>%
+  filter(elite %in% c("Elite Students", "Regular Students"))
+
+# Factor and relevel "elite" variable
+wdat1$elite <- factor(wdat1$elite,
+  levels = c("Regular Students", "Elite Students"))
+
+# Create averages of exam performance in high school, using trimmed scores
+wdat1 <- wdat1 %>%
+  mutate(
+    avg_hs = rowMeans(select(., g1m1_ztot_trim:g3k2_ztot_trim), na.rm = TRUE),
+    avg_g1 = rowMeans(select(., g1m1_ztot_trim:g1f2_ztot_trim), na.rm = TRUE),
+    avg_g2 = rowMeans(select(., g2m1_ztot_trim:g2f2_ztot_trim), na.rm = TRUE),
+    avg_g3 = rowMeans(select(., g3m1_ztot_trim:g3k2_ztot_trim), na.rm = TRUE)
+  )
+
+# Use bandwidth of 0.3
+wdat1_bw03 <- wdat1 %>%
+  filter(policy == "Treated", hsee_ctot >= -0.3, hsee_ctot <= 0.3)
+
+# Define broom tidiers for rdrobust objects
+tidy.rdrobust <- function(x, ...) {
+  data.frame(
+    term      = rownames(x$coef),
+    estimate  = x$coef[, 1],
+    std.error = x$se[,   1],
+    statistic = x$z[,    1],
+    p.value   = x$pv[,   1],
+    conf.low  = x$ci[,   1],
+    conf.high = x$ci[,   2],
+    row.names = NULL
+  )
+}
+
+glance.rdrobust <- function(x, ...) {
+  data.frame(
+    nobs.left            = x$N[1],
+    nobs.right           = x$N[2],
+    nobs.effective.left  = x$N_h[1],
+    nobs.effective.right = x$N_h[2],
+    cutoff               = x$c,
+    order.regression     = x$p,
+    kernel               = x$kernel,
+    bwselect             = x$bwselect,
+    row.names = NULL
+  )
+}
