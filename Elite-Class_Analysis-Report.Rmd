@@ -1,0 +1,390 @@
+---
+title: "Preliminary Analysis Report"
+output: 
+    html_document:
+        toc: true
+        toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+# Load packages
+library(tidyverse)
+library(knitr)
+library(rddensity)
+library(fixest)
+library(rdrobust)
+library(broom)
+library(modelsummary)
+
+# Source the data wrangling script
+source("Elite-Class_04_Wrangle-Data.R")
+```
+
+# Descriptive Figures and Statistics
+
+## Number of students in each cohort
+
+```{r}
+dat %>%
+distinct(cohort, ssid) %>%
+count(cohort) %>%
+ggplot(aes(x = factor(cohort, levels = sort(unique(cohort),
+decreasing = TRUE)), y = n)) +
+  geom_col() +
+  geom_text(aes(label = n), hjust = -0.3, size = 3) +
+  coord_flip() +
+  labs(title = "Number of Students in Each Cohort",
+       x = "Cohort",
+       y = "Number of Students")
+```
+
+## Number of elite vs. regular students in each cohort-track
+
+```{r}
+dat %>%
+filter(elite %in% c("Elite Students", "Regular Students")) %>%
+distinct(policy, cohort, track, elite, ssid) %>%
+count(policy, cohort, track, elite) %>%
+ggplot(aes(x = factor(cohort, levels = sort(unique(cohort),
+decreasing = TRUE)), y = n, fill = elite)) +
+  geom_col(position = "dodge") +
+  geom_text(aes(label = n), position = position_dodge(width = 0.9),
+  hjust = -0.3, size = 3) +
+  coord_flip() +
+  facet_grid(policy ~ track, scales = "free_y", space = "free_y") +
+  labs(
+    title = "Number of Students in Each Category of `elite` in
+    Each Cohort-Track",
+    x = "Cohort",
+    y = "Number of Students"
+  ) +
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+Including all categories of students
+
+```{r}
+dat %>%
+distinct(policy, cohort, track, elite, ssid) %>%
+count(policy, cohort, track, elite) %>%
+ggplot(aes(x = factor(cohort, levels = sort(unique(cohort),
+decreasing = TRUE)), y = n, fill = elite)) +
+  geom_col(position = "dodge") +
+  geom_text(aes(label = n), position = position_dodge(width = 0.9),
+  hjust = -0.3, size = 3) +
+  coord_flip() +
+  facet_grid(policy ~ track, scales = "free_y", space = "free_y") +
+  labs(
+    title = "Number of Students in Each Category of `elite` in
+    Each Cohort-Track",
+    x = "Cohort",
+    y = "Number of Students"
+  ) +
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+## Distribution of students by demographic characteristics in each cohort-track
+
+```{r}
+demo_col <- c("male", "rural", "onlychd", "board", "jhsch_rural", "han",
+"polsta", "spec2", "f_job", "f_edu", "f_polsta", "m_job", "m_edu", "m_polsta")
+
+gg_demo <- function(var) {
+    dat %>%
+      distinct(cohort, track, !!rlang::sym(var), ssid) %>%
+      count(cohort, track, !!rlang::sym(var)) %>%
+      ggplot(aes(x = factor(cohort, levels = sort(unique(cohort),
+      decreasing = TRUE)), y = n, fill = !!rlang::sym(var))) +
+        geom_col(position = "dodge") +
+        geom_text(aes(label = n), position = position_dodge(width = 0.9),
+        hjust = -0.3, size = 3) +
+        coord_flip() +
+        facet_wrap(~ track) +
+        labs(
+          title = paste0("Number of Students in Each Category of **", var,
+          "** in Each Cohort-Track"),
+          x = "Cohort",
+          y = "Number of Students"
+        ) +
+        theme(
+            legend.position = "top",
+            legend.title = element_blank(),
+            plot.title = ggtext::element_markdown()
+        )
+}
+
+# Print all plots
+walk(demo_col, ~ print(gg_demo(.)))
+```
+
+## Exam score availability in each cohort-track
+
+```{r}
+gg_score <- function(var) {
+    dat %>%
+      select(cohort, track, exam, !!rlang::sym(var)) %>%
+      group_by(cohort, track, exam) %>%
+      summarize(n = sum(!is.na(!!rlang::sym(var)))) %>%
+      ggplot(aes(x = exam, y = n, color = cohort)) +
+        geom_jitter(position = position_jitter(width = 0.15)) +
+        ggrepel::geom_text_repel(aes(label = cohort),
+        show.legend = FALSE, size = 3) +
+        facet_wrap(~ track, ncol = 1, scales = "free_y") +
+        labs(
+          title = paste0("Number of Available Scores for **", var,
+          "** in Each Cohort-Track"),
+          x = "Exam",
+          y = "Number of Available Scores"
+        ) +
+        theme(plot.title = ggtext::element_markdown())
+}
+
+# Print all plots
+walk(zscore_col, ~ print(gg_score(.)))
+```
+
+# Regression Discontinuity Analysis in Treated Cohorts
+
+## Evidence of a sharp regression discontinuity design
+
+```{r}
+dat %>%
+  filter(policy == "Treated",
+  elite %in% c("Elite Students", "Regular Students")) %>%
+  distinct(cssid, .keep_all = TRUE) %>%
+  ggplot(aes(x = hsee_ctot, y = elite, color = elite)) +
+    geom_point(size = 0.5, alpha = 0.5,
+      position = position_jitter(height = 0.3)) +
+    geom_vline(xintercept = 0) +
+    labs(
+      title = "Evidence of a Sharp Regression Discontinuity Design",
+      x = "Total Score in HSEE Centered around the Cutoffs",
+      y = "Student Category"
+    ) +
+    guides(color = "none")
+```
+
+Including all categories of students
+
+```{r}
+dat %>%
+  filter(policy == "Treated") %>%
+  distinct(cssid, .keep_all = TRUE) %>%
+  ggplot(aes(x = hsee_ctot, y = elite, color = elite)) +
+    geom_point(size = 0.5, alpha = 0.5,
+      position = position_jitter(height = 0.2)) +
+    geom_vline(xintercept = 0) +
+    labs(
+      title = "Evidence of a Sharp Regression Discontinuity Design",
+      x = "Total Score in HSEE Centered around the Cutoffs",
+      y = "Student Category"
+    ) +
+    guides(color = "none")
+```
+
+## Check for continuity assumption in each cohort-track
+
+### Histograms
+
+```{r}
+dat %>%
+  filter(policy == "Treated",
+  elite %in% c("Elite Students", "Regular Students")) %>%
+  distinct(cssid, .keep_all = TRUE) %>%
+  ggplot(aes(x = hsee_ctot, fill = elite)) +
+    geom_histogram(binwidth = 0.05) +
+    geom_vline(xintercept = 0) +
+    facet_grid(cohort ~ track) +
+    labs(
+      title = "Check for Continuity Assumption",
+      x = "Standardized HSEE Total Score Centered around the Cutoffs",
+      fill = "Student Category"
+    )
+```
+
+### McCrary density tests
+
+```{r}
+cohort_col <- c("2003", "2004", "2005", "2005", "2006", "2006", "2007", "2007")
+track_col <- c("Science Track", "Science Track",
+rep(c("Liberal Arts Track", "Science Track"), times = 3))
+
+density_test <- function(cohort_val, track_val) {
+    run_var <- dat %>%
+      filter(elite %in% c("Elite Students", "Regular Students"),
+      cohort == cohort_val, track == track_val) %>%
+      distinct(cssid, .keep_all = TRUE) %>%
+      pull(hsee_ctot)
+
+    density_test <- rddensity(run_var, c = 0)
+
+    cat("Cohort:", cohort_val, "Track:", track_val, "\n")
+    print(summary(density_test))
+    cat("\n")
+    plot_test <- rdplotdensity(rdd = density_test,
+                               X = run_var,
+                               type = "both")
+    cat("\n")
+}
+
+walk2(cohort_col, track_col, density_test)
+```
+
+## Graphic evidence
+
+```{r}
+# CEE
+ggplot(wdat1_bw03, aes(x = hsee_ctot, y = cee_ztot_trim, color = elite)) +
+  geom_point(size = 0.5, alpha = 0.5) +
+  # Add a line for regular students
+  geom_smooth(data = filter(wdat1_bw03, hsee_ctot < 0),
+  method = "lm", se = FALSE) +
+  # Add a line for elite students
+  geom_smooth(data = filter(wdat1_bw03, hsee_ctot >= 0),
+  method = "lm", se = FALSE) +
+  geom_vline(xintercept = 0) +
+  labs(
+    title = "Graphic Evidence of Discontinuity in CEE Total Scores",
+    x = "Standardized HSEE Total Score Centered around the Cutoffs",
+    y = "Standardized CEE Total Score"
+  ) +
+  guides(color = "none") +
+  facet_wrap(~ track, scales = "free_y")
+
+# Average High School Performance
+ggplot(wdat1_bw03, aes(x = hsee_ctot, y = avg_hs, color = elite)) +
+  geom_point(size = 0.5, alpha = 0.5) +
+  # Add a line for regular students
+  geom_smooth(data = filter(wdat1_bw03, hsee_ctot < 0),
+  method = "lm", se = FALSE) +
+  # Add a line for elite students
+  geom_smooth(data = filter(wdat1_bw03, hsee_ctot >= 0),
+  method = "lm", se = FALSE) +
+  geom_vline(xintercept = 0) +
+  labs(
+    title =
+    "Graphic Evidence of Discontinuity in Average High School Performance",
+    x = "Standardized HSEE Total Score Centered around the Cutoffs",
+    y = "Average High School Performance"
+  ) +
+  guides(color = "none") +
+  facet_wrap(~ track, scales = "free_y")
+```
+
+## Benchmark models
+
+```{r}
+# OLS models
+  # Including cohort x track fixed effects
+  # Including interaction term
+  # Standard errors clustered by cohort x track
+  # Bandwidth of 0.3
+
+bm_ols1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort^track,
+  data = wdat1_bw03
+)
+
+bm_ols2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort^track,
+  data = wdat1_bw03
+)
+
+# Non-parametric models with rdrobust
+
+bm_rd1 <- rdrobust(
+  y = wdat1$cee_ztot_trim,
+  x = wdat1$hsee_ctot,
+  c = 0
+)
+
+bm_rd2 <- rdrobust(
+  y = wdat1$avg_hs,
+  x = wdat1$hsee_ctot,
+  c = 0
+)
+
+# Non-parametric models with rdrobust
+# Including "cohort" and "track" as covariates
+
+bm_rd3 <- rdrobust(
+  y = wdat1$cee_ztot_trim,
+  x = wdat1$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(wdat1$cohort)),
+    track = as.numeric(as.factor(wdat1$track))
+  ),
+  c = 0
+)
+
+bm_rd4 <- rdrobust(
+  y = wdat1$avg_hs,
+  x = wdat1$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(wdat1$cohort)),
+    track = as.numeric(as.factor(wdat1$track))
+  ),
+  c = 0
+)
+
+mod_bm <- list(
+  "CEE Total Score (OLS)" = bm_ols1,
+  "Average High School Performance (OLS)" = bm_ols2,
+  "CEE Total Score (Nonparametric)" = bm_rd1,
+  "Average High School Performance (Nonparametric)" = bm_rd2,
+  "CEE Total Score (Nonparametric with Covariates)" = bm_rd3,
+  "Average High School Performance (Nonparametric with Covariates)" = bm_rd4
+)
+
+modelsummary(
+  mod_bm,
+  statistic = "std.error",
+  coef_map = c(
+    # fixest OLS terms
+    "hsee_ctot" = "Centered HSEE Total Score",
+    "eliteElite Students" = "Elite Class",
+    "hsee_ctot:eliteElite Students" = "Interaction Term",
+    # rdrobust slope term
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Benchmark Models",
+  output = "markdown"
+)
+```
+
+### Plot of benchmark models (rdplot)
+
+```{r}
+# CEE
+rdplot(
+  y = wdat1$cee_ztot_trim,
+  x = wdat1$hsee_ctot,
+  c = 0,
+  # use the bandwidth from the benchmark model
+  h = bm_rd1$bws[1, ],
+  x.lim = c(-bm_rd1$bws[1, 1], bm_rd1$bws[1, 2]),
+  y.lim = c(0, 2),
+  title = "Non-parametric Estimation of the Effect of HSEE on CEE Scores",
+  x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
+  y.label = "Standardized CEE Total Score"
+)
+
+# Average High School Performance
+rdplot(
+  y = wdat1$avg_hs,
+  x = wdat1$hsee_ctot,
+  c = 0,
+  # use the bandwidth from the benchmark model
+  h = bm_rd2$bws[1, ],
+  x.lim = c(-bm_rd2$bws[1, 1], bm_rd2$bws[1, 2]),
+  y.lim = c(0, 2),
+  title = "Non-parametric Estimation of the Effect of HSEE on Average High School Performance",
+  x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
+  y.label = "Average High School Performance"
+)
+```
