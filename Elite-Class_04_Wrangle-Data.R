@@ -648,6 +648,43 @@ dat <- dat %>%
     relationship = "many-to-one"
   )
 
+# Factor Variables ####
+
+dat$track <- factor(dat$track,
+                    levels = c("Science Track", "Liberal Arts Track"))
+
+dat$policy <- factor(dat$policy,
+                     levels = c("Untreated", "Treated"))
+
+dat$cls_elite <- factor(dat$cls_elite,
+                        levels = c("Regular Class", "Elite Class"))
+
+dat$top_scorer <- factor(dat$top_scorer,
+                         levels = c("No", "Yes"))
+
+dat$elite <- factor(dat$elite,
+                    levels = c("Regular Students", "Elite Students",
+                               "Elite Class Non-Top Scorers",
+                               "Regular Class Top Scorers"))
+
+# Teacher gender variables
+dat <- dat %>%
+  mutate(
+    across(
+      .cols = ends_with("_tmale"),
+      .fns = ~ factor(., levels = c("No", "Yes"))
+    )
+  )
+
+# Factor and relevel "exam" variable
+dat <- dat %>%
+  mutate(
+    exam = factor(exam,
+                  levels = c("hsee",
+                             setdiff(unique(exam), c("hsee", "cee")),
+                             "cee"))
+  )
+
 # Filter Data ####
 
 # Filter out students whose track is NA and who did not have hsee total score
@@ -679,13 +716,6 @@ wdat <- dat %>%
 
 # Ad hoc Wrangling ####
 
-# Factor and relevel "exam" variable
-dat <- dat %>%
-  mutate(
-    exam = factor(exam,
-    levels = c("hsee", setdiff(unique(exam), c("hsee", "cee")), "cee"))
-  )
-
 # Create data frames that exclude "Regular Class Top Scorers"
 # and "Elite Class Non-Top Scorers" for the majority of analyses
 dat1 <- dat %>%
@@ -693,10 +723,6 @@ dat1 <- dat %>%
 
 wdat1 <- wdat %>%
   filter(elite %in% c("Elite Students", "Regular Students"))
-
-# Factor and relevel "elite" variable
-wdat1$elite <- factor(wdat1$elite,
-  levels = c("Regular Students", "Elite Students"))
 
 # Create averages of exam performance in high school, using trimmed scores
 wdat1 <- wdat1 %>%

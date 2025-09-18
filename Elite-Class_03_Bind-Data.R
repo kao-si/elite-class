@@ -1219,7 +1219,7 @@ demo <- bind_rows(demo_list) %>%
     m_name, m_job_text, m_pos_text, m_tel, m_edu, m_polsta, m_job_add, m_nid
   )
 
-### Tidy and Factor Variables ----
+## Tidy and Factor Variables ====
 
 demo$btrack <- factor(demo$btrack,
                  levels = c(1, 2),
@@ -1320,7 +1320,7 @@ demo$m_polsta <- factor(demo$m_polsta,
                                    "CCP Member",
                                    "Member of Other Parties"))
 
-### Extract Variables from Coding Files ----  
+## Extract Variables from Coding Files ====  
 
 # (1) rural
 # (2) f_job
@@ -2935,7 +2935,7 @@ dat_teacher <- dat_teacher %>%
     )
   )
 
-### Extract Variables from Coding Files ----  
+## Extract Variables from Coding Files ====  
 
 # (1) _tmale
 # (2) _tname (cleaned)
