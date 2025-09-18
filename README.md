@@ -747,7 +747,11 @@
 - c14_md <- md
 - c14_testname <- testname
 
-## Identify Exams within Different Class Number Sets
+## Identify Exams within Each Class Number Set in Each Cohort
+
+In each cohort, students were re-assigned to different classes once or twice during the three years
+
+Values in cells represent the names of the column that contains class number in each data file
 
 ### Cohort 2003
 
@@ -1066,102 +1070,215 @@
 | c14_20170525mn3 |                    | BH                 |
 | c14_gk          |                    | 班级               |
 
-## Demographic Variables
+## Study Tracks
 
-| Variable        | Label                               | Levels                                                       |
-| --------------- | ----------------------------------- | ------------------------------------------------------------ |
-| **cohort**      | Enrollment Cohort                   |                                                              |
-| **name**        | Name                                |                                                              |
-| **ssid**        | Student Status ID (XJH)             |                                                              |
-| **nid**         | National ID Number                  |                                                              |
-| **dob**         | Date of Birth                       |                                                              |
-| **male**        | Gender                              | 0: female, 1: male                                           |
-| **rural**       | Rural Residency                     | 0: no, 1: yes                                                |
-| orig            | Place of Origin                     |                                                              |
-| hukou           | Hukou Type                          | 0: rural, 1: urban                                           |
-| hukou_loc       | Hukou Address                       |                                                              |
-| home_add        | Home Address                        |                                                              |
-| tel             | Phone Number                        |                                                              |
-| **onlychd**     | Only Child in Family                | 0: no, 1: yes                                                |
-| **board**       | Board at School                     | 0: no, 1: yes                                                |
-| jhsch           | Junior High School                  |                                                              |
-| **jhsch_name**  | Standard Name of Junior High School |                                                              |
-| **jhsch_rural** | Rural Junior High School            | 0: no, 1: yes                                                |
-| **han**         | Han Ethnicity                       | 0: other ethnicity, 1: Han ethnicity                         |
-| **polsta**      | Political Status                    | 0: not CYL member, 1: CYL member                             |
-| **spec**        | Specialty                           |                                                              |
-| **spec_rank**   | Specialty Rank                      |                                                              |
-| **spec2**       | Specialty                           | 0: no specialty, 1: specialty student                        |
-| **btrack**      | Track of Study (in base file)       | 1: science track, 2: liberal arts track                      |
-| **univ**        | University Accepted                 |                                                              |
-| **univmajor**   | University Major                    |                                                              |
-| **f_name**      | Father Name                         |                                                              |
-| **f_job**       | Father Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| f_pos           | Father Job Position                 |                                                              |
-| f_tel           | Father Phone Number                 |                                                              |
-| **f_edu**       | Father Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **f_polsta**    | Father Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
-| f_job_add       | Father Job Address                  |                                                              |
-| **f_nid**       | Father National ID Number           |                                                              |
-| **m_name**      | Mother Name                         |                                                              |
-| **m_job**       | Mother Job                          | 1: peasant, 2: unstable occupation, 3: self-employed, 4: enterprise employee, 5: public institution employee, 6: civil servant/military man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| m_pos           | Mother Job Position                 |                                                              |
-| m_tel           | Mother Phone Number                 |                                                              |
-| **m_edu**       | Mother Education                    | 1: primary school, 2: junior high school, 3: senior high school/technical school, 4: associate degree, 5: undergraduate degree, 6: postgraduate degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **m_polsta**    | Mother Political Status             | 0: no party affiliation, 1: CCP member, 2: member of other parties |
-| m_job_add       | Mother Job Address                  |                                                              |
-| **m_nid**       | Mother National ID Number           |                                                              |
+Numbers in cells represent class numbers
 
-### Notes
+| Cohort | Track              | Grade 1                        | Grade 2                                | Grade 3                                |
+| ------ | ------------------ | ------------------------------ | -------------------------------------- | -------------------------------------- |
+| 2003   | Liberal Arts Track | 1-5                            | 1-8, 25-26                             | 1-8, 25-26                             |
+| 2003   | Science Track      | 6-20                           | 9-22                                   | 9-22                                   |
+| 2004   | Liberal Arts Track | 13-22                          | 13-23, 27, 29                          | 13-23, 27, 29                          |
+| 2004   | Science Track      | 1-12                           | 1-12, 25, 28                           | 1-12, 25, 28                           |
+| 2005   | Liberal Arts Track | 1st sem: 1-9; 2nd sem: 1-10    | 1-10                                   | 1-10                                   |
+| 2005   | Science Track      | 1st sem: 10-24; 2nd sem: 11-26 | 11-26                                  | 11-26                                  |
+| 2006   | Liberal Arts Track | 1-10, 25                       | 1-10, 25                               | 1-10, 25                               |
+| 2006   | Science Track      | 11-24                          | 11-24                                  | 11-24                                  |
+| 2007   | Liberal Arts Track | 17-24                          | 17-24                                  | 17-24                                  |
+| 2007   | Science Track      | 1-16                           | 1-16                                   | 1-16                                   |
+| 2008   | Liberal Arts Track | NA                             | 1-2, 9-12, 19-22                       | 1-11, 31-32                            |
+| 2008   | Science Track      | NA                             | 3-8, 13-18, 23-25                      | 13-30                                  |
+| 2009   | Liberal Arts Track | 15-26                          | 1st sem: mixed; 2nd sem: 1-10, 26      | 1-10, 26                               |
+| 2009   | Science Track      | 1-14                           | 1st sem: mixed; 2nd sem: 11-25         | 11-25                                  |
+| 2010   | Liberal Arts Track | NA                             | 5-6, 10-13, 17-18, 23-24, 29-30, 33-34 | 5-6, 10-13, 17-18, 23-24, 29-30, 33-34 |
+| 2010   | Science Track      | NA                             | 1-4, 7-9, 14-16, 19-22, 25-28, 31-32   | 1-4, 7-9, 14-16, 19-22, 25-28, 31-32   |
+| 2011   | Liberal Arts Track | NA                             | 17-30 (none in g2m1)                   | 17-30                                  |
+| 2011   | Science Track      | NA                             | 1-16 (all in g2m1)                     | 1-16                                   |
+| 2012   | Liberal Arts Track | mixed                          | 1-12                                   | 1-12                                   |
+| 2012   | Science Track      | mixed                          | 13-30                                  | 13-30                                  |
+| 2013   | Liberal Arts Track | NA                             | 1-14                                   | 1-14                                   |
+| 2013   | Science Track      | NA                             | 15-30                                  | 15-30                                  |
+| 2014   | Liberal Arts Track | NA                             | 1-12                                   | 1-12                                   |
+| 2014   | Science Track      | NA                             | 13-30                                  | 13-30                                  |
+
+## Elite Classes
+
+Numbers in cells represent class numbers
+
+| Cohort | Track              | Grade 1                        | Grade 2 | Grade 3 |
+| ------ | ------------------ | ------------------------------ | ------- | ------- |
+| 2003   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2003   | Science Track      | 11-12                          | 9-10    | 9-10    |
+| 2004   | Liberal Arts Track | NA                             | 23      | 23      |
+| 2004   | Science Track      | 1-2                            | 1-2     | 1-2     |
+| 2005   | Liberal Arts Track | 1st sem: 9; 2nd sem: 8         | 8       | 8       |
+| 2005   | Science Track      | 1st sem: 10-11; 2nd sem: 11-12 | 11-12   | 11-12   |
+| 2006   | Liberal Arts Track | 25                             | 25      | 25      |
+| 2006   | Science Track      | 23-24                          | 23-24   | 23-24   |
+| 2007   | Liberal Arts Track | 23-24                          | 23-24   | 23-24   |
+| 2007   | Science Track      | 1-2                            | 1-2     | 1-2     |
+| 2008   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2008   | Science Track      | NA                             | NA      | NA      |
+| 2009   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2009   | Science Track      | NA                             | NA      | NA      |
+| 2010   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2010   | Science Track      | NA                             | NA      | NA      |
+| 2011   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2011   | Science Track      | NA                             | NA      | NA      |
+| 2012   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2012   | Science Track      | NA                             | NA      | NA      |
+| 2013   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2013   | Science Track      | NA                             | NA      | NA      |
+| 2014   | Liberal Arts Track | NA                             | NA      | NA      |
+| 2014   | Science Track      | NA                             | NA      | NA      |
+
+## Cutoff Points for "Top Scorers"
+
+| Cohort | Track              | Cutoff hsee Scores |
+| ------ | ------------------ | ------------------ |
+| 2003   | Science Track      | >= 579             |
+| 2004   | Science Track      | >= 596             |
+| 2005   | Science Track      | >= 594.5           |
+| 2005   | Liberal Arts Track | >= 573             |
+| 2006   | Science Track      | >= 595             |
+| 2006   | Liberal Arts Track | >= 586.5           |
+| 2007   | Science Track      | >= 606             |
+| 2007   | Liberal Arts Track | >= 556             |
+| 2008   | Science Track      | >= 647             |
+| 2008   | Liberal Arts Track | >= 625.5           |
+| 2009   | Science Track      | >= 692.5           |
+| 2009   | Liberal Arts Track | >= 667.5           |
+| 2010   | Science Track      | >= 686             |
+| 2010   | Liberal Arts Track | >= 652             |
+| 2011   | Science Track      | >= 741             |
+| 2011   | Liberal Arts Track | >= 721.5           |
+| 2012   | Science Track      | >= 726             |
+| 2012   | Liberal Arts Track | >= 703             |
+| 2013   | Science Track      | >= 761             |
+| 2013   | Liberal Arts Track | >= 739             |
+| 2014   | Science Track      | >= 749             |
+| 2014   | Liberal Arts Track | >= 729             |
+
+Notes
+
+- For Cohorts 2003 - 2007 (cohorts with elite class policy), top scorers are those whose total scores in HSEE are higher than the highest score in the regular classes. Importantly, when identifying the highest score in the regular classes, we do not count a few top scorers who chose to stay in regular classes but whose total scores in HSEE are discontinuously higher than the rest of the regular class.
+- Define students who were "top scorers" in Cohorts 2008 - 2014:
+  - 501 "top scorers" in Science Track elite classes in Cohorts 2003 - 2007 (average 100/cohort)
+  - 212 "top scorers" in Liberal Arts Track elite classes in Cohorts 2005 - 2007 (average 71/cohort)
+  - Therefore, students whose HSEE total scores were higher or equal to the 100th/71st highest score in the Science Track/Liberal Arts Track were identified as "top scorers" in Cohorts 2008 - 2014
+
+
+## Data Dictionary
+
+| Variable             | Label                                   | Levels                                                       |
+| -------------------- | --------------------------------------- | ------------------------------------------------------------ |
+| **cohort**           | Enrollment Cohort                       |                                                              |
+| **ssid**             | Student Status ID (XJH)                 |                                                              |
+| **cssid**            | "cohort_ssid"                           |                                                              |
+| **name**             | Name                                    |                                                              |
+| **nid**              | National ID Number                      |                                                              |
+| **dob**              | Date of Birth                           |                                                              |
+| **male**             | Male                                    | No; Yes                                                      |
+| **rural**            | Rural Residency                         | No; Yes                                                      |
+| **onlychd**          | Only Child in Family                    | No; Yes                                                      |
+| **board**            | Board at School                         | No; Yes                                                      |
+| **jhsch_name**       | Name of Junior High School              |                                                              |
+| **jhsch_rural**      | Rural Junior High School                | No; Yes                                                      |
+| **han**              | Han Ethnicity                           | Other Ethnicity; Han Ethnicity                               |
+| **polsta**           | Political Status                        | Not CYL Member; CYL Member                                   |
+| **spec**             | Specialty Category                      |                                                              |
+| **spec_rank**        | Specialty Rank                          |                                                              |
+| **spec2**            | Specialty Status                        | No Specialty; Specialty Student                              |
+| btrack               | Track of Study (in base files)          | Science Track; Liberal Arts Track                            |
+| **univ**             | University Accepted                     |                                                              |
+| **univmajor**        | University Major                        |                                                              |
+| **f_name**           | Father Name                             |                                                              |
+| **f_job**            | Father Job                              | Peasant; Unstable Occupation; Self-Employed; Enterprise Employee; Public Institution Employee; Civil Servant/Military Man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| **f_edu**            | Father Education                        | Primary School; Junior High School; Senior High School/Technical School; Associate Degree; Undergraduate Degree; Postgraduate Degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **f_polsta**         | Father Political Status                 | No Party Affiliation; CCP Member; Member of Other Parties    |
+| **f_nid**            | Father National ID Number               |                                                              |
+| **m_name**           | Mother Name                             |                                                              |
+| **m_job**            | Mother Job                              | Peasant; Unstable Occupation; Self-Employed; Enterprise Employee; Public Institution Employee; Civil Servant/Military Man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
+| **m_edu**            | Mother Education                        | Primary School; Junior High School; Senior High School/Technical School; Associate Degree; Undergraduate Degree; Postgraduate Degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
+| **m_polsta**         | Mother Political Status                 | No Party Affiliation; CCP Member; Member of Other Parties    |
+| **m_nid**            | Mother National ID Number               |                                                              |
+| **exam**             | Exams                                   | (See below for exam prefixes)                                |
+| trk:com              | Exam Attributes and Subject Scores      | (See below for subject suffixes)                             |
+| cls_set              | Class Number Set                        |                                                              |
+| head_tname:bio_tname | Teacher Name of Each Subject            | ("head": class supervisor (班主任))                          |
+| trk6d                | Track of Study (in 6d files)            | Science Track; Liberal Arts Track                            |
+| head_tmale:bio_tmale | Teacher Gender (Male) of Each Subject   | No; Yes                                                      |
+| **track**            | Track of Study                          | Science Track; Liberal Arts Track                            |
+| **policy**           | Elite Class Policy Treatment            | Untreated; Treated                                           |
+| **cls_elite**        | Elite Class Indicator                   | Regular Class; Elite Class                                   |
+| **top_scorer**       | Top Scorers in hsee                     | No; Yes (see "Cutoff Points for "Top Scorers"" section)      |
+| **elite**            | Elite Student Indicator                 | Regular Students; Elite Students (removed for majority of analyses: Regular Class Top Scorers; Elite Class Non-Top Scorers) |
+| tot_trim:com_trim    | Trimmed Exam Scores                     | (Trim the lowest 5% of scores in each subject within cohort-track-exam) |
+| ztot:zcom            | Standardized Exam Scores                | (Standardize exam scores within cohort-track-exam)           |
+| ztot_trim:zcom_trim  | Standardized Trimmed Exam Scores        | (Standardize trimmed exam scores within cohort-track-exam)   |
+| **hsee_ctot**        | hsee Scores Centered around the Cutoffs | (Center total score of hsee (untrimmed) around the cutoffs for top scorers; center tot at cutoffs then divided by standard deviation, equivalent to centering ztot at cutoffs) |
+| hsee_ctot2           | hsee Scores Centered around the Cutoffs | (Center total score of hsee (untrimmed) around the cutoffs for top scorers; center tot at cutoffs then divided by root mean square) |
+
+Notes
 
 - Strings in **name** are not exact correct names for some rows in Cohorts 2008, 2011, & 2014
 - Strings in **f_name** and **m_name** are not exact correct names for some rows in Cohorts 2008, 2011, 2012, 2013, & 2014
 - **board** == 0 could also mean NA (no data input) for Cohorts 2003 & 2005
 
-### Summary by Cohort
+### Demographic Variables Availability by Cohort
 
 | Variable<br />/Cohort | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 |
 | --------------------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| **ssid**              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **btrack**            | 1    | 1    | 1    | 1    | 0    | 1    | 1    | 1    | 0    | 1    | 1    | 1    |
-| **name**              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **male**              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **nid**               | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **dob**               | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **han**               | 1    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| ssid                  | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| btrack                | 1    | 1    | 1    | 1    | 0    | 1    | 1    | 1    | 0    | 1    | 1    | 1    |
+| name                  | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| male                  | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| nid                   | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| dob                   | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| han                   | 1    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
 | orig                  | 1    | 0    | 0    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **hukou**             | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 1    |
+| hukou                 | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 1    |
 | hukou_loc             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 1    | 1    | 1    |
-| **onlychd**           | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 1    | 1    | 1    |
-| **polsta**            | 1    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| onlychd               | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 1    | 1    | 1    |
+| polsta                | 1    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
 | home_add              | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
 | tel                   | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **board**             | 1    | 0    | 1    | 1    | 1    | 0    | 0    | 0    | 0    | 1    | 1    | 1    |
-| **jhsch**             | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **univ**              | 0    | 1    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
-| **univmajor**         | 0    | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    |
-| **spec**              | 1    | 1    | 1    | 1    | 1    | 1    | 0    | 0    | 1    | 1    | 0    | 1    |
+| board                 | 1    | 0    | 1    | 1    | 1    | 0    | 0    | 0    | 0    | 1    | 1    | 1    |
+| jhsch                 | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| univ                  | 0    | 1    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
+| univmajor             | 0    | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    |
+| spec                  | 1    | 1    | 1    | 1    | 1    | 1    | 0    | 0    | 1    | 1    | 0    | 1    |
 | spec_rank             | 1    | 1    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    |
-| **f_name**            | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **f_job**             | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| f_name                | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| f_job                 | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
 | f_pos                 | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
 | f_tel                 | 0    | 0    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **f_edu**             | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
-| **f_polsta**          | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| f_edu                 | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| f_polsta              | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
 | f_job_add             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    | 0    |
-| **f_nid**             | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
-| **m_name**            | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **m_job**             | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| f_nid                 | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
+| m_name                | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
+| m_job                 | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
 | m_pos                 | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    |
 | m_tel                 | 0    | 0    | 0    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    | 1    |
-| **m_edu**             | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
-| **m_polsta**          | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| m_edu                 | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
+| m_polsta              | 0    | 0    | 0    | 0    | 1    | 1    | 0    | 0    | 1    | 1    | 1    | 1    |
 | m_job_add             | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    | 0    | 0    | 0    | 0    |
-| **m_nid**             | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
+| m_nid                 | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 0    | 1    | 0    |
 
-## Exam and Score Variables
+Notes
 
-### Exam Prefixes
+- orig: Place of Origin
+- hukou: Hukou Type
+- hukou_loc: Hukou Address
+- home_add: Home Address
+- tel: Phone Number
+- jhsch: Junior High School
+- f_pos/m_pos: Father/Mother Job Position
+- f_tel/m_tel: Father/Mother Phone Number
+- f_job_add/m_job_add: Father/Mother Job Address
+
+### Exam Prefixes and Subject Suffixes
 
 Collect information of **14** exams for each student in a cohort
 
@@ -1170,7 +1287,7 @@ Collect information of **14** exams for each student in a cohort
 - Mock Exam 1 & 2: **g3k1, g3k2**
 - CEE: **cee**
 
-### Subject Suffixes
+Subject suffixes
 
 1. 文理科类: trk
 2. 班号: cls
@@ -1190,7 +1307,11 @@ Collect information of **14** exams for each student in a cohort
 16. 能力: gen
 17. 综合: com
 
-### Cohort 2003
+### Score Variables Availability by Cohort-Exam
+
+Values in cells represent the names of the columns that contain the exam attributes or subject scores in each data file
+
+#### Cohort 2003
 
 | Exam | Data File | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1209,7 +1330,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c03_mn2   | NA   | bh   | xh   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c03_gk    | NA   | 班级 | NA   | gkzf   | yw   | sx   | yy   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | zh   |
 
-### Cohort 2004
+#### Cohort 2004
 
 | Exam | Data File      | 1    | 2      | 3      | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | -------------- | ---- | ------ | ------ | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1228,7 +1349,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c04_mn2        | WL   | NA     | NA     | AA     | YY   | SS   | EE   | WW   | HH   | BB   | DD   | LL   | ZZ   | LZ   | WZ   | XX   | NA   |
 | cee  | c04_gk         | KL   | BJ     | NA     | ZF     | YW   | SX   | YY   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NL   | ZH   |
 
-### Cohort 2005
+#### Cohort 2005
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1247,7 +1368,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c05_20080430mn2_wj    | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 | cee  | c05_gk                | NA   | 班级 | NA   | 总分   | 语文 | 数学 | 外语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 能力 | 综合 |
 
-### Cohort 2006
+#### Cohort 2006
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5     | 6     | 7     | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ----- | ----- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1266,7 +1387,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c06_20090429mn2       | NA   | BH   | XH   | 总成绩 | 语文  | 数学  | 英语  | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 | cee  | c06_gk                | NA   | 班号 | NA   | gkzf   | gkkm1 | gkkm2 | gkkm3 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | jbnl | zhkm |
 
-### Cohort 2007
+#### Cohort 2007
 
 | Exam | Data File           | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17     |
 | ---- | ------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ------ |
@@ -1285,7 +1406,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c07_20100430mn2_wj  | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA     |
 | cee  | c07_gk              | NA   | bh   | NA   | zf     | yw   | sx   | yy   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | nl   | zonghe |
 
-### Cohort 2008
+#### Cohort 2008
 
 | Exam | Data File            | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | -------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1304,7 +1425,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c08_20110427mn2_wj   | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 | cee  | c08_20110318mn1_wj   | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | 能力 | NA   |
 
-### Cohort 2009
+#### Cohort 2009
 
 | Exam | Data File             | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1323,7 +1444,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c09_20120427mn2_wj    | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | 能力 | NA   |
 | cee  | c09_20120303mn1_wj    | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | 理综 | 文综 | 能力 | NA   |
 
-### Cohort 2010
+#### Cohort 2010
 
 | Exam | Data File          | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ------------------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1342,7 +1463,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c10_20130426mn2_wj | KL   | BH   | NA   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | 能力 | NA   |
 | cee  | c10_gk             | NA   | 班   | NA   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 能力 | 综合 |
 
-### Cohort 2011
+#### Cohort 2011
 
 | Exam | Data File          | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ------------------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1361,7 +1482,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c11_20140422mn2    | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c11_gk             | kldh | NA   | NA   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-### Cohort 2012
+#### Cohort 2012
 
 | Exam | Data File        | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | ---------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1380,7 +1501,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c12_20150506mn2  | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c12_gk           | NA   | bh   | NA   | zf     | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-### Cohort 2013
+#### Cohort 2013
 
 | Exam | Data File       | 1    | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------- | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1399,7 +1520,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c13_20160504mn2 | KL   | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c13_gk          | kl   | bh   | xh   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-### Cohort 2014
+#### Cohort 2014
 
 | Exam | Data File       | 1      | 2    | 3    | 4      | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   |
 | ---- | --------------- | ------ | ---- | ---- | ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -1418,99 +1539,7 @@ Collect information of **14** exams for each student in a cohort
 | g3k2 | c14_20170505mn2 | KL     | BH   | XH   | 总成绩 | 语文 | 数学 | 英语 | 物理 | 化学 | 生物 | 地理 | 历史 | 政治 | 理综 | 文综 | NA   | NA   |
 | cee  | c14_gk          | 文理科 | 班级 | NA   | 总分   | 语文 | 数学 | 英语 | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | NA   | 综合 |
 
-## Study Track
-
-|             |                    | Grade 1                        | Grade 2                                | Grade 3                                |
-| ----------- | ------------------ | ------------------------------ | -------------------------------------- | -------------------------------------- |
-| Cohort 2003 | Liberal Arts Track | 1-5                            | 1-8, 25-26                             | 1-8, 25-26                             |
-|             | Science Track      | 6-20                           | 9-22                                   | 9-22                                   |
-| Cohort 2004 | Liberal Arts Track | 13-22                          | 13-23, 27, 29                          | 13-23, 27, 29                          |
-|             | Science Track      | 1-12                           | 1-12, 25, 28                           | 1-12, 25, 28                           |
-| Cohort 2005 | Liberal Arts Track | 1st sem: 1-9; 2nd sem: 1-10    | 1-10                                   | 1-10                                   |
-|             | Science Track      | 1st sem: 10-24; 2nd sem: 11-26 | 11-26                                  | 11-26                                  |
-| Cohort 2006 | Liberal Arts Track | 1-10, 25                       | 1-10, 25                               | 1-10, 25                               |
-|             | Science Track      | 11-24                          | 11-24                                  | 11-24                                  |
-| Cohort 2007 | Liberal Arts Track | 17-24                          | 17-24                                  | 17-24                                  |
-|             | Science Track      | 1-16                           | 1-16                                   | 1-16                                   |
-| Cohort 2008 | Liberal Arts Track | NA                             | 1-2, 9-12, 19-22                       | 1-11, 31-32                            |
-|             | Science Track      | NA                             | 3-8, 13-18, 23-25                      | 13-30                                  |
-| Cohort 2009 | Liberal Arts Track | 15-26                          | 1st sem: mixed; 2nd sem: 1-10, 26      | 1-10, 26                               |
-|             | Science Track      | 1-14                           | 1st sem: mixed; 2nd sem: 11-25         | 11-25                                  |
-| Cohort 2010 | Liberal Arts Track | NA                             | 5-6, 10-13, 17-18, 23-24, 29-30, 33-34 | 5-6, 10-13, 17-18, 23-24, 29-30, 33-34 |
-|             | Science Track      | NA                             | 1-4, 7-9, 14-16, 19-22, 25-28, 31-32   | 1-4, 7-9, 14-16, 19-22, 25-28, 31-32   |
-| Cohort 2011 | Liberal Arts Track | NA                             | 17-30 (none in g2m1)                   | 17-30                                  |
-|             | Science Track      | NA                             | 1-16 (all in g2m1)                     | 1-16                                   |
-| Cohort 2012 | Liberal Arts Track | mixed                          | 1-12                                   | 1-12                                   |
-|             | Science Track      | mixed                          | 13-30                                  | 13-30                                  |
-| Cohort 2013 | Liberal Arts Track | NA                             | 1-14                                   | 1-14                                   |
-|             | Science Track      | NA                             | 15-30                                  | 15-30                                  |
-| Cohort 2014 | Liberal Arts Track | NA                             | 1-12                                   | 1-12                                   |
-|             | Science Track      | NA                             | 13-30                                  | 13-30                                  |
-
-## Elite Classes
-
-|             |                    | Grade 1                        | Grade 2 | Grade 3 |
-| ----------- | ------------------ | ------------------------------ | ------- | ------- |
-| Cohort 2003 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | 11-12                          | 9-10    | 9-10    |
-| Cohort 2004 | Liberal Arts Track | NA                             | 23      | 23      |
-|             | Science Track      | 1-2                            | 1-2     | 1-2     |
-| Cohort 2005 | Liberal Arts Track | 1st sem: 9; 2nd sem: 8         | 8       | 8       |
-|             | Science Track      | 1st sem: 10-11; 2nd sem: 11-12 | 11-12   | 11-12   |
-| Cohort 2006 | Liberal Arts Track | 25                             | 25      | 25      |
-|             | Science Track      | 23-24                          | 23-24   | 23-24   |
-| Cohort 2007 | Liberal Arts Track | 23-24                          | 23-24   | 23-24   |
-|             | Science Track      | 1-2                            | 1-2     | 1-2     |
-| Cohort 2008 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-| Cohort 2009 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-| Cohort 2010 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-| Cohort 2011 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-| Cohort 2012 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-| Cohort 2013 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-| Cohort 2014 | Liberal Arts Track | NA                             | NA      | NA      |
-|             | Science Track      | NA                             | NA      | NA      |
-
-## Cutoff Points for "True Elites"
-
-| Cohort | Cutoff hsee Scores | Track        |
-| ------ | ------------------ | ------------ |
-| 2003   | >= 579             | Science      |
-| 2004   | >= 596             | Science      |
-| 2005   | >= 594.5           | Science      |
-|        | >= 573             | Liberal Arts |
-| 2006   | >= 595             | Science      |
-|        | >= 586.5           | Liberal Arts |
-| 2007   | >= 606             | Science      |
-|        | >= 556             | Liberal Arts |
-| 2008   | >= 647             | Science      |
-|        | >= 625.5           | Liberal Arts |
-| 2009   | >= 692.5           | Science      |
-|        | >= 667.5           | Liberal Arts |
-| 2010   | >= 686             | Science      |
-|        | >= 652             | Liberal Arts |
-| 2011   | >= 741             | Science      |
-|        | >= 721.5           | Liberal Arts |
-| 2012   | >= 726             | Science      |
-|        | >= 703             | Liberal Arts |
-| 2013   | >= 761             | Science      |
-|        | >= 739             | Liberal Arts |
-| 2014   | >= 749             | Science      |
-|        | >= 729             | Liberal Arts |
-
-### Notes
-
-- For Cohorts 2003 - 2007 (cohorts with elite class policy), "true elites" refer to students who were in the elite classes and whose hsee scores were higher than the highest score in the regular classes (not including a few top scorers who chose to stay in regular classes)
-- For Cohorts 2008 - 2014 (cohorts without elite class policy), "true elites" refer to students whose hsee scores were higher or equal to the 100th/71st highest score in the Science Track/Liberal Arts Track
-  - 501 "true elites" in Science Track in Cohorts 2003 - 2007 (average 100/cohort)
-  - 212 "true elites" in Liberal Arts Track in Cohorts 2005 - 2007 (average 71/cohort)
-
-## Miscellaneous Notes
+## Notes
 
 - 6d files：六档线; 总分及每学科成绩分六档，文科理科每学科的六档线不同; 记录每个班级每学科不同档次学生人数以及对应的任课教师
 - 2008, 2009两届无高考成绩，在分析高考成绩时这两届的高考成绩用一模成绩代替
