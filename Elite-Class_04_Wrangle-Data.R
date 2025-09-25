@@ -724,6 +724,13 @@ dat1 <- dat %>%
 wdat1 <- wdat %>%
   filter(elite %in% c("Elite Students", "Regular Students"))
 
+# Factor variable "elite" in dat1 and wdat1 (again)
+dat1$elite <- factor(dat1$elite,
+                     levels = c("Regular Students", "Elite Students"))
+
+wdat1$elite <- factor(wdat1$elite,
+                      levels = c("Regular Students", "Elite Students"))
+
 # Create averages of exam performance in high school, using trimmed scores
 wdat1 <- wdat1 %>%
   mutate(

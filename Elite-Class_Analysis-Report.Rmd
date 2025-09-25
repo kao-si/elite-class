@@ -145,9 +145,9 @@ gg_score <- function(var) {
 walk(zscore_col, ~ print(gg_score(.)))
 ```
 
-# Regression Discontinuity Analysis in Treated Cohorts
+# Regression Discontinuity: Assumption Checks
 
-## Evidence of a sharp regression discontinuity design
+## Graphic evidence of a sharp regression discontinuity design
 
 ```{r}
 dat %>%
@@ -232,159 +232,414 @@ density_test <- function(cohort_val, track_val) {
 walk2(cohort_col, track_col, density_test)
 ```
 
-## Graphic evidence
-
-```{r}
-# CEE
-ggplot(wdat1_bw03, aes(x = hsee_ctot, y = cee_ztot_trim, color = elite)) +
-  geom_point(size = 0.5, alpha = 0.5) +
-  # Add a line for regular students
-  geom_smooth(data = filter(wdat1_bw03, hsee_ctot < 0),
-  method = "lm", se = FALSE) +
-  # Add a line for elite students
-  geom_smooth(data = filter(wdat1_bw03, hsee_ctot >= 0),
-  method = "lm", se = FALSE) +
-  geom_vline(xintercept = 0) +
-  labs(
-    title = "Graphic Evidence of Discontinuity in CEE Total Scores",
-    x = "Standardized HSEE Total Score Centered around the Cutoffs",
-    y = "Standardized CEE Total Score"
-  ) +
-  guides(color = "none") +
-  facet_wrap(~ track, scales = "free_y")
-
-# Average High School Performance
-ggplot(wdat1_bw03, aes(x = hsee_ctot, y = avg_hs, color = elite)) +
-  geom_point(size = 0.5, alpha = 0.5) +
-  # Add a line for regular students
-  geom_smooth(data = filter(wdat1_bw03, hsee_ctot < 0),
-  method = "lm", se = FALSE) +
-  # Add a line for elite students
-  geom_smooth(data = filter(wdat1_bw03, hsee_ctot >= 0),
-  method = "lm", se = FALSE) +
-  geom_vline(xintercept = 0) +
-  labs(
-    title =
-    "Graphic Evidence of Discontinuity in Average High School Performance",
-    x = "Standardized HSEE Total Score Centered around the Cutoffs",
-    y = "Average High School Performance"
-  ) +
-  guides(color = "none") +
-  facet_wrap(~ track, scales = "free_y")
-```
+# Regression Discontinuity: Models and Results
 
 ## Benchmark models
 
 ```{r}
-# OLS models
-  # Including cohort x track fixed effects
-  # Including interaction term
-  # Standard errors clustered by cohort x track
-  # Bandwidth of 0.3
-
-bm_ols1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort^track,
-  data = wdat1_bw03
-)
-
-bm_ols2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort^track,
-  data = wdat1_bw03
-)
-
 # Non-parametric models with rdrobust
+  # Including "cohort" as a covariate
 
-bm_rd1 <- rdrobust(
-  y = wdat1$cee_ztot_trim,
-  x = wdat1$hsee_ctot,
-  c = 0
-)
-
-bm_rd2 <- rdrobust(
-  y = wdat1$avg_hs,
-  x = wdat1$hsee_ctot,
-  c = 0
-)
-
-# Non-parametric models with rdrobust
-# Including "cohort" and "track" as covariates
-
-bm_rd3 <- rdrobust(
-  y = wdat1$cee_ztot_trim,
-  x = wdat1$hsee_ctot,
+bm_rd_s1 <- rdrobust(
+  y = filter(wdat1, track == "Science Track")$cee_ztot_trim,
+  x = filter(wdat1, track == "Science Track")$hsee_ctot,
   covs = data.frame(
-    cohort = as.numeric(as.factor(wdat1$cohort)),
-    track = as.numeric(as.factor(wdat1$track))
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track")$cohort))
   ),
   c = 0
 )
 
-bm_rd4 <- rdrobust(
-  y = wdat1$avg_hs,
-  x = wdat1$hsee_ctot,
+bm_rd_s2 <- rdrobust(
+  y = filter(wdat1, track == "Science Track")$avg_hs,
+  x = filter(wdat1, track == "Science Track")$hsee_ctot,
   covs = data.frame(
-    cohort = as.numeric(as.factor(wdat1$cohort)),
-    track = as.numeric(as.factor(wdat1$track))
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track")$cohort))
   ),
   c = 0
 )
 
-mod_bm <- list(
-  "CEE Total Score (OLS)" = bm_ols1,
-  "Average High School Performance (OLS)" = bm_ols2,
-  "CEE Total Score (Nonparametric)" = bm_rd1,
-  "Average High School Performance (Nonparametric)" = bm_rd2,
-  "CEE Total Score (Nonparametric with Covariates)" = bm_rd3,
-  "Average High School Performance (Nonparametric with Covariates)" = bm_rd4
+bm_rd_l1 <- rdrobust(
+  y = filter(wdat1, track == "Liberal Arts Track")$cee_ztot_trim,
+  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track")$cohort))
+  ),
+  c = 0
+)
+
+bm_rd_l2 <- rdrobust(
+  y = filter(wdat1, track == "Liberal Arts Track")$avg_hs,
+  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track")$cohort))
+  ),
+  c = 0
+)
+
+mod_bm_rd <- list(
+  "Science Track_CEE Total Score" = bm_rd_s1,
+  "Science Track_Average High School Performance" = bm_rd_s2,
+  "Liberal Arts Track_CEE Total Score" = bm_rd_l1,
+  "Liberal Arts Track_Average High School Performance" = bm_rd_l2
 )
 
 modelsummary(
-  mod_bm,
+  mod_bm_rd,
   statistic = "std.error",
   coef_map = c(
-    # fixest OLS terms
-    "hsee_ctot" = "Centered HSEE Total Score",
-    "eliteElite Students" = "Elite Class",
-    "hsee_ctot:eliteElite Students" = "Interaction Term",
-    # rdrobust slope term
     "Conventional" = "Conventional",
     "Robust" = "Robust"
     ),
   gof_omit = "^R2 Within|AIC|BIC",
   stars = TRUE,
-  title = "Benchmark Models",
+  title = "Benchmark Non-parametric Models",
   output = "markdown"
 )
 ```
 
-### Plot of benchmark models (rdplot)
+```{r}
+# OLS models
+  # Including interaction term
+  # Including cohort fixed effects
+  # Standard errors clustered by cohort
+  # Bandwidth of 0.3
+
+bm_ols_s1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Science Track")
+)
+
+bm_ols_s2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Science Track")
+)
+
+bm_ols_l1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Liberal Arts Track")
+)
+
+bm_ols_l2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Liberal Arts Track")
+)
+
+mod_bm_ols <- list(
+  "Science Track_CEE Total Score" = bm_ols_s1,
+  "Science Track_Average High School Performance" = bm_ols_s2,
+  "Liberal Arts Track_CEE Total Score" = bm_ols_l1,
+  "Liberal Arts Track_Average High School Performance" = bm_ols_l2
+)
+
+modelsummary(
+  mod_bm_ols,
+  statistic = "std.error",
+  coef_map = c(
+    "hsee_ctot" = "Centered HSEE Total Score",
+    "eliteElite Students" = "Elite Class",
+    "hsee_ctot:eliteElite Students" = "Interaction Term"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Benchmark OLS Models",
+  output = "markdown"
+)
+```
+
+### Graphic evidence: rdplot
 
 ```{r}
-# CEE
+# Science Track_CEE
 rdplot(
-  y = wdat1$cee_ztot_trim,
-  x = wdat1$hsee_ctot,
+  y = filter(wdat1, track == "Science Track")$cee_ztot_trim,
+  x = filter(wdat1, track == "Science Track")$hsee_ctot,
   c = 0,
   # use the bandwidth from the benchmark model
-  h = bm_rd1$bws[1, ],
-  x.lim = c(-bm_rd1$bws[1, 1], bm_rd1$bws[1, 2]),
+  h = bm_rd_s1$bws[1, ],
+  x.lim = c(-bm_rd_s1$bws[1, 1], bm_rd_s1$bws[1, 2]),
   y.lim = c(0, 2),
-  title = "Non-parametric Estimation of the Effect of HSEE on CEE Scores",
+  title = "Non-parametric Estimation of the Effect of HSEE on CEE Scores: Science Track",
   x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
   y.label = "Standardized CEE Total Score"
 )
 
-# Average High School Performance
+# Science Track_Average High School Performance
 rdplot(
-  y = wdat1$avg_hs,
-  x = wdat1$hsee_ctot,
+  y = filter(wdat1, track == "Science Track")$avg_hs,
+  x = filter(wdat1, track == "Science Track")$hsee_ctot,
   c = 0,
   # use the bandwidth from the benchmark model
-  h = bm_rd2$bws[1, ],
-  x.lim = c(-bm_rd2$bws[1, 1], bm_rd2$bws[1, 2]),
+  h = bm_rd_s2$bws[1, ],
+  x.lim = c(-bm_rd_s2$bws[1, 1], bm_rd_s2$bws[1, 2]),
   y.lim = c(0, 2),
-  title = "Non-parametric Estimation of the Effect of HSEE on Average High School Performance",
+  title = "Non-parametric Estimation of the Effect of HSEE on Average High School Performance: Science Track",
   x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
   y.label = "Average High School Performance"
+)
+
+# Liberal Arts Track_CEE
+rdplot(
+  y = filter(wdat1, track == "Liberal Arts Track")$cee_ztot_trim,
+  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
+  c = 0,
+  # use the bandwidth from the benchmark model
+  h = bm_rd_l1$bws[1, ],
+  x.lim = c(-bm_rd_l1$bws[1, 1], bm_rd_l1$bws[1, 2]),
+  y.lim = c(0, 2),
+  title = "Non-parametric Estimation of the Effect of HSEE on CEE Scores: Liberal Arts Track",
+  x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
+  y.label = "Standardized CEE Total Score"
+)
+
+# Liberal Arts Track_Average High School Performance
+rdplot(
+  y = filter(wdat1, track == "Liberal Arts Track")$avg_hs,
+  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
+  c = 0,
+  # use the bandwidth from the benchmark model
+  h = bm_rd_l2$bws[1, ],
+  x.lim = c(-bm_rd_l2$bws[1, 1], bm_rd_l2$bws[1, 2]),
+  y.lim = c(0, 2),
+  title = "Non-parametric Estimation of the Effect of HSEE on Average High School Performance: Liberal Arts Track",
+  x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
+  y.label = "Average High School Performance"
+)
+```
+
+## Gender gap
+
+### Science Track
+
+```{r}
+# Non-parametric models with rdrobust
+  # Including "cohort" as a covariate
+
+male_rd_s1 <- rdrobust(
+  y = filter(wdat1, track == "Science Track", male == "Yes")$cee_ztot_trim,
+  x = filter(wdat1, track == "Science Track", male == "Yes")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "Yes")$cohort))
+  ),
+  c = 0
+)
+
+female_rd_s1 <- rdrobust(
+  y = filter(wdat1, track == "Science Track", male == "No")$cee_ztot_trim,
+  x = filter(wdat1, track == "Science Track", male == "No")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "No")$cohort))
+  ),
+  c = 0
+)
+
+male_rd_s2 <- rdrobust(
+  y = filter(wdat1, track == "Science Track", male == "Yes")$avg_hs,
+  x = filter(wdat1, track == "Science Track", male == "Yes")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "Yes")$cohort))
+  ),
+  c = 0
+)
+
+female_rd_s2 <- rdrobust(
+  y = filter(wdat1, track == "Science Track", male == "No")$avg_hs,
+  x = filter(wdat1, track == "Science Track", male == "No")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "No")$cohort))
+  ),
+  c = 0
+)
+
+mod_gender_rd_s <- list(
+  "Science Track_CEE Total Score_Male" = male_rd_s1,
+  "Science Track_CEE Total Score_Female" = female_rd_s1,
+  "Science Track_Average High School Performance_Male" = male_rd_s2,
+  "Science Track_Average High School Performance_Female" = female_rd_s2
+)
+
+modelsummary(
+  mod_gender_rd_s,
+  statistic = "std.error",
+  coef_map = c(
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Gender Differences: Science Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+```{r}
+# OLS models
+  # Including interaction term
+  # Including cohort fixed effects
+  # Standard errors clustered by cohort
+  # Bandwidth of 0.3
+
+male_ols_s1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Science Track", male == "Yes")
+)
+
+female_ols_s1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Science Track", male == "No")
+)
+
+male_ols_s2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Science Track", male == "Yes")
+)
+
+female_ols_s2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Science Track", male == "No")
+)
+
+mod_gender_ols_s <- list(
+  "Science Track_CEE Total Score_Male" = male_ols_s1,
+  "Science Track_CEE Total Score_Female" = female_ols_s1,
+  "Science Track_Average High School Performance_Male" = male_ols_s2,
+  "Science Track_Average High School Performance_Female" = female_ols_s2
+)
+
+modelsummary(
+  mod_gender_ols_s,
+  statistic = "std.error",
+  coef_map = c(
+    "hsee_ctot" = "Centered HSEE Total Score",
+    "eliteElite Students" = "Elite Class",
+    "hsee_ctot:eliteElite Students" = "Interaction Term"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Gender Differences: Science Track (OLS Models)",
+  output = "markdown"
+)
+```
+
+### Liberal Arts Track
+
+```{r}
+# Non-parametric models with rdrobust
+  # Including "cohort" as a covariate
+
+male_rd_l1 <- rdrobust(
+  y = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$cee_ztot_trim,
+  x = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "Yes")$cohort))
+  ),
+  c = 0
+)
+
+female_rd_l1 <- rdrobust(
+  y = filter(wdat1, track == "Liberal Arts Track", male == "No")$cee_ztot_trim,
+  x = filter(wdat1, track == "Liberal Arts Track", male == "No")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "No")$cohort))
+  ),
+  c = 0
+)
+
+male_rd_l2 <- rdrobust(
+  y = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$avg_hs,
+  x = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "Yes")$cohort))
+  ),
+  c = 0
+)
+
+female_rd_l2 <- rdrobust(
+  y = filter(wdat1, track == "Liberal Arts Track", male == "No")$avg_hs,
+  x = filter(wdat1, track == "Liberal Arts Track", male == "No")$hsee_ctot,
+  covs = data.frame(
+    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "No")$cohort))
+  ),
+  c = 0
+)
+
+mod_gender_rd_l <- list(
+  "Liberal Arts Track_CEE Total Score_Male" = male_rd_l1,
+  "Liberal Arts Track_CEE Total Score_Female" = female_rd_l1,
+  "Liberal Arts Track_Average High School Performance_Male" = male_rd_l2,
+  "Liberal Arts Track_Average High School Performance_Female" = female_rd_l2
+)
+
+modelsummary(
+  mod_gender_rd_l,
+  statistic = "std.error",
+  coef_map = c(
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Gender Differences: Liberal Arts Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+```{r}
+# OLS models
+  # Including interaction term
+  # Including cohort fixed effects
+  # Standard errors clustered by cohort
+  # Bandwidth of 0.3
+
+male_ols_l1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "Yes")
+)
+
+female_ols_l1 <- feols(
+  cee_ztot_trim ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "No")
+)
+
+male_ols_l2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "Yes")
+)
+
+female_ols_l2 <- feols(
+  avg_hs ~ hsee_ctot * elite | cohort,
+  cluster = ~ cohort,
+  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "No")
+)
+
+mod_gender_ols_l <- list(
+  "Liberal Arts Track_CEE Total Score_Male" = male_ols_l1,
+  "Liberal Arts Track_CEE Total Score_Female" = female_ols_l1,
+  "Liberal Arts Track_Average High School Performance_Male" = male_ols_l2,
+  "Liberal Arts Track_Average High School Performance_Female" = female_ols_l2
+)
+
+modelsummary(
+  mod_gender_ols_l,
+  statistic = "std.error",
+  coef_map = c(
+    "hsee_ctot" = "Centered HSEE Total Score",
+    "eliteElite Students" = "Elite Class",
+    "hsee_ctot:eliteElite Students" = "Interaction Term"
+  ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Gender Differences: Liberal Arts Track (OLS Models)",
+  output = "markdown"
 )
 ```
