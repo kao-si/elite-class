@@ -716,23 +716,19 @@ wdat <- dat %>%
 
 # Ad hoc Wrangling ####
 
-# Create data frames that exclude "Regular Class Top Scorers"
-# and "Elite Class Non-Top Scorers" for the majority of analyses
-dat1 <- dat %>%
+# Subset data for RDD analyses
+wdat_rd <- wdat %>%
+  filter(policy == "Treated") %>%
+  # exclude "Regular Class Top Scorers" and "Elite Class Non-Top Scorers"
+  # for majority of analyses
   filter(elite %in% c("Elite Students", "Regular Students"))
 
-wdat1 <- wdat %>%
-  filter(elite %in% c("Elite Students", "Regular Students"))
-
-# Factor variable "elite" in dat1 and wdat1 (again)
-dat1$elite <- factor(dat1$elite,
-                     levels = c("Regular Students", "Elite Students"))
-
-wdat1$elite <- factor(wdat1$elite,
-                      levels = c("Regular Students", "Elite Students"))
+# Factor variable "elite" in wdat_rd (again)
+wdat_rd$elite <- factor(wdat_rd$elite,
+                        levels = c("Regular Students", "Elite Students"))
 
 # Create averages of exam performance in high school, using trimmed scores
-wdat1 <- wdat1 %>%
+wdat_rd <- wdat_rd %>%
   mutate(
     avg_hs = rowMeans(select(., g1m1_ztot_trim:g3k2_ztot_trim), na.rm = TRUE),
     avg_g1 = rowMeans(select(., g1m1_ztot_trim:g1f2_ztot_trim), na.rm = TRUE),
@@ -741,7 +737,7 @@ wdat1 <- wdat1 %>%
   )
 
 # Use bandwidth of 0.3
-wdat1_bw03 <- wdat1 %>%
+wdat_rd_bw03 <- wdat_rd %>%
   filter(policy == "Treated", hsee_ctot >= -0.3, hsee_ctot <= 0.3)
 
 # Define broom tidiers for rdrobust objects

@@ -237,54 +237,70 @@ walk2(cohort_col, track_col, density_test)
 ## Benchmark models
 
 ```{r}
-# Non-parametric models with rdrobust
-  # Including "cohort" as a covariate
+# Prepare `cohort` as a dummy control for `rdrobust`
 
-bm_rd_s1 <- rdrobust(
-  y = filter(wdat1, track == "Science Track")$cee_ztot_trim,
-  x = filter(wdat1, track == "Science Track")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track")$cohort))
-  ),
-  c = 0
+# Factor `cohort` to make it categorical
+cohort_factor <- factor(wdat_rd$cohort, levels = 2003:2007)
+
+# Create a numeric matrix with K-1 dummies and remove the intercept
+# Use drop = FALSE to guarantee a matrix output
+cov_cohort <- model.matrix(~ cohort_factor)[, -1, drop = FALSE]
+```
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# Science Track, CEE
+bm_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track") &
+  # ensure that the analysis only includes complete cases
+  complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-bm_rd_s2 <- rdrobust(
-  y = filter(wdat1, track == "Science Track")$avg_hs,
-  x = filter(wdat1, track == "Science Track")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track")$cohort))
-  ),
-  c = 0
+# Science Track, Average High School Performance
+bm_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-bm_rd_l1 <- rdrobust(
-  y = filter(wdat1, track == "Liberal Arts Track")$cee_ztot_trim,
-  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track")$cohort))
-  ),
-  c = 0
+# Liberal Arts Track, CEE
+bm_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-bm_rd_l2 <- rdrobust(
-  y = filter(wdat1, track == "Liberal Arts Track")$avg_hs,
-  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track")$cohort))
-  ),
-  c = 0
+# Liberal Arts Track, Average High School Performance
+bm_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_bm_rd <- list(
-  "Science Track_CEE Total Score" = bm_rd_s1,
-  "Science Track_Average High School Performance" = bm_rd_s2,
-  "Liberal Arts Track_CEE Total Score" = bm_rd_l1,
-  "Liberal Arts Track_Average High School Performance" = bm_rd_l2
+mod_bm <- list(
+  "Science Track_CEE Total Score" = bm_s1,
+  "Science Track_Average High School Performance" = bm_s2,
+  "Liberal Arts Track_CEE Total Score" = bm_l1,
+  "Liberal Arts Track_Average High School Performance" = bm_l2
 )
 
 modelsummary(
-  mod_bm_rd,
+  mod_bm,
   statistic = "std.error",
   coef_map = c(
     "Conventional" = "Conventional",
@@ -297,112 +313,136 @@ modelsummary(
 )
 ```
 
+### Refit benchmark models without cohort covariates
+
 ```{r}
-# OLS models
-  # Including interaction term
-  # Including cohort fixed effects
-  # Standard errors clustered by cohort
-  # Bandwidth of 0.3
-
-bm_ols_s1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Science Track")
+# Science Track, CEE
+bm_s1_nocov <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot)
 )
 
-bm_ols_s2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Science Track")
+# Science Track, Average High School Performance
+bm_s2_nocov <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot)
 )
 
-bm_ols_l1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Liberal Arts Track")
+# Liberal Arts Track, CEE
+bm_l1_nocov <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot)
 )
 
-bm_ols_l2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Liberal Arts Track")
+# Liberal Arts Track, Average High School Performance
+bm_l2_nocov <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot)
 )
 
-mod_bm_ols <- list(
-  "Science Track_CEE Total Score" = bm_ols_s1,
-  "Science Track_Average High School Performance" = bm_ols_s2,
-  "Liberal Arts Track_CEE Total Score" = bm_ols_l1,
-  "Liberal Arts Track_Average High School Performance" = bm_ols_l2
+mod_bm_nocov <- list(
+  "Science Track_CEE Total Score" = bm_s1_nocov,
+  "Science Track_Average High School Performance" = bm_s2_nocov,
+  "Liberal Arts_CEE Total Score" = bm_l1_nocov,
+  "Liberal Arts_Average High School Performance" = bm_l2_nocov
 )
 
 modelsummary(
-  mod_bm_ols,
+  mod_bm_nocov,
   statistic = "std.error",
   coef_map = c(
-    "hsee_ctot" = "Centered HSEE Total Score",
-    "eliteElite Students" = "Elite Class",
-    "hsee_ctot:eliteElite Students" = "Interaction Term"
-    ),
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+  ),
   gof_omit = "^R2 Within|AIC|BIC",
   stars = TRUE,
-  title = "Benchmark OLS Models",
+  title = "Benchmark Non-parametric Models Without Covariates",
   output = "markdown"
 )
 ```
 
-### Graphic evidence: rdplot
+### Graphic evidence using rdplot
 
 ```{r}
-# Science Track_CEE
+# Plot unadjusted for covariates
+# (rdplot() always shows binned means of the raw outcome (unadjusted dots))
+# (when passing covs, rdplot() overlays a covariate-adjusted fit)
+# (the adjusted curve could be visually incompatible with the local binned means)
+
+# Science Track, CEE
 rdplot(
-  y = filter(wdat1, track == "Science Track")$cee_ztot_trim,
-  x = filter(wdat1, track == "Science Track")$hsee_ctot,
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
   c = 0,
+  subset = (wdat_rd$track == "Science Track") &
+  complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot),
+  kernel = "triangular",
   # use the bandwidth from the benchmark model
-  h = bm_rd_s1$bws[1, ],
-  x.lim = c(-bm_rd_s1$bws[1, 1], bm_rd_s1$bws[1, 2]),
+  h = bm_s1$bws[1, ],
+  x.lim = c(-bm_s1$bws[1, 1], bm_s1$bws[1, 2]),
   y.lim = c(0, 2),
   title = "Non-parametric Estimation of the Effect of HSEE on CEE Scores: Science Track",
   x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
   y.label = "Standardized CEE Total Score"
 )
 
-# Science Track_Average High School Performance
+# Science Track, Average High School Performance
 rdplot(
-  y = filter(wdat1, track == "Science Track")$avg_hs,
-  x = filter(wdat1, track == "Science Track")$hsee_ctot,
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
   c = 0,
+  subset = (wdat_rd$track == "Science Track") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot),
+  kernel = "triangular",
   # use the bandwidth from the benchmark model
-  h = bm_rd_s2$bws[1, ],
-  x.lim = c(-bm_rd_s2$bws[1, 1], bm_rd_s2$bws[1, 2]),
+  h = bm_s2$bws[1, ],
+  x.lim = c(-bm_s2$bws[1, 1], bm_s2$bws[1, 2]),
   y.lim = c(0, 2),
   title = "Non-parametric Estimation of the Effect of HSEE on Average High School Performance: Science Track",
   x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
   y.label = "Average High School Performance"
 )
 
-# Liberal Arts Track_CEE
+# Liberal Arts Track, CEE
 rdplot(
-  y = filter(wdat1, track == "Liberal Arts Track")$cee_ztot_trim,
-  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
   c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot),
+  kernel = "triangular",
   # use the bandwidth from the benchmark model
-  h = bm_rd_l1$bws[1, ],
-  x.lim = c(-bm_rd_l1$bws[1, 1], bm_rd_l1$bws[1, 2]),
+  h = bm_l1$bws[1, ],
+  x.lim = c(-bm_l1$bws[1, 1], bm_l1$bws[1, 2]),
   y.lim = c(0, 2),
   title = "Non-parametric Estimation of the Effect of HSEE on CEE Scores: Liberal Arts Track",
   x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
   y.label = "Standardized CEE Total Score"
 )
 
-# Liberal Arts Track_Average High School Performance
+# Liberal Arts Track, Average High School Performance
 rdplot(
-  y = filter(wdat1, track == "Liberal Arts Track")$avg_hs,
-  x = filter(wdat1, track == "Liberal Arts Track")$hsee_ctot,
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
   c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot),
+  kernel = "triangular",
   # use the bandwidth from the benchmark model
-  h = bm_rd_l2$bws[1, ],
-  x.lim = c(-bm_rd_l2$bws[1, 1], bm_rd_l2$bws[1, 2]),
+  h = bm_l2$bws[1, ],
+  x.lim = c(-bm_l2$bws[1, 1], bm_l2$bws[1, 2]),
   y.lim = c(0, 2),
   title = "Non-parametric Estimation of the Effect of HSEE on Average High School Performance: Liberal Arts Track",
   x.label = "Standardized HSEE Total Score Centered around the Cutoffs",
@@ -412,57 +452,59 @@ rdplot(
 
 ## Gender gap
 
-### Science Track
+### Science track
 
 ```{r}
-# Non-parametric models with rdrobust
-  # Including "cohort" as a covariate
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
 
-male_rd_s1 <- rdrobust(
-  y = filter(wdat1, track == "Science Track", male == "Yes")$cee_ztot_trim,
-  x = filter(wdat1, track == "Science Track", male == "Yes")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "Yes")$cohort))
-  ),
-  c = 0
+# CEE
+male_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$male == "Yes") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-female_rd_s1 <- rdrobust(
-  y = filter(wdat1, track == "Science Track", male == "No")$cee_ztot_trim,
-  x = filter(wdat1, track == "Science Track", male == "No")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "No")$cohort))
-  ),
-  c = 0
+female_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$male == "No") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-male_rd_s2 <- rdrobust(
-  y = filter(wdat1, track == "Science Track", male == "Yes")$avg_hs,
-  x = filter(wdat1, track == "Science Track", male == "Yes")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "Yes")$cohort))
-  ),
-  c = 0
+# Average High School Performance
+male_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$male == "Yes") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-female_rd_s2 <- rdrobust(
-  y = filter(wdat1, track == "Science Track", male == "No")$avg_hs,
-  x = filter(wdat1, track == "Science Track", male == "No")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Science Track", male == "No")$cohort))
-  ),
-  c = 0
+female_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$male == "No") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_gender_rd_s <- list(
-  "Science Track_CEE Total Score_Male" = male_rd_s1,
-  "Science Track_CEE Total Score_Female" = female_rd_s1,
-  "Science Track_Average High School Performance_Male" = male_rd_s2,
-  "Science Track_Average High School Performance_Female" = female_rd_s2
+mod_gender_s <- list(
+  "CEE Total Score_Male" = male_s1,
+  "CEE Total Score_Female" = female_s1,
+  "Average High School Performance_Male" = male_s2,
+  "Average High School Performance_Female" = female_s2
 )
 
 modelsummary(
-  mod_gender_rd_s,
+  mod_gender_s,
   statistic = "std.error",
   coef_map = c(
     "Conventional" = "Conventional",
@@ -475,110 +517,59 @@ modelsummary(
 )
 ```
 
+### Liberal arts track
+
 ```{r}
-# OLS models
-  # Including interaction term
-  # Including cohort fixed effects
-  # Standard errors clustered by cohort
-  # Bandwidth of 0.3
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
 
-male_ols_s1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Science Track", male == "Yes")
+# CEE
+male_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$male == "Yes") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-female_ols_s1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Science Track", male == "No")
+female_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$male == "No") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-male_ols_s2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Science Track", male == "Yes")
+# Average High School Performance
+male_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$male == "Yes") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-female_ols_s2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Science Track", male == "No")
+female_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$male == "No") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_gender_ols_s <- list(
-  "Science Track_CEE Total Score_Male" = male_ols_s1,
-  "Science Track_CEE Total Score_Female" = female_ols_s1,
-  "Science Track_Average High School Performance_Male" = male_ols_s2,
-  "Science Track_Average High School Performance_Female" = female_ols_s2
+mod_gender_l <- list(
+  "CEE Total Score_Male" = male_l1,
+  "CEE Total Score_Female" = female_l1,
+  "Average High School Performance_Male" = male_l2,
+  "Average High School Performance_Female" = female_l2
 )
 
 modelsummary(
-  mod_gender_ols_s,
-  statistic = "std.error",
-  coef_map = c(
-    "hsee_ctot" = "Centered HSEE Total Score",
-    "eliteElite Students" = "Elite Class",
-    "hsee_ctot:eliteElite Students" = "Interaction Term"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Gender Differences: Science Track (OLS Models)",
-  output = "markdown"
-)
-```
-
-### Liberal Arts Track
-
-```{r}
-# Non-parametric models with rdrobust
-  # Including "cohort" as a covariate
-
-male_rd_l1 <- rdrobust(
-  y = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$cee_ztot_trim,
-  x = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "Yes")$cohort))
-  ),
-  c = 0
-)
-
-female_rd_l1 <- rdrobust(
-  y = filter(wdat1, track == "Liberal Arts Track", male == "No")$cee_ztot_trim,
-  x = filter(wdat1, track == "Liberal Arts Track", male == "No")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "No")$cohort))
-  ),
-  c = 0
-)
-
-male_rd_l2 <- rdrobust(
-  y = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$avg_hs,
-  x = filter(wdat1, track == "Liberal Arts Track", male == "Yes")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "Yes")$cohort))
-  ),
-  c = 0
-)
-
-female_rd_l2 <- rdrobust(
-  y = filter(wdat1, track == "Liberal Arts Track", male == "No")$avg_hs,
-  x = filter(wdat1, track == "Liberal Arts Track", male == "No")$hsee_ctot,
-  covs = data.frame(
-    cohort = as.numeric(as.factor(filter(wdat1, track == "Liberal Arts Track", male == "No")$cohort))
-  ),
-  c = 0
-)
-
-mod_gender_rd_l <- list(
-  "Liberal Arts Track_CEE Total Score_Male" = male_rd_l1,
-  "Liberal Arts Track_CEE Total Score_Female" = female_rd_l1,
-  "Liberal Arts Track_Average High School Performance_Male" = male_rd_l2,
-  "Liberal Arts Track_Average High School Performance_Female" = female_rd_l2
-)
-
-modelsummary(
-  mod_gender_rd_l,
+  mod_gender_l,
   statistic = "std.error",
   coef_map = c(
     "Conventional" = "Conventional",
@@ -587,59 +578,6 @@ modelsummary(
   gof_omit = "^R2 Within|AIC|BIC",
   stars = TRUE,
   title = "Gender Differences: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
-)
-```
-
-```{r}
-# OLS models
-  # Including interaction term
-  # Including cohort fixed effects
-  # Standard errors clustered by cohort
-  # Bandwidth of 0.3
-
-male_ols_l1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "Yes")
-)
-
-female_ols_l1 <- feols(
-  cee_ztot_trim ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "No")
-)
-
-male_ols_l2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "Yes")
-)
-
-female_ols_l2 <- feols(
-  avg_hs ~ hsee_ctot * elite | cohort,
-  cluster = ~ cohort,
-  data = filter(wdat1_bw03, track == "Liberal Arts Track", male == "No")
-)
-
-mod_gender_ols_l <- list(
-  "Liberal Arts Track_CEE Total Score_Male" = male_ols_l1,
-  "Liberal Arts Track_CEE Total Score_Female" = female_ols_l1,
-  "Liberal Arts Track_Average High School Performance_Male" = male_ols_l2,
-  "Liberal Arts Track_Average High School Performance_Female" = female_ols_l2
-)
-
-modelsummary(
-  mod_gender_ols_l,
-  statistic = "std.error",
-  coef_map = c(
-    "hsee_ctot" = "Centered HSEE Total Score",
-    "eliteElite Students" = "Elite Class",
-    "hsee_ctot:eliteElite Students" = "Interaction Term"
-  ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Gender Differences: Liberal Arts Track (OLS Models)",
   output = "markdown"
 )
 ```
