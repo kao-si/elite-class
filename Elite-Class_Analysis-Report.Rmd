@@ -63,7 +63,7 @@ decreasing = TRUE)), y = n, fill = elite)) +
   theme(legend.position = "top", legend.title = element_blank())
 ```
 
-Including all categories of students
+**Including all categories of students**
 
 ```{r}
 dat %>%
@@ -166,7 +166,7 @@ dat %>%
     guides(color = "none")
 ```
 
-Including all categories of students
+**Including all categories of students**
 
 ```{r}
 dat %>%
@@ -235,6 +235,10 @@ walk2(cohort_col, track_col, density_test)
 # Regression Discontinuity: Models and Results
 
 ## Benchmark models
+
+**Non-parametric models using `rdrobust`**
+
+**Include cohort covariates**
 
 ```{r}
 # Prepare `cohort` as a dummy control for `rdrobust`
@@ -313,7 +317,7 @@ modelsummary(
 )
 ```
 
-### Refit benchmark models without cohort covariates
+**Refit benchmark models without cohort covariates**
 
 ```{r}
 # Science Track, CEE
@@ -373,10 +377,12 @@ modelsummary(
 )
 ```
 
-### Graphic evidence using rdplot
+### Graphic evidence using `rdplot`
+
+**Plots unadjusted for covariates**
 
 ```{r}
-# Plot unadjusted for covariates
+# Plots unadjusted for covariates
 # (rdplot() always shows binned means of the raw outcome (unadjusted dots))
 # (when passing covs, rdplot() overlays a covariate-adjusted fit)
 # (the adjusted curve could be visually incompatible with the local binned means)
@@ -517,6 +523,8 @@ modelsummary(
 )
 ```
 
+Andreu Arenas, Caterina Calsamiglia (2025) Gender Differences in High-Stakes Performance and College Admission Policies. Management Science 71(10):8413-8429.
+
 ### Liberal arts track
 
 ```{r}
@@ -578,6 +586,138 @@ modelsummary(
   gof_omit = "^R2 Within|AIC|BIC",
   stars = TRUE,
   title = "Gender Differences: Liberal Arts Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+## Rural vs. urban
+
+### Science track
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# CEE
+rural_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$rural == "Yes") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+urban_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$rural == "No") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+# Average High School Performance
+rural_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$rural == "Yes") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+urban_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$rural == "No") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+mod_rural_s <- list(
+  "CEE Total Score_Rural" = rural_s1,
+  "CEE Total Score_Urban" = urban_s1,
+  "Average High School Performance_Rural" = rural_s2,
+  "Average High School Performance_Urban" = urban_s2
+)
+
+modelsummary(
+  mod_rural_s,
+  statistic = "std.error",
+  coef_map = c(
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Rural vs Urban: Science Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+### Liberal arts track
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# CEE
+rural_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$rural == "Yes") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+urban_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$rural == "No") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+# Average High School Performance
+rural_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$rural == "Yes") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+urban_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$rural == "No") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+mod_rural_l <- list(
+  "CEE Total Score_Rural" = rural_l1,
+  "CEE Total Score_Urban" = urban_l1,
+  "Average High School Performance_Rural" = rural_l2,
+  "Average High School Performance_Urban" = urban_l2
+)
+
+modelsummary(
+  mod_rural_l,
+  statistic = "std.error",
+  coef_map = c(
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Rural vs Urban: Liberal Arts Track (Non-parametric Models)",
   output = "markdown"
 )
 ```
