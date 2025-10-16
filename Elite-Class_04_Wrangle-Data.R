@@ -685,6 +685,27 @@ dat <- dat %>%
                              "cee"))
   )
 
+# Divide parental employment status into two levels
+dat <- dat %>%
+  mutate(
+    f_job_l2 = factor(
+      case_when(
+        is.na(f_job) ~ NA_character_,
+        f_job %in% c("Peasant", "Unstable Occupation", "Self-Employed") ~ "Low Status Jobs",
+        TRUE ~ "High Status Jobs"
+      ),
+      levels = c("Low Status Jobs", "High Status Jobs")
+    ),
+    m_job_l2 = factor(
+      case_when(
+        is.na(m_job) ~ NA_character_,
+        m_job %in% c("Peasant", "Unstable Occupation", "Self-Employed") ~ "Low Status Jobs",
+        TRUE ~ "High Status Jobs"
+      ),
+      levels = c("Low Status Jobs", "High Status Jobs")
+    )
+  )
+
 # Filter Data ####
 
 # Filter out students whose track is NA and who did not have hsee total score
