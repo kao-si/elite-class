@@ -1,3 +1,4 @@
+Go to [Data Dictionary](#data-dictionary)
 
 ## Import Raw Data Files to R
 
@@ -1170,54 +1171,54 @@ Notes
 
 ## Data Dictionary
 
-| Variable             | Label                                   | Levels                                                       |
-| -------------------- | --------------------------------------- | ------------------------------------------------------------ |
-| **cohort**           | Enrollment Cohort                       |                                                              |
-| **ssid**             | Student Status ID (XJH)                 |                                                              |
-| **cssid**            | "cohort_ssid"                           |                                                              |
-| **name**             | Name                                    |                                                              |
-| **nid**              | National ID Number                      |                                                              |
-| **dob**              | Date of Birth                           |                                                              |
-| **male**             | Male                                    | No; Yes                                                      |
-| **rural**            | Rural Residency                         | No; Yes                                                      |
-| **onlychd**          | Only Child in Family                    | No; Yes                                                      |
-| **board**            | Board at School                         | No; Yes                                                      |
-| **jhsch_name**       | Name of Junior High School              |                                                              |
-| **jhsch_rural**      | Rural Junior High School                | No; Yes                                                      |
-| **han**              | Han Ethnicity                           | Other Ethnicity; Han Ethnicity                               |
-| **polsta**           | Political Status                        | Not CYL Member; CYL Member                                   |
-| **spec**             | Specialty Category                      |                                                              |
-| **spec_rank**        | Specialty Rank                          |                                                              |
-| **spec2**            | Specialty Status                        | No Specialty; Specialty Student                              |
-| btrack               | Track of Study (in base files)          | Science Track; Liberal Arts Track                            |
-| **univ**             | University Accepted                     |                                                              |
-| **univmajor**        | University Major                        |                                                              |
-| **f_name**           | Father Name                             |                                                              |
-| **f_job**            | Father Job                              | Peasant; Unstable Occupation; Self-Employed; Enterprise Employee; Public Institution Employee; Civil Servant/Military Man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| **f_edu**            | Father Education                        | Primary School; Junior High School; Senior High School/Technical School; Associate Degree; Undergraduate Degree; Postgraduate Degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **f_polsta**         | Father Political Status                 | No Party Affiliation; CCP Member; Member of Other Parties    |
-| **f_nid**            | Father National ID Number               |                                                              |
-| **m_name**           | Mother Name                             |                                                              |
-| **m_job**            | Mother Job                              | Peasant; Unstable Occupation; Self-Employed; Enterprise Employee; Public Institution Employee; Civil Servant/Military Man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |
-| **m_edu**            | Mother Education                        | Primary School; Junior High School; Senior High School/Technical School; Associate Degree; Undergraduate Degree; Postgraduate Degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) |
-| **m_polsta**         | Mother Political Status                 | No Party Affiliation; CCP Member; Member of Other Parties    |
-| **m_nid**            | Mother National ID Number               |                                                              |
-| **exam**             | Exams                                   | (See below for exam prefixes)                                |
-| trk:com              | Exam Attributes and Subject Scores      | (See below for subject suffixes)                             |
-| cls_set              | Class Number Set                        |                                                              |
-| head_tname:bio_tname | Teacher Name of Each Subject            | ("head": class supervisor (班主任))                          |
-| trk6d                | Track of Study (in 6d files)            | Science Track; Liberal Arts Track                            |
-| head_tmale:bio_tmale | Teacher Gender (Male) of Each Subject   | No; Yes                                                      |
-| **track**            | Track of Study                          | Science Track; Liberal Arts Track                            |
-| **policy**           | Elite Class Policy Treatment            | Untreated; Treated                                           |
-| **cls_elite**        | Elite Class Indicator                   | Regular Class; Elite Class                                   |
-| **top_scorer**       | Top Scorers in hsee                     | No; Yes (see "Cutoff Points for "Top Scorers"" section)      |
-| **elite**            | Elite Student Indicator                 | Regular Students; Elite Students (removed for majority of analyses: Regular Class Top Scorers; Elite Class Non-Top Scorers) |
-| tot_trim:com_trim    | Trimmed Exam Scores                     | (Trim the lowest 5% of scores in each subject within cohort-track-exam) |
-| ztot:zcom            | Standardized Exam Scores                | (Standardize exam scores within cohort-track-exam)           |
-| ztot_trim:zcom_trim  | Standardized Trimmed Exam Scores        | (Standardize trimmed exam scores within cohort-track-exam)   |
-| **hsee_ctot**        | hsee Scores Centered around the Cutoffs | (Center total score of hsee (untrimmed) around the cutoffs for top scorers; center tot at cutoffs then divided by standard deviation, equivalent to centering ztot at cutoffs) |
-| hsee_ctot2           | hsee Scores Centered around the Cutoffs | (Center total score of hsee (untrimmed) around the cutoffs for top scorers; center tot at cutoffs then divided by root mean square) |
+| Variable                | Label                                   | Levels                                                       | Notes                                                        |
+| ----------------------- | --------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| cohort                  | Enrollment Cohort                       |                                                              |                                                              |
+| ssid                    | Student Status ID (XJH)                 |                                                              |                                                              |
+| cssid                   | "cohort_ssid"                           |                                                              |                                                              |
+| name                    | Name                                    |                                                              |                                                              |
+| nid                     | National ID Number                      |                                                              | Not available for cohort 2003                                |
+| dob                     | Date of Birth                           |                                                              |                                                              |
+| male                    | Male                                    | No; Yes                                                      |                                                              |
+| rural                   | Rural Residency                         | No; Yes                                                      |                                                              |
+| onlychd                 | Only Child in Family                    | No; Yes                                                      | Not available for cohorts 2003-2008, 2011                    |
+| board                   | Board at School                         | No; Yes                                                      | Not available for cohorts 2004, 2008-2011                    |
+| jhsch_name              | Name of Junior High School              |                                                              |                                                              |
+| jhsch_rural             | Rural Junior High School                | No; Yes                                                      |                                                              |
+| han                     | Han Ethnicity                           | Other Ethnicity; Han Ethnicity                               | Not available for cohort 2004                                |
+| polsta                  | Political Status                        | Not CYL Member; CYL Member                                   | Not available for cohort 2004                                |
+| spec                    | Specialty Category                      |                                                              |                                                              |
+| spec_rank               | Specialty Rank                          |                                                              |                                                              |
+| spec2                   | Specialty Status                        | No Specialty; Specialty Student                              |                                                              |
+| btrack                  | Track of Study Shown in Base Files      | Science Track; Liberal Arts Track                            | Do not use; use variable "track"                             |
+| univ                    | University Accepted                     |                                                              | Available for cohorts 2004, 2010                             |
+| univmajor               | University Major                        |                                                              | Available for cohort 2004                                    |
+| f_name                  | Father Name                             |                                                              |                                                              |
+| f_job                   | Father Job                              | Peasant; Unstable Occupation; Self-Employed; Enterprise Employee; Public Institution Employee; Civil Servant/Military Man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |                                                              |
+| f_edu                   | Father Education                        | Primary School; Junior High School; Senior High School/Technical School; Associate Degree; Undergraduate Degree; Postgraduate Degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) | Not available for cohorts 2003-2006, 2009-2010               |
+| f_polsta                | Father Political Status                 | No Party Affiliation; CCP Member; Member of Other Parties    | Not available for cohorts 2003-2006, 2009-2010               |
+| f_nid                   | Father National ID Number               |                                                              | Available for cohort 2013                                    |
+| m_name                  | Mother Name                             |                                                              |                                                              |
+| m_job                   | Mother Job                              | Peasant; Unstable Occupation; Self-Employed; Enterprise Employee; Public Institution Employee; Civil Servant/Military Man<br />(1: 务农, 2: 无固定职业, 3: 个体, 4: 企业单位, 5: 事业单位, 6: 国家机关/军队) |                                                              |
+| m_edu                   | Mother Education                        | Primary School; Junior High School; Senior High School/Technical School; Associate Degree; Undergraduate Degree; Postgraduate Degree<br />(1: 小学, 2: 初中/中学, 3: 高中/中专/技校, 4: 专科/大专/高专/师范, 5: 本科/大学/大本, 6: 研究生/硕士/博士) | Not available for cohorts 2003-2006, 2009-2010               |
+| m_polsta                | Mother Political Status                 | No Party Affiliation; CCP Member; Member of Other Parties    | Not available for cohorts 2003-2006, 2009-2010               |
+| m_nid                   | Mother National ID Number               |                                                              | Available for cohort 2013                                    |
+| exam                    | Exams                                   |                                                              | See below for exam prefixes                                  |
+| trk:com                 | Exam Attributes and Subject Scores      |                                                              | See below for subject suffixes                               |
+| cls_set                 | Class Number Set                        |                                                              |                                                              |
+| head_tname:bio_tname    | Teacher Name of Each Subject            |                                                              | "head": class supervisor (班主任)                            |
+| trk6d                   | Track of Study in 6d Files              | Science Track; Liberal Arts Track                            | Do not use; use variable "track"                             |
+| head_tmale:bio_tmale    | Teacher Gender (Male) of Each Subject   | No; Yes                                                      |                                                              |
+| track                   | Track of Study                          | Science Track; Liberal Arts Track                            |                                                              |
+| policy                  | Elite Class Policy Treatment            | Untreated; Treated                                           |                                                              |
+| cls_elite               | Elite Class Indicator                   | Regular Class; Elite Class                                   |                                                              |
+| top_scorer              | Top Scorers in hsee                     | No; Yes                                                      | See "Cutoff Points for "Top Scorers"" section                |
+| elite                   | Elite Student Indicator                 | Regular Students; Elite Students                             | Categories removed for majority of analyses: Regular Class Top Scorers; Elite Class Non-Top Scorers |
+| tot_trim:com_trim       | Trimmed Exam Scores                     |                                                              | Trim the lowest 5% of scores in each subject within cohort-track-exam |
+| ztot:zcom               | Standardized Exam Scores                |                                                              | Standardize exam scores within cohort-track-exam             |
+| **ztot_trim:zcom_trim** | Standardized Trimmed Exam Scores        |                                                              | Standardize trimmed exam scores within cohort-track-exam     |
+| **hsee_ctot**           | hsee Scores Centered around the Cutoffs |                                                              | Center total score of hsee (untrimmed) around the cutoffs for top scorers; center tot at cutoffs then divided by standard deviation, equivalent to centering ztot at cutoffs |
+| hsee_ctot2              | hsee Scores Centered around the Cutoffs |                                                              | Center total score of hsee (untrimmed) around the cutoffs for top scorers; center tot at cutoffs then divided by root mean square |
 
 Notes
 

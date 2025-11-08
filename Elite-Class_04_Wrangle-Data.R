@@ -691,7 +691,8 @@ dat <- dat %>%
     f_job_l2 = factor(
       case_when(
         is.na(f_job) ~ NA_character_,
-        f_job %in% c("Peasant", "Unstable Occupation", "Self-Employed") ~ "Low Status Jobs",
+        f_job %in% c("Peasant", "Unstable Occupation", "Self-Employed")
+        ~ "Low Status Jobs",
         TRUE ~ "High Status Jobs"
       ),
       levels = c("Low Status Jobs", "High Status Jobs")
@@ -699,7 +700,8 @@ dat <- dat %>%
     m_job_l2 = factor(
       case_when(
         is.na(m_job) ~ NA_character_,
-        m_job %in% c("Peasant", "Unstable Occupation", "Self-Employed") ~ "Low Status Jobs",
+        m_job %in% c("Peasant", "Unstable Occupation", "Self-Employed")
+        ~ "Low Status Jobs",
         TRUE ~ "High Status Jobs"
       ),
       levels = c("Low Status Jobs", "High Status Jobs")

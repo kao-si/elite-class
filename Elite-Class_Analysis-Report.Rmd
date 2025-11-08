@@ -525,6 +525,12 @@ modelsummary(
 
 Andreu Arenas, Caterina Calsamiglia (2025) Gender Differences in High-Stakes Performance and College Admission Policies. Management Science 71(10):8413-8429.
 
+Ghazala Azmat, Caterina Calsamiglia, Nagore Iriberri, Gender Differences in Response to Big Stakes, Journal of the European Economic Association, Volume 14, Issue 6, 1 December 2016, Pages 1372–1400.
+
+Shurchkov, O. (2012). UNDER PRESSURE: GENDER DIFFERENCES IN OUTPUT QUALITY AND QUANTITY UNDER COMPETITION AND TIME CONSTRAINTS. Journal of the European Economic Association, 10(5), 1189–1213.
+
+Analia Schlosser, Zvika Neeman, Yigal Attali, Differential Performance in High Versus Low Stakes Tests: Evidence from the Gre Test*, The Economic Journal, Volume 129, Issue 623, October 2019, Pages 2916–2948.
+
 ### Liberal arts track
 
 ```{r}
@@ -1009,3 +1015,5 @@ modelsummary(
   output = "markdown"
 )
 ```
+
+**Analyses based on parents' education levels and political status are not conducted because data of only a few cohorts are available.**
