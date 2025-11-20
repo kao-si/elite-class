@@ -296,24 +296,29 @@ bm_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_bm <- list(
-  "Science Track_CEE Total Score" = bm_s1,
-  "Science Track_Average High School Performance" = bm_s2,
-  "Liberal Arts Track_CEE Total Score" = bm_l1,
-  "Liberal Arts Track_Average High School Performance" = bm_l2
+bm_panels <- list(
+  "Science Track" = list(
+    "CEE Total Score"                 = bm_s1,
+    "Average High School Performance" = bm_s2
+  ),
+  "Liberal Arts Track" = list(
+    "CEE Total Score"                 = bm_l1,
+    "Average High School Performance" = bm_l2
+  )
 )
 
 modelsummary(
-  mod_bm,
+  bm_panels,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Benchmark Non-parametric Models",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Benchmark Non-parametric Models",
+  output    = "markdown"
 )
 ```
 
@@ -356,24 +361,29 @@ bm_l2_nocov <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot)
 )
 
-mod_bm_nocov <- list(
-  "Science Track_CEE Total Score" = bm_s1_nocov,
-  "Science Track_Average High School Performance" = bm_s2_nocov,
-  "Liberal Arts_CEE Total Score" = bm_l1_nocov,
-  "Liberal Arts_Average High School Performance" = bm_l2_nocov
+bm_panels_nocov <- list(
+  "Science Track" = list(
+    "CEE Total Score"                 = bm_s1_nocov,
+    "Average High School Performance" = bm_s2_nocov
+  ),
+  "Liberal Arts Track" = list(
+    "CEE Total Score"                 = bm_l1_nocov,
+    "Average High School Performance" = bm_l2_nocov
+  )
 )
 
 modelsummary(
-  mod_bm_nocov,
+  bm_panels_nocov,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
+    "Robust"       = "Robust"
   ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Benchmark Non-parametric Models Without Covariates",
-  output = "markdown"
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Benchmark Non-parametric Models Without Covariates",
+  output    = "markdown"
 )
 ```
 
@@ -502,24 +512,29 @@ female_s2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_gender_s <- list(
-  "CEE Total Score_Male" = male_s1,
-  "CEE Total Score_Female" = female_s1,
-  "Average High School Performance_Male" = male_s2,
-  "Average High School Performance_Female" = female_s2
+gender_panels_s <- list(
+  "CEE Total Score" = list(
+    "Male"   = male_s1,
+    "Female" = female_s1
+  ),
+  "Average High School Performance" = list(
+    "Male"   = male_s2,
+    "Female" = female_s2
+  )
 )
 
 modelsummary(
-  mod_gender_s,
+  gender_panels_s,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Gender Differences: Science Track (Non-parametric Models)",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Gender Differences: Science Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -575,24 +590,29 @@ female_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_gender_l <- list(
-  "CEE Total Score_Male" = male_l1,
-  "CEE Total Score_Female" = female_l1,
-  "Average High School Performance_Male" = male_l2,
-  "Average High School Performance_Female" = female_l2
+gender_panels_l <- list(
+  "CEE Total Score" = list(
+    "Male"   = male_l1,
+    "Female" = female_l1
+  ),
+  "Average High School Performance" = list(
+    "Male"   = male_l2,
+    "Female" = female_l2
+  )
 )
 
 modelsummary(
-  mod_gender_l,
+  gender_panels_l,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Gender Differences: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Gender Differences: Liberal Arts Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -642,24 +662,29 @@ urban_s2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_rural_s <- list(
-  "CEE Total Score_Rural" = rural_s1,
-  "CEE Total Score_Urban" = urban_s1,
-  "Average High School Performance_Rural" = rural_s2,
-  "Average High School Performance_Urban" = urban_s2
+rural_panels_s <- list(
+  "CEE Total Score" = list(
+    "Rural" = rural_s1,
+    "Urban" = urban_s1
+  ),
+  "Average High School Performance" = list(
+    "Rural" = rural_s2,
+    "Urban" = urban_s2
+  )
 )
 
 modelsummary(
-  mod_rural_s,
+  rural_panels_s,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Rural vs Urban: Science Track (Non-parametric Models)",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Rural vs Urban: Science Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -707,24 +732,29 @@ urban_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_rural_l <- list(
-  "CEE Total Score_Rural" = rural_l1,
-  "CEE Total Score_Urban" = urban_l1,
-  "Average High School Performance_Rural" = rural_l2,
-  "Average High School Performance_Urban" = urban_l2
+rural_panels_l <- list(
+  "CEE Total Score" = list(
+    "Rural" = rural_l1,
+    "Urban" = urban_l1
+  ),
+  "Average High School Performance" = list(
+    "Rural" = rural_l2,
+    "Urban" = urban_l2
+  )
 )
 
 modelsummary(
-  mod_rural_l,
+  rural_panels_l,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Rural vs Urban: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Rural vs Urban: Liberal Arts Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -774,24 +804,29 @@ jhschurban_s2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_jhschrural_s <- list(
-  "CEE Total Score_Rural" = jhschrural_s1,
-  "CEE Total Score_Urban" = jhschurban_s1,
-  "Average High School Performance_Rural" = jhschrural_s2,
-  "Average High School Performance_Urban" = jhschurban_s2
+jhschrural_panels_s <- list(
+  "CEE Total Score" = list(
+    "Rural" = jhschrural_s1,
+    "Urban" = jhschurban_s1
+  ),
+  "Average High School Performance" = list(
+    "Rural" = jhschrural_s2,
+    "Urban" = jhschurban_s2
+  )
 )
 
 modelsummary(
-  mod_jhschrural_s,
+  jhschrural_panels_s,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Rural vs Urban Junior High School: Science Track (Non-parametric Models)",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Rural vs Urban Junior High School: Science Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -839,24 +874,29 @@ jhschurban_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_jhschrural_l <- list(
-  "CEE Total Score_Rural" = jhschrural_l1,
-  "CEE Total Score_Urban" = jhschurban_l1,
-  "Average High School Performance_Rural" = jhschrural_l2,
-  "Average High School Performance_Urban" = jhschurban_l2
+jhschrural_panels_l <- list(
+  "CEE Total Score" = list(
+    "Rural" = jhschrural_l1,
+    "Urban" = jhschurban_l1
+  ),
+  "Average High School Performance" = list(
+    "Rural" = jhschrural_l2,
+    "Urban" = jhschurban_l2
+  )
 )
 
 modelsummary(
-  mod_jhschrural_l,
+  jhschrural_panels_l,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c(
+  coef_map  = c(
     "Conventional" = "Conventional",
-    "Robust" = "Robust"
-    ),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Rural vs Urban Junior High School: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
+    "Robust"       = "Robust"
+  ),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Rural vs Urban Junior High School: Liberal Arts Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -924,21 +964,26 @@ fjob_high_s2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_fjob_s <- list(
-  "CEE Total Score_Low Status Jobs" = fjob_low_s1,
-  "CEE Total Score_High Status Jobs" = fjob_high_s1,
-  "Average High School Performance_Low Status Jobs" = fjob_low_s2,
-  "Average High School Performance_High Status Jobs" = fjob_high_s2
+fjob_panels_s <- list(
+  "CEE Total Score" = list(
+    "Low Status Jobs"  = fjob_low_s1,
+    "High Status Jobs" = fjob_high_s1
+  ),
+  "Average High School Performance" = list(
+    "Low Status Jobs"  = fjob_low_s2,
+    "High Status Jobs" = fjob_high_s2
+  )
 )
 
 modelsummary(
-  mod_fjob_s,
+  fjob_panels_s,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Split by Father's Employment Status: Science Track (Non-parametric Models)",
-  output = "markdown"
+  coef_map  = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Split by Father's Employment Status: Science Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -986,21 +1031,26 @@ fjob_high_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_fjob_l <- list(
-  "CEE Total Score_Low Status Jobs" = fjob_low_l1,
-  "CEE Total Score_High Status Jobs" = fjob_high_l1,
-  "Average High School Performance_Low Status Jobs" = fjob_low_l2,
-  "Average High School Performance_High Status Jobs" = fjob_high_l2
+fjob_panels_l <- list(
+  "CEE Total Score" = list(
+    "Low Status Jobs"  = fjob_low_l1,
+    "High Status Jobs" = fjob_high_l1
+  ),
+  "Average High School Performance" = list(
+    "Low Status Jobs"  = fjob_low_l2,
+    "High Status Jobs" = fjob_high_l2
+  )
 )
 
 modelsummary(
-  mod_fjob_l,
+  fjob_panels_l,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Split by Father's Employment Status: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
+  coef_map  = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Split by Father's Employment Status: Liberal Arts Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -1068,21 +1118,26 @@ mjob_high_s2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_mjob_s <- list(
-  "CEE Total Score_Low Status Jobs" = mjob_low_s1,
-  "CEE Total Score_High Status Jobs" = mjob_high_s1,
-  "Average High School Performance_Low Status Jobs" = mjob_low_s2,
-  "Average High School Performance_High Status Jobs" = mjob_high_s2
+mjob_panels_s <- list(
+  "CEE Total Score" = list(
+    "Low Status Jobs"  = mjob_low_s1,
+    "High Status Jobs" = mjob_high_s1
+  ),
+  "Average High School Performance" = list(
+    "Low Status Jobs"  = mjob_low_s2,
+    "High Status Jobs" = mjob_high_s2
+  )
 )
 
 modelsummary(
-  mod_mjob_s,
+  mjob_panels_s,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Split by Mother's Employment Status: Science Track (Non-parametric Models)",
-  output = "markdown"
+  coef_map  = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Split by Mother's Employment Status: Science Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -1130,21 +1185,26 @@ mjob_high_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_mjob_l <- list(
-  "CEE Total Score_Low Status Jobs" = mjob_low_l1,
-  "CEE Total Score_High Status Jobs" = mjob_high_l1,
-  "Average High School Performance_Low Status Jobs" = mjob_low_l2,
-  "Average High School Performance_High Status Jobs" = mjob_high_l2
+mjob_panels_l <- list(
+  "CEE Total Score" = list(
+    "Low Status Jobs"  = mjob_low_l1,
+    "High Status Jobs" = mjob_high_l1
+  ),
+  "Average High School Performance" = list(
+    "Low Status Jobs"  = mjob_low_l2,
+    "High Status Jobs" = mjob_high_l2
+  )
 )
 
 modelsummary(
-  mod_mjob_l,
+  mjob_panels_l,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Split by Mother's Employment Status: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
+  coef_map  = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Split by Mother's Employment Status: Liberal Arts Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -1232,23 +1292,28 @@ pjob_both_s2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_pjob_s <- list(
-  "CEE Total Score_Neither High Status" = pjob_neither_s1,
-  "CEE Total Score_One High Status"      = pjob_one_s1,
-  "CEE Total Score_Both High Status"   = pjob_both_s1,
-  "Average High School Performance_Neither High Status" = pjob_neither_s2,
-  "Average High School Performance_One High Status"      = pjob_one_s2,
-  "Average High School Performance_Both High Status"   = pjob_both_s2
+pjob_panels_s <- list(
+  "CEE Total Score" = list(
+    "Neither High Status" = pjob_neither_s1,
+    "One High Status"     = pjob_one_s1,
+    "Both High Status"    = pjob_both_s1
+  ),
+  "Average High School Performance" = list(
+    "Neither High Status" = pjob_neither_s2,
+    "One High Status"     = pjob_one_s2,
+    "Both High Status"    = pjob_both_s2
+  )
 )
 
 modelsummary(
-  mod_pjob_s,
+  pjob_panels_s,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Split by Combined Parental Employment Status: Science Track (Non-parametric Models)",
-  output = "markdown"
+  coef_map  = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Split by Combined Parental Employment Status: Science Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
@@ -1320,23 +1385,28 @@ pjob_both_l2 <- rdrobust(
            complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
 )
 
-mod_pjob_l <- list(
-  "CEE Total Score_Neither High Status" = pjob_neither_l1,
-  "CEE Total Score_One High Status"      = pjob_one_l1,
-  "CEE Total Score_Both High Status"   = pjob_both_l1,
-  "Average High School Performance_Neither High Status" = pjob_neither_l2,
-  "Average High School Performance_One High Status"      = pjob_one_l2,
-  "Average High School Performance_Both High Status"   = pjob_both_l2
+pjob_panels_l <- list(
+  "CEE Total Score" = list(
+    "Neither High Status" = pjob_neither_l1,
+    "One High Status"     = pjob_one_l1,
+    "Both High Status"    = pjob_both_l1
+  ),
+  "Average High School Performance" = list(
+    "Neither High Status" = pjob_neither_l2,
+    "One High Status"     = pjob_one_l2,
+    "Both High Status"    = pjob_both_l2
+  )
 )
 
 modelsummary(
-  mod_pjob_l,
+  pjob_panels_l,
+  shape     = "cbind",
   statistic = "std.error",
-  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
-  gof_omit = "^R2 Within|AIC|BIC",
-  stars = TRUE,
-  title = "Split by Combined Parental Employment Status: Liberal Arts Track (Non-parametric Models)",
-  output = "markdown"
+  coef_map  = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit  = "^R2 Within|AIC|BIC",
+  stars     = TRUE,
+  title     = "Split by Combined Parental Employment Status: Liberal Arts Track (Non-parametric Models)",
+  output    = "markdown"
 )
 ```
 
