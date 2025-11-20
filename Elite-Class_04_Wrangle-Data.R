@@ -648,6 +648,57 @@ dat <- dat %>%
     relationship = "many-to-one"
   )
 
+# Parental Employment Status ####
+
+# Divide parental employment status into two levels
+  # Low Status Jobs: Peasant, Unstable Occupation, Self-Employed
+  # High Status Jobs: Enterprise Employee, Public Institution Employee, Civil Servant/Military Man
+
+# Create an index for combined status of parents, with three levels
+  # Both Parents in High Status Jobs
+  # One Parent in High Status Job
+  # Neither Parent in High Status Jobs
+
+dat <- dat %>%
+  mutate(
+    f_job_l2 = factor(
+      case_when(
+        is.na(f_job) ~ NA_character_,
+        f_job %in% c("Peasant", "Unstable Occupation", "Self-Employed")
+        ~ "Low Status Jobs",
+        TRUE ~ "High Status Jobs"
+      ),
+      levels = c("Low Status Jobs", "High Status Jobs")
+    ),
+    m_job_l2 = factor(
+      case_when(
+        is.na(m_job) ~ NA_character_,
+        m_job %in% c("Peasant", "Unstable Occupation", "Self-Employed")
+        ~ "Low Status Jobs",
+        TRUE ~ "High Status Jobs"
+      ),
+      levels = c("Low Status Jobs", "High Status Jobs")
+    ),
+    par_job = factor(
+      case_when(
+        is.na(f_job_l2) & is.na(m_job_l2) ~ NA_character_,
+        f_job_l2 == "High Status Jobs" & m_job_l2 == "High Status Jobs"
+        ~ "Both Parents in High Status Jobs",
+        f_job_l2 == "High Status Jobs" | m_job_l2 == "High Status Jobs"
+        ~ "One Parent in High Status Job",
+        f_job_l2 == "Low Status Jobs"  & m_job_l2 == "Low Status Jobs"
+        ~ "Neither Parent in High Status Jobs",
+        # one Low Status and one NA will be counted as NA
+        TRUE ~ NA_character_
+      ),
+      levels = c(
+        "Neither Parent in High Status Jobs",
+        "One Parent in High Status Job",
+        "Both Parents in High Status Jobs"
+      )
+    )
+  )
+
 # Factor Variables ####
 
 dat$track <- factor(dat$track,
@@ -683,29 +734,6 @@ dat <- dat %>%
                   levels = c("hsee",
                              setdiff(unique(exam), c("hsee", "cee")),
                              "cee"))
-  )
-
-# Divide parental employment status into two levels
-dat <- dat %>%
-  mutate(
-    f_job_l2 = factor(
-      case_when(
-        is.na(f_job) ~ NA_character_,
-        f_job %in% c("Peasant", "Unstable Occupation", "Self-Employed")
-        ~ "Low Status Jobs",
-        TRUE ~ "High Status Jobs"
-      ),
-      levels = c("Low Status Jobs", "High Status Jobs")
-    ),
-    m_job_l2 = factor(
-      case_when(
-        is.na(m_job) ~ NA_character_,
-        m_job %in% c("Peasant", "Unstable Occupation", "Self-Employed")
-        ~ "Low Status Jobs",
-        TRUE ~ "High Status Jobs"
-      ),
-      levels = c("Low Status Jobs", "High Status Jobs")
-    )
   )
 
 # Filter Data ####

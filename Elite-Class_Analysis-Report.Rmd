@@ -728,6 +728,138 @@ modelsummary(
 )
 ```
 
+## Rural vs. urban (using `jhsch_rural`)
+
+### Science track
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# CEE
+jhschrural_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$jhsch_rural == "Yes") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+jhschurban_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$jhsch_rural == "No") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+# Average High School Performance
+jhschrural_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$jhsch_rural == "Yes") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+jhschurban_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" & wdat_rd$jhsch_rural == "No") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+mod_jhschrural_s <- list(
+  "CEE Total Score_Rural" = jhschrural_s1,
+  "CEE Total Score_Urban" = jhschurban_s1,
+  "Average High School Performance_Rural" = jhschrural_s2,
+  "Average High School Performance_Urban" = jhschurban_s2
+)
+
+modelsummary(
+  mod_jhschrural_s,
+  statistic = "std.error",
+  coef_map = c(
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Rural vs Urban Junior High School: Science Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+### Liberal arts track
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# CEE
+jhschrural_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$jhsch_rural == "Yes") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+jhschurban_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$jhsch_rural == "No") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+# Average High School Performance
+jhschrural_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$jhsch_rural == "Yes") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+jhschurban_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" & wdat_rd$jhsch_rural == "No") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+mod_jhschrural_l <- list(
+  "CEE Total Score_Rural" = jhschrural_l1,
+  "CEE Total Score_Urban" = jhschurban_l1,
+  "Average High School Performance_Rural" = jhschrural_l2,
+  "Average High School Performance_Urban" = jhschurban_l2
+)
+
+modelsummary(
+  mod_jhschrural_l,
+  statistic = "std.error",
+  coef_map = c(
+    "Conventional" = "Conventional",
+    "Robust" = "Robust"
+    ),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Rural vs Urban Junior High School: Liberal Arts Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
 ## Father's employment status
 
 ### Distribution of father's employment status
@@ -1012,6 +1144,198 @@ modelsummary(
   gof_omit = "^R2 Within|AIC|BIC",
   stars = TRUE,
   title = "Split by Mother's Employment Status: Liberal Arts Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+## Combined parental employment status
+
+### Distribution of combined parental employment status
+
+```{r}
+datasummary_crosstab(
+  track ~ par_job,
+  data = wdat_rd %>%
+    dplyr::mutate(
+      par_job = forcats::fct_na_value_to_level(par_job, level = "Missing")
+    ),
+  title = "Distribution of Combined Parental Employment Status",
+  output = "markdown"
+)
+```
+
+### Science track
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# CEE
+pjob_neither_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" &
+            wdat_rd$par_job == "Neither Parent in High Status Jobs") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_one_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" &
+            wdat_rd$par_job == "One Parent in High Status Job") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_both_s1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" &
+            wdat_rd$par_job == "Both Parents in High Status Jobs") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+# Average High School Performance
+pjob_neither_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" &
+            wdat_rd$par_job == "Neither Parent in High Status Jobs") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_one_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" &
+            wdat_rd$par_job == "One Parent in High Status Job") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_both_s2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Science Track" &
+            wdat_rd$par_job == "Both Parents in High Status Jobs") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+mod_pjob_s <- list(
+  "CEE Total Score_Neither High Status" = pjob_neither_s1,
+  "CEE Total Score_One High Status"      = pjob_one_s1,
+  "CEE Total Score_Both High Status"   = pjob_both_s1,
+  "Average High School Performance_Neither High Status" = pjob_neither_s2,
+  "Average High School Performance_One High Status"      = pjob_one_s2,
+  "Average High School Performance_Both High Status"   = pjob_both_s2
+)
+
+modelsummary(
+  mod_pjob_s,
+  statistic = "std.error",
+  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Split by Combined Parental Employment Status: Science Track (Non-parametric Models)",
+  output = "markdown"
+)
+```
+
+### Liberal arts track
+
+```{r}
+# Non-parametric models with `rdrobust`
+# Including cohort covariates
+
+# CEE
+pjob_neither_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" &
+            wdat_rd$par_job == "Neither Parent in High Status Jobs") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_one_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" &
+            wdat_rd$par_job == "One Parent in High Status Job") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_both_l1 <- rdrobust(
+  y = wdat_rd$cee_ztot_trim,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" &
+            wdat_rd$par_job == "Both Parents in High Status Jobs") &
+           complete.cases(wdat_rd$cee_ztot_trim, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+# Average High School Performance
+pjob_neither_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" &
+            wdat_rd$par_job == "Neither Parent in High Status Jobs") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_one_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" &
+            wdat_rd$par_job == "One Parent in High Status Job") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+pjob_both_l2 <- rdrobust(
+  y = wdat_rd$avg_hs,
+  x = wdat_rd$hsee_ctot,
+  covs = cov_cohort,
+  c = 0,
+  subset = (wdat_rd$track == "Liberal Arts Track" &
+            wdat_rd$par_job == "Both Parents in High Status Jobs") &
+           complete.cases(wdat_rd$avg_hs, wdat_rd$hsee_ctot, cov_cohort)
+)
+
+mod_pjob_l <- list(
+  "CEE Total Score_Neither High Status" = pjob_neither_l1,
+  "CEE Total Score_One High Status"      = pjob_one_l1,
+  "CEE Total Score_Both High Status"   = pjob_both_l1,
+  "Average High School Performance_Neither High Status" = pjob_neither_l2,
+  "Average High School Performance_One High Status"      = pjob_one_l2,
+  "Average High School Performance_Both High Status"   = pjob_both_l2
+)
+
+modelsummary(
+  mod_pjob_l,
+  statistic = "std.error",
+  coef_map = c("Conventional" = "Conventional", "Robust" = "Robust"),
+  gof_omit = "^R2 Within|AIC|BIC",
+  stars = TRUE,
+  title = "Split by Combined Parental Employment Status: Liberal Arts Track (Non-parametric Models)",
   output = "markdown"
 )
 ```

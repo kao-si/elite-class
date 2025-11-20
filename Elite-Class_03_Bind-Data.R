@@ -1320,7 +1320,7 @@ demo$m_polsta <- factor(demo$m_polsta,
                                    "CCP Member",
                                    "Member of Other Parties"))
 
-## Extract Variables from Coding Files ====  
+## Extract Variables from Coding Files ====
 
 # (1) rural
 # (2) f_job
