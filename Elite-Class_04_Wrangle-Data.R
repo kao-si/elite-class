@@ -292,12 +292,12 @@ dat <- dat %>%
     )
   )
 
-# Top Scorers in hsee ####
+# Top Scorers in HSEE ####
 
 ## Cohorts 2003 - 2007 ====
 
 # For cohorts 2003 - 2007, top scorers are those whose total scores in HSEE are
-# higher than the highest score in the regular classes
+# higher than the highest score in the regular classes in each track
 
 # Importantly, when identifying the highest score in the regular classes, we
 # do not count a few top scorers who chose to stay in regular classes but whose
@@ -386,111 +386,58 @@ dat <- dat %>%
 
 # Define students who were "top scorers" in Cohorts 2008 - 2014
 
-# (1) 501 "top scorers" in Science Track elite classes in Cohorts 2003 - 2007
-# (average 100/cohort)
+# (1) 501 "top scorers" in Science Track elite classes ("Elite Students")
+# in Cohorts 2003 - 2007 (average 100/cohort)
 
-# (2) 212 "top scorers" in Liberal Arts Track elite classes in Cohorts
-# 2005 - 2007 (average 71/cohort)
+dat %>%
+  filter(cohort %in% c("2003", "2004", "2005", "2006", "2007"),
+         track == "Science Track",
+         cls_elite == "Elite Class",
+         top_scorer == "Yes") %>%
+  distinct(cssid) %>%
+  nrow()
 
-# Therefore, students whose HSEE total scores were higher or equal to the
-# 100th/71st highest score in the Science Track/Liberal Arts Track were
-# identified as "top scorers" in Cohorts 2008 - 2014
+# (2) 212 "top scorers" in Liberal Arts Track elite classes ("Elite Students")
+# in Cohorts 2005 - 2007 (average 71/cohort)
 
-# Cohort 2008
+dat %>%
+  filter(cohort %in% c("2005", "2006", "2007"),
+         track == "Liberal Arts Track",
+         cls_elite == "Elite Class",
+         top_scorer == "Yes") %>%
+  distinct(cssid) %>%
+  nrow()
 
-id_topscore08_sci <- dat %>%
-  filter(cohort == "2008", track == "Science Track",
-         exam == "hsee", tot >= 647) %>%
+# Therefore, students whose HSEE total scores were ranked higher than
+# or equal to the 100th/71st rank in the Science Track/Liberal Arts Track
+# were identified as "top scorers" in Cohorts 2008 - 2014
+
+hsee_rank_0814 <- dat %>%
+  filter(
+    exam == "hsee",
+    cohort %in% c("2008", "2009", "2010", "2011", "2012", "2013", "2014")
+  ) %>%
+  group_by(cohort, track) %>%
+  mutate(
+    hsee_rank = min_rank(desc(tot))
+  ) %>%
+  ungroup()
+
+# Science Track: 100th highest
+id_topscore0814_sci <- hsee_rank_0814 %>%
+  filter(
+    track == "Science Track",
+    hsee_rank <= 100
+  ) %>%
   pull(cssid) %>%
   unique()
 
-id_topscore08_lib <- dat %>%
-  filter(cohort == "2008", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 625.5) %>%
-  pull(cssid) %>%
-  unique()
-
-# Cohort 2009
-
-id_topscore09_sci <- dat %>%
-  filter(cohort == "2009", track == "Science Track",
-         exam == "hsee", tot >= 692.5) %>%
-  pull(cssid) %>%
-  unique()
-
-id_topscore09_lib <- dat %>%
-  filter(cohort == "2009", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 667.5) %>%
-  pull(cssid) %>%
-  unique()
-
-# Cohort 2010
-
-id_topscore10_sci <- dat %>%
-  filter(cohort == "2010", track == "Science Track",
-         exam == "hsee", tot >= 686) %>%
-  pull(cssid) %>%
-  unique()
-
-id_topscore10_lib <- dat %>%
-  filter(cohort == "2010", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 652) %>%
-  pull(cssid) %>%
-  unique()
-
-# Cohort 2011
-
-id_topscore11_sci <- dat %>%
-  filter(cohort == "2011", track == "Science Track",
-         exam == "hsee", tot >= 741) %>%
-  pull(cssid) %>%
-  unique()
-
-id_topscore11_lib <- dat %>%
-  filter(cohort == "2011", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 721.5) %>%
-  pull(cssid) %>%
-  unique()
-
-# Cohort 2012
-
-id_topscore12_sci <- dat %>%
-  filter(cohort == "2012", track == "Science Track",
-         exam == "hsee", tot >= 726) %>%
-  pull(cssid) %>%
-  unique()
-
-id_topscore12_lib <- dat %>%
-  filter(cohort == "2012", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 703) %>%
-  pull(cssid) %>%
-  unique()
-
-# Cohort 2013
-
-id_topscore13_sci <- dat %>%
-  filter(cohort == "2013", track == "Science Track",
-         exam == "hsee", tot >= 761) %>%
-  pull(cssid) %>%
-  unique()
-
-id_topscore13_lib <- dat %>%
-  filter(cohort == "2013", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 739) %>%
-  pull(cssid) %>%
-  unique()
-
-# Cohort 2014
-
-id_topscore14_sci <- dat %>%
-  filter(cohort == "2014", track == "Science Track",
-         exam == "hsee", tot >= 749) %>%
-  pull(cssid) %>%
-  unique()
-
-id_topscore14_lib <- dat %>%
-  filter(cohort == "2014", track == "Liberal Arts Track",
-         exam == "hsee", tot >= 729) %>%
+# Liberal Arts Track: 71st highest
+id_topscore0814_lib <- hsee_rank_0814 %>%
+  filter(
+    track == "Liberal Arts Track",
+    hsee_rank <= 71
+  ) %>%
   pull(cssid) %>%
   unique()
 
@@ -499,26 +446,14 @@ dat <- dat %>%
   mutate(
     top_scorer = case_when(
       cssid %in% c(
-        id_topscore08_sci,
-        id_topscore09_sci,
-        id_topscore10_sci,
-        id_topscore11_sci,
-        id_topscore12_sci,
-        id_topscore13_sci,
-        id_topscore14_sci,
-        id_topscore08_lib,
-        id_topscore09_lib,
-        id_topscore10_lib,
-        id_topscore11_lib,
-        id_topscore12_lib,
-        id_topscore13_lib,
-        id_topscore14_lib
+        id_topscore0814_sci,
+        id_topscore0814_lib
       ) ~ "Yes",
       TRUE ~ top_scorer
     )
   )
 
-## Variable "elite" ====
+## Construct "elite" Variable ====
 
 # Create variable "elite" to indicate four types of students
 dat <- dat %>%
@@ -533,6 +468,86 @@ dat <- dat %>%
       policy == "Treated" & cls_elite == "Elite Class" & top_scorer == "No"
       ~ "Elite Class Non-Top Scorers",
       TRUE ~ "Regular Students"
+    )
+  )
+
+# Top Students in Regular Classes ####
+
+## Cohorts 2003 - 2007 ====
+
+# For cohorts 2003 - 2007, top students in regular classes were those whose
+# total scores in HSEE were ranked higher than or equal to the nth rank in the
+# regular classes, where n is the number of "Elite Students"
+# in each cohort-track, and excluding those "Regular Class Top Scorers"
+# (i.e., only "Regular Students")
+
+# Number of "Elite Students" in each cohort-track
+n_elite_0307 <- dat %>%
+  filter(
+    cohort %in% c("2003", "2004", "2005", "2006", "2007"),
+    elite == "Elite Students"
+  ) %>%
+  group_by(cohort, track) %>%
+  summarize(n_elite = n_distinct(cssid), .groups = "drop")
+
+# Rank "Regular Students" within cohort-track by HSEE total score
+reg_rank_0307 <- dat %>%
+  filter(
+    exam == "hsee",
+    cohort %in% c("2003", "2004", "2005", "2006", "2007"),
+    elite == "Regular Students"
+  ) %>%
+  group_by(cohort, track) %>%
+  mutate(
+    reg_rank = min_rank(desc(tot))
+  ) %>%
+  ungroup() %>%
+  left_join(n_elite_0307, by = c("cohort", "track"))
+
+# Identify top students in regular classes
+id_topreg0307 <- reg_rank_0307 %>%
+  filter(!is.na(n_elite), reg_rank <= n_elite) %>%
+  pull(cssid) %>%
+  unique()
+
+## Cohorts 2008 - 2014 ====
+
+# For cohorts 2008 - 2014, students whose HSEE total scores were ranked between
+# 101st and 200th in the Science Track, and between
+# 72nd and 142nd in the Liberal Arts Track were identified as
+# top students in regular classes
+
+# Science Track: 101st–200th highest
+id_topreg0814_sci <- hsee_rank_0814 %>%
+  filter(
+    track == "Science Track",
+    hsee_rank >= 101,
+    hsee_rank <= 200
+  ) %>%
+  pull(cssid) %>%
+  unique()
+
+# Liberal Arts Track: 72nd–142nd highest
+id_topreg0814_lib <- hsee_rank_0814 %>%
+  filter(
+    track == "Liberal Arts Track",
+    hsee_rank >= 72,
+    hsee_rank <= 142
+  ) %>%
+  pull(cssid) %>%
+  unique()
+
+id_topreg0814 <- union(id_topreg0814_sci, id_topreg0814_lib)
+
+## Construct "top_regular" Variable ====
+
+# Create a dummy variable for "top students in regular classes"
+# in terms of HSEE total scores
+dat <- dat %>%
+  mutate(
+    top_regular = case_when(
+      cssid %in% c(id_topreg0307, id_topreg0814) ~ "Yes",
+      TRUE ~ "No"
     )
   )
 
@@ -648,7 +663,47 @@ dat <- dat %>%
     relationship = "many-to-one"
   )
 
-# Parental Employment Status ####
+# Factor and Create Variables ####
+
+dat$track <- factor(dat$track,
+                    levels = c("Science Track", "Liberal Arts Track"))
+
+dat$policy <- factor(dat$policy,
+                     levels = c("Untreated", "Treated"))
+
+dat$cls_elite <- factor(dat$cls_elite,
+                        levels = c("Regular Class", "Elite Class"))
+
+dat$top_scorer <- factor(dat$top_scorer,
+                         levels = c("No", "Yes"))
+
+dat$elite <- factor(dat$elite,
+                    levels = c("Regular Students", "Elite Students",
+                               "Elite Class Non-Top Scorers",
+                               "Regular Class Top Scorers"))
+
+dat$top_regular <- factor(dat$top_regular,
+                          levels = c("No", "Yes"))
+
+# Teacher gender variables
+dat <- dat %>%
+  mutate(
+    across(
+      .cols = ends_with("_tmale"),
+      .fns = ~ factor(., levels = c("No", "Yes"))
+    )
+  )
+
+# Exam variable
+dat <- dat %>%
+  mutate(
+    exam = factor(exam,
+                  levels = c("hsee",
+                             setdiff(unique(exam), c("hsee", "cee")),
+                             "cee"))
+  )
+
+## Parental Employment Status ====
 
 # Divide parental employment status into two levels
   # Low Status Jobs: Peasant, Unstable Occupation, Self-Employed
@@ -699,41 +754,41 @@ dat <- dat %>%
     )
   )
 
-# Factor Variables ####
+## Subgrouping Based on HSEE Total Score ====
 
-dat$track <- factor(dat$track,
-                    levels = c("Science Track", "Liberal Arts Track"))
-
-dat$policy <- factor(dat$policy,
-                     levels = c("Untreated", "Treated"))
-
-dat$cls_elite <- factor(dat$cls_elite,
-                        levels = c("Regular Class", "Elite Class"))
-
-dat$top_scorer <- factor(dat$top_scorer,
-                         levels = c("No", "Yes"))
-
-dat$elite <- factor(dat$elite,
-                    levels = c("Regular Students", "Elite Students",
-                               "Elite Class Non-Top Scorers",
-                               "Regular Class Top Scorers"))
-
-# Teacher gender variables
+# Create a variable to include only "Elite Students" and "top_regular" students
 dat <- dat %>%
   mutate(
-    across(
-      .cols = ends_with("_tmale"),
-      .fns = ~ factor(., levels = c("No", "Yes"))
+    top_cat = case_when(
+      elite == "Elite Students" ~ "Elite Students",
+      top_regular == "Yes" ~ "Top Regular Students",
+      TRUE ~ NA
     )
   )
 
-# Factor and relevel "exam" variable
-dat <- dat %>%
+# Decile (10-bin) groups for HSEE total score within cohort-track-top_cat
+hsee_bin <- dat %>%
+  filter(!is.na(track), !is.na(top_cat), exam == "hsee", !is.na(tot)) %>%
+  group_by(cohort, track, top_cat) %>%
   mutate(
-    exam = factor(exam,
-                  levels = c("hsee",
-                             setdiff(unique(exam), c("hsee", "cee")),
-                             "cee"))
+    # empirical CDF of HSEE tot within group; ties share the same value
+    hsee_cdf = cume_dist(tot)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    # turn CDF into 10 bins (each ≈ 10 percentile points)
+    # bin 1: (0, 0.1], bin 2: (0.1, 0.2], ..., bin 10: (0.9, 1]
+    # i.e., bin 1 = lowest scores, bin 10 = highest scores
+    hsee_decile = pmin(10L, pmax(1L, as.integer(ceiling(hsee_cdf * 10))))
+  )
+
+# Join the bin variable
+dat <- dat %>%
+  left_join(
+    select(hsee_bin, cssid, hsee_cdf, hsee_decile),
+    by = "cssid",
+    na_matches = "never",
+    relationship = "many-to-one"
   )
 
 # Filter Data ####
@@ -755,7 +810,9 @@ id_excl <- union(id_natrack, id_nahsee)
 dat <- dat %>%
   filter(!cssid %in% id_excl)
 
-# Pivot Wider ####
+# Ad-hoc Wrangling ####
+
+## Pivot Wider ====
 
 wdat <- dat %>%
   pivot_wider(
@@ -765,7 +822,7 @@ wdat <- dat %>%
     names_repair = "check_unique"
   )
 
-# Ad hoc Wrangling ####
+## Data for RDD Analyses ====
 
 # Subset data for RDD analyses
 wdat_rd <- wdat %>%

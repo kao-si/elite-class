@@ -85,6 +85,50 @@ decreasing = TRUE)), y = n, fill = elite)) +
   theme(legend.position = "top", legend.title = element_blank())
 ```
 
+## Elite students and top regular students by decile of HSEE total score
+
+```{r}
+gg_decile <- function(cohort_val) {
+    dat %>%
+      filter(!is.na(top_cat), exam == "hsee", cohort == cohort_val) %>%
+      # Compute counts and groupwise max(tot) per decile within each facet group (track × top_cat)
+      group_by(track, top_cat, hsee_decile) %>%
+      mutate(
+        n_dec = n(),
+        y_pos = max(tot, na.rm = TRUE)
+      ) %>%
+      ungroup() %>%
+      ggplot(aes(
+        x = factor(hsee_decile),
+        y = tot,
+        color = factor(hsee_decile)
+      )) +
+        geom_point(size = 1, alpha = 0.5,
+          position = position_jitter(width = 0.2, height = 0)) +
+        # Add count labels (one per decile per facet)
+        geom_text(
+          aes(
+            x = factor(hsee_decile),
+            y = y_pos,
+            label = n_dec
+          ),
+          vjust = -2,
+          size = 3,
+          color = "black"
+        ) +
+        facet_grid(track ~ factor(top_cat, levels = c("Top Regular Students","Elite Students"))) +
+        guides(color = "none") +
+        labs(
+          title = paste0("HSEE Total Scores by Decile in Cohort ", cohort_val),
+          x = "Decile of HSEE Total Score",
+          y = "HSEE Total Score"
+        )
+}
+
+# Print all plots
+walk(unique(dat$cohort), ~ print(gg_decile(.)))
+```
+
 ## Distribution of students by demographic characteristics in each cohort-track
 
 ```{r}
@@ -237,6 +281,10 @@ walk2(cohort_col, track_col, density_test)
 ## Benchmark models
 
 **Non-parametric models using `rdrobust`**
+
+**Report and interpret the coefficient estimates under the method "Robust"**
+
+> Footnote: All RD estimates are obtained using the robust bias-corrected procedure implemented in rdrobust (Calonico, Cattaneo, and Titiunik 2014, 2015; Calonico et al. 2019). We report the robust (bias-corrected) point estimates and standard errors as our main results, since they deliver valid inference under MSE-optimal bandwidth selection. Conventional estimates are shown only for comparison.
 
 **Include cohort covariates**
 
