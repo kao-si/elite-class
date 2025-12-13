@@ -85,32 +85,36 @@ decreasing = TRUE)), y = n, fill = elite)) +
   theme(legend.position = "top", legend.title = element_blank())
 ```
 
-## Elite students and top regular students by decile of HSEE total score
+## Elite students and top regular students by subgroups of HSEE total score
 
 ```{r}
-gg_decile <- function(cohort_val) {
+gg_bin <- function(cohort_val, bin_var) {
+    lab <- dat %>%
+      filter(!is.na(top_cat), exam == "hsee", cohort == cohort_val) %>%
+      group_by(track, top_cat, !!rlang::sym(bin_var)) %>%
+      # Compute counts and groupwise max(tot) per bin within each facet group (track × top_cat)
+      summarize(
+        n_bin = n(),
+        y_pos = max(tot, na.rm = TRUE),
+        .groups = "drop"
+      )
+
     dat %>%
       filter(!is.na(top_cat), exam == "hsee", cohort == cohort_val) %>%
-      # Compute counts and groupwise max(tot) per decile within each facet group (track × top_cat)
-      group_by(track, top_cat, hsee_decile) %>%
-      mutate(
-        n_dec = n(),
-        y_pos = max(tot, na.rm = TRUE)
-      ) %>%
-      ungroup() %>%
       ggplot(aes(
-        x = factor(hsee_decile),
+        x = factor(!!rlang::sym(bin_var)),
         y = tot,
-        color = factor(hsee_decile)
+        color = factor(!!rlang::sym(bin_var))
       )) +
         geom_point(size = 1, alpha = 0.5,
           position = position_jitter(width = 0.2, height = 0)) +
-        # Add count labels (one per decile per facet)
+        # Add count labels (one per bin per facet)
         geom_text(
+          data = lab,
           aes(
-            x = factor(hsee_decile),
+            x = factor(!!rlang::sym(bin_var)),
             y = y_pos,
-            label = n_dec
+            label = n_bin
           ),
           vjust = -2,
           size = 3,
@@ -119,14 +123,18 @@ gg_decile <- function(cohort_val) {
         facet_grid(track ~ factor(top_cat, levels = c("Top Regular Students","Elite Students"))) +
         guides(color = "none") +
         labs(
-          title = paste0("HSEE Total Scores by Decile in Cohort ", cohort_val),
-          x = "Decile of HSEE Total Score",
+          title = paste0("HSEE Total Scores by Subgroups in Cohort ", cohort_val, " using ", bin_var),
+          x = "Bin",
           y = "HSEE Total Score"
         )
 }
 
 # Print all plots
-walk(unique(dat$cohort), ~ print(gg_decile(.)))
+vec_cohort_val <- rep(unique(dat$cohort), each = 3)
+
+vec_bin_vars <- rep(c("hsee_decile", "hsee_2decile", "hsee_5decile"), times = length(unique(dat$cohort)))
+
+walk2(vec_cohort_val, vec_bin_vars,  ~ print(gg_bin(.x, .y)))
 ```
 
 ## Distribution of students by demographic characteristics in each cohort-track

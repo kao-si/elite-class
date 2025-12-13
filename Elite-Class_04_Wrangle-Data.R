@@ -72,7 +72,7 @@ sample_dat <- function(extra_cols = NULL, n = 1) {
 
 # Study Track ####
 
-# Identify students in science track using their exam scores in Grade 3
+# Identify students in the science track using their exam scores in Grade 3
 id_sci <- dat %>%
   filter(exam %in% c("g3m1", "g3f1", "g3k1", "g3k2", "cee")) %>%
   filter(
@@ -81,7 +81,7 @@ id_sci <- dat %>%
   pull(cssid) %>%
   unique()
 
-# Identify students in liberal arts track using their exam scores in Grade 3
+# Identify students in the liberal arts track using their exam scores in Grade 3
 id_lib <- dat %>%
   filter(exam %in% c("g3m1", "g3f1", "g3k1", "g3k2", "cee")) %>%
   filter(
@@ -127,9 +127,9 @@ dat <- dat %>%
     )
   )
 
-# Comprehensive Test (sci/lib) Scores ####
+# Comprehensive Test Scores ####
 
-# For later analyses, use comprehensive test scores(sci/lib), do not use scores
+# For later analyses, use comprehensive test scores (sci/lib), do not use scores
 # of composing subjects (phy, che, bio/pol, his, geo) or com score
 
 dat <- dat %>%
@@ -766,7 +766,7 @@ dat <- dat %>%
     )
   )
 
-# Decile (10-bin) groups for HSEE total score within cohort-track-top_cat
+# Create subgroups based on HSEE total score within cohort-track-top_cat
 hsee_bin <- dat %>%
   filter(!is.na(track), !is.na(top_cat), exam == "hsee", !is.na(tot)) %>%
   group_by(cohort, track, top_cat) %>%
@@ -779,13 +779,17 @@ hsee_bin <- dat %>%
     # turn CDF into 10 bins (each ≈ 10 percentile points)
     # bin 1: (0, 0.1], bin 2: (0.1, 0.2], ..., bin 10: (0.9, 1]
     # i.e., bin 1 = lowest scores, bin 10 = highest scores
-    hsee_decile = pmin(10L, pmax(1L, as.integer(ceiling(hsee_cdf * 10))))
+    hsee_decile = pmin(10L, pmax(1L, as.integer(ceiling(hsee_cdf * 10)))),
+    # 2-decile (20%-bin) groups: 5 bins formed by combining every two deciles
+    hsee_2decile = as.integer(ceiling(hsee_decile / 2)),
+    # 5-decile (50%-bin) groups: 2 bins (lower half vs upper half)
+    hsee_5decile = if_else(hsee_decile <= 5L, 1L, 2L)
   )
 
 # Join the bin variable
 dat <- dat %>%
   left_join(
-    select(hsee_bin, cssid, hsee_cdf, hsee_decile),
+    select(hsee_bin, cssid, hsee_cdf, hsee_decile, hsee_2decile, hsee_5decile),
     by = "cssid",
     na_matches = "never",
     relationship = "many-to-one"
